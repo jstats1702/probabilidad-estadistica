@@ -1,0 +1,304 @@
+---
+title: "Tablas de Frecuencias"
+author: 
+  - Lina Buitrago PhD(c), labuitragor@unal.edu.co
+  - Juan Sosa PhD, jcsosam@unal.edu.co
+date: ""
+output:
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introducción
+
+Las **tablas de frecuencias**:
+
+- Constituyen una de las maneras más útiles y sencillas de **describir variables**.
+- Permiten identificar **características relevantes** como los valores más y menos frecuentes de la variable, por ejemplo.
+
+# Tablas de clasificación a una vía
+
+- Considerar el conjunto de datos $x_1,\ldots,x_n$ de una variable $X$ **sin agrupar**.
+- $n$: número de casos en estudio.
+- $C_1,\ldots,C_m$: clases (categorías) de la variable.
+- $m$: número de clases.
+
+## Frecuencias absolutas
+
+La **frecuencia absoluta** $n_j$ de la clase $C_j$ es la **cantidad de observaciones** que hacen parte de la $j$-ésima categoría para $j=1,\ldots,m$.
+
+**Propiedades**
+
+- $0\leq n_j\leq n$
+- $\displaystyle\sum_{j=1}^{m}n_j=n$
+
+## Frecuencias relativas
+
+La **frecuencias relativa** $h_j$ de la clase $C_j$ es la **proporción de casos** que hacen parte de la $j$-ésima categoría para $j=1,\ldots,m$.
+
+$$h_j=\frac{n_j}{n}$$
+
+**Propiedades**
+
+- $0\leq h_j\leq 1$
+- $\displaystyle \sum_{j=1}^{m}h_j=1$
+
+## Ejemplo
+
+En un proceso de control de calidad, durante un periodo de tiempo determinado, se tiene un conjunto de 7614 lotes de cien resistencias (resistores) cada uno. Para cada lote se registra el número de resistencias con algún tipo de inconformidad, obteniéndose los resultados de la tabla que se presenta a continuación. Completar la tabla de frecuencias.
+
+```{r, eval = TRUE, echo=FALSE, out.width="30%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("02-resistencias.jpg")
+```
+
+| Clase      | F. Absoluta | F. Relativa | 
+|:--------:|:-------:|:-----:|
+| 0        |  145    |       | 
+| 1        |  2415   |       |
+| 2        |  3456   |       |
+| 3        |  852    |       |
+| 4        |         | 0.0603|                  
+| 5        |  157    |       |
+| 6        |         |       |
+| Total    |  7614  |       |
+
+```{r}
+# tamaño de la muestra
+n <- 7614
+# frecuencia absoluta clase 5
+n_5 <- 0.0603*n
+print(n_5)
+# frecuencia absoluta clase 7
+n_7 <- n - (145 + 2415 + 3456 + 852 + 459 + 157)
+print(n_7)
+# frecuencias absolutas
+nj <- c(145, 2415, 3456, 852, 459, 157, 130)
+# frecuencias relativas
+hj <- nj/n
+print(hj)
+```
+
+## Análisis gráfico
+
+En general las variables categóricas y las cuantitativas discretas se grafican por medio de **diagramas de barras**:
+
+- Eje $x$: categorías de la característica observada.
+- Eje $y$: frecuencia absoluta o frecuencia relativa.
+
+## Ejemplo
+
+Graficar las frecuencias relativas del ejemplo de las resistencias.
+
+```{r}
+# tamaño de la muestra
+n <- 7614
+# frecuencias absolutas
+nj <- c(145, 2415, 3456, 852, 459, 157, 130)
+names(nj) <- 0:6
+barplot(nj)
+# frecuencias relativas
+hj <- nj/n
+barplot(hj)
+barplot(100*hj, xlab = "No. resistencias", ylab = "Porcentaje", col = "mistyrose", border = "mistyrose3", ylim = c(0, 50))
+```
+
+## Frecuencia absoluta acumulada
+
+Las frecuencias acumuladas se calculan para variables que estén medidas **al menos en escala ordinal**.   
+
+La **frecuencia absoluta acumulada** $N_j$ de la clase $C_j$ es la **cantidad de individuos cuya modalidad es inferior o igual** a la $j$-ésima categoría:
+
+$$
+N_j = \sum_{k=1}^{j} n_k
+$$
+
+**Propiedades**
+
+- $N_1=n_1$
+- $N_m=n$
+- $N_1\leq N_2\leq\ldots\leq N_m$
+
+## Frecuencia relativa acumulada
+
+La **frecuencia relativa acumulada** $H_j$ de la clase $C_j$ es la **proporción de individuos cuya modalidad es inferior o igual** a la $j$-ésima categoría:
+
+$$
+H_j = \sum_{k=1}^{j} h_k = \frac{N_j}{n}
+$$
+
+**Propiedades**
+
+- $H_1=h_1$
+- $H_m=1$
+- $H_1\leq H_2\leq\ldots\leq H_m$
+ 
+## Distribución de frecuencias
+
+Se llama **distribución de frecuencias** a la tabla que contiene las categorías junto con las frecuencias correspondientes.
+
+| Clase    | F. Absoluta  | F. Relativa  | F. Abs. Acumulada | F. Rel. Acumulada |
+|:--------:|:------------:|:------------:|:-----------------:|:-----------------:|
+| $C_1$    | $n_1$        | $h_1$        | $N_1$             | $H_1$             |
+| $\vdots$ | $\vdots$     | $\vdots$     | $\vdots$          | $\vdots$          |
+| $C_m$    | $n_m$        | $h_m$        | $n$               | $1$               |
+| Total    | $n$          | 1            | N.A.              | N.A.              |
+
+### Ejemplo
+
+Considerar el siguiente conjunto de datos asociados con el nivel educativo de una muestra de empleados (Bachillerato (B), Pregrado (P), Maestría (M), y Doctorado (D)). Elaborar la tabla de frecuencias correspondiente.
+
+B, D, M, B, B, P, B, M, B, B,
+B, P, B, M, B, B, M, B, M, B,
+B, B, B, B, B, B, P, B, B, B,
+B, M, B, P, B, B, M, B, B, B,
+D, B, M, B, P, B, B, B, P, P
+
+| Clase        | F. Absoluta  | F. Relativa  | F. Abs. Acumulada | F. Rel. Acumulada |
+|:------------:|:------------:|:------------:|:-----------------:|:-----------------:|
+| Bachillerato | 33           | 66.0\%       | 33                |  66.0\%           |
+| Pregrado     | 7	      | 14.0\%       | 40                |  80.0\%           |
+| Maestría     | 8	      | 16.0\%       | 48                |  96.0\%           |
+| Doctorado    | 2	      | 4.0\%        | 50                |  100\%            |
+| Total        | 50           | 100\%        | N.A.              |  N.A.             |
+
+```{r}
+# datos
+edu <- c("B", "D", "M", "B", "B", "P", "B", "M", "B", "B", "B", "P", "B", "M", 
+         "B", "B", "M", "B", "M", "B", "B", "B", "B", "B", "B", "B", "P", "B", 
+         "B", "B", "B", "M", "B", "P", "B", "B", "M", "B", "B", "B", "D", "B", 
+         "M", "B", "P", "B", "B", "B", "P", "P")
+# tamaño de la muestra
+n <- length(edu)
+print(n)
+# frecuencias absolutas
+nj <- table(edu)
+print(nj)
+nj <- nj[c(1, 4, 3, 2)]
+print(nj)
+# frecuencias relativas
+hj <- nj/n
+print(hj)
+# frecuencias absolutas acumuladas
+Nj <- cumsum(nj)
+print(Nj)
+# frecuencias relativas acumuladas
+Hj <- cumsum(hj)
+print(Hj)
+# tabla
+tab <- cbind(nj, hj, Nj, Hj)
+total <- c(sum(tab[,1]), sum(tab[,2]), NA, NA)
+tab <- rbind(tab, total)
+print(tab)
+# edicion
+nombres_f <- c("Bachillerato", "Pregrado", "Maestria", "Doctorado", "Total")
+nombres_c <- c("F. Absoluta", "F. Relativa", "F. Abs. Acumulada",	"F. Rel. Acumulada")
+rownames(tab) <- nombres_f
+colnames(tab) <- nombres_c
+# imprir tabla
+print(tab)
+# imprir tabla usando knitr
+knitr::kable(tab)
+```
+
+## Variables cuantitativas
+
+Cuando no se tienen directamente las $m$ clases para elaborar la tabla de distribución de frecuencias se acostumbra **definir las clases** (intervalos) de la siguiente manera: 
+
+1. Seleccionar el **número de clases** $m$. Para tal fin se distinguen tres alternativas: 
+    - Elegir $m$ arbitrariamente o teniendo en cuenta alguna consideración previa. 
+    - Regla empírica: $m \approx \sqrt{n}$ (no es recomendable para muestras *grandes*).
+    - Regla de Sturges: $m \approx 1 + 3\text{.}3 \log (n)$.
+2. Calcular el **mínimo** y el **máximo** de la variable: $x_{\min} = \{x_1,\ldots,x_n\}$ y $x_{\max} = \{x_1,\ldots,x_n\}$, respectivamente. 
+3. Calcular el **rango** de la variable: $R = x_{\max} - x_{\min}$.
+4. Calcular la **amplitud** de las clases: $a =\frac{R}{m}$.    
+5. Definir las **clases**: $C_j = \{x: l_{j-1} < x \leq l_j\}$ con $l_{j}=l_{j-1} + a$ para $j=1,\ldots,m$, donde $l_0 = x_\min$.
+
+## Ejemplo 
+
+Los siguientes datos están asociados con el peso (kg) de un conjunto de materiales. Elaborar la distribución de frecuencias correspondiente.
+
+103.1, 82.1, 106.2, 100.9, 91.8 , 96.1 , 126.9, 119.8, 93.1, 86.8, 75.2, 93.0 , 
+82.3 , 94.8, 64.2 , 105.3, 108.0, 86.3 , 81.8 , 138.1, 92.5, 66.3, 66.6, 142.2,
+96.5 , 74.8, 95.4 , 100.1, 81.9 , 112.0, 116.8,	103.2, 66.1, 60.4, 78.7  
+
+```{r, eval = TRUE, echo=FALSE, out.width="30%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("02-material.jpg")
+```
+
+La variable "peso" es una variable cuantitativa de razón. Es claro que esta variable no está dada en categorías, por lo que es necesario elaborar las clases pertinentes como sigue:
+
+-  Se eligen $m=6$ clases dado que $\sqrt{35} = 5\text{.}916 \approx 6$ y  $1 + 3\text{.}3 \log_{10} (35) = 6\text{.}095 \approx 6$.
+-  $x_{\min} = 60\text{.}4$  y $x_{\max} = 142\text{.}2$.
+-  $R = x_{\max} - x_{\min} = 142\text{.}2 - 60\text{.}4 = 81\text{.}8$.
+-  $a = 81\text{.}8/6 = 13\text{.}63$.
+-  Las clases resultantes son:
+    1.  $C_1 = \{x: l_0 \leq x \leq l_1\}$ donde $l_0 = 60\text{.}40$ y $l_1= 60\text{.}40 + 13\text{.}63 = 74\text{.}03$.
+    2.  $C_2 = \{x: l_1 < x \leq l_2\}$ donde $l_2=74\text{.}03 + 13\text{.}63  = 87\text{.}67$.
+    3.  $C_3 = \{x: l_2 < x \leq l_3\}$ donde $l_3=87\text{.}67 + 13\text{.}63  = 101\text{.}30$.
+    4.  $C_4 = \{x: l_3 < x \leq l_4\}$ donde $l_4=101\text{.}30 + 13\text{.}63 = 114\text{.}93$.
+    5.  $C_5 = \{x: l_4 < x \leq l_5\}$ donde $l_5=114\text{.}93 + 13\text{.}63 = 128\text{.}57$.
+    6.  $C_6 = \{x: l_5 < x \leq l_6\}$ donde $l_6=128\text{.}57 + 13\text{.}63 = 142\text{.}20$.
+
+Así, la distribución de frecuencias está dada por:.
+
+| Clase    | F. Absoluta  | F. Relativa  | F. Abs. Acumulada | F. Rel. Acumulada |
+|:--------:|:------------:|:------------:|:-----------------:|:-----------------:|
+| $[60\text{.}40  ; 74\text{.}03]$  |	5   | 14.3\%	 | 5	 | 14.3\% |
+| $(74\text{.}03  ; 87\text{.}67]$  |	9   | 25.7\%	 | 14	 | 40.0\% |
+| $(87\text{.}67  ; 101\text{.}30]$ |	10  | 28.6\%	 | 24	 | 68.6\% |
+| $(101\text{.}30 ; 114\text{.}93]$ |	6   | 17.1\%	 | 30	 | 85.7\% |
+| $(114\text{.}93 ; 128\text{.}57]$ |	3   | 8.6\%	   | 33	 | 94.3\% |
+| $(128\text{.}57 ; 142\text{.}20]$ |	2   | 5.7\%	   | 35	 | 100\%  |
+| Total                             | 35  | 100\%    | N.A | N.A    | 
+
+```{r}
+# datos
+peso<- c(103.1, 82.1, 106.2, 100.9, 91.8,  96.1,  126.9, 119.8, 93.1, 86.8, 75.2, 93.0, 
+         82.3,  94.8, 64.2,  105.3, 108.0, 86.3,  81.8,  138.1, 92.5, 66.3, 66.6, 142.2,	
+         96.5,  74.8, 95.4,  100.1, 81.9,  112.0, 116.8, 103.2, 66.1, 60.4, 78.7)
+# tamaño de la muestra
+n <- length(peso)
+print(n)
+# numero de intervalos
+m <- round(1 + 3.3*log(n, base = 10))
+print(m)
+# rango
+R <- max(peso) - min(peso)
+print(R)
+# amplitud
+a <- R/m
+print(a)
+# limites
+lim <- min(peso) + (0:m)*a
+print(lim)
+# frecuencias absolutas
+nj <- table(cut(x = peso, breaks = lim, include.lowest = TRUE))
+print(nj)
+# frecuencias relativas
+hj <- nj/n
+print(hj)
+# frecuencias absolutas acumuladas
+Nj <- cumsum(nj)
+print(Nj)
+# frecuencias relativas acumuladas
+Hj <- cumsum(hj)
+print(Hj)
+# tabla
+tab <- cbind(nj, hj, Nj, Hj)
+total <- c(sum(tab[,1]), sum(tab[,2]), NA, NA)
+tab <- rbind(tab, total)
+print(tab)
+# edicion
+nombres_c <- c("F. Absoluta", "F. Relativa", "F. Abs. Acumulada",	"F. Rel. Acumulada")
+colnames(tab) <- nombres_c
+# imprir tabla
+print(tab)
+# imprir tabla usando knitr
+knitr::kable(tab, digits = 3)
+```
