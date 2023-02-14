@@ -1,0 +1,54 @@
+---
+title: "Taller 1"
+author: 
+  - Lina Buitrago PhD(c), labuitragor@unal.edu.co
+  - Juan Sosa PhD, jcsosam@unal.edu.co
+date: ""
+output:
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introducción a la estadística
+
+1. Clasificar según su naturaleza (cualitativa, cuantitativa discreta, cuantitativa continua) y establecer la escala de medición de las siguientes variables. 
+    - Estrato socio-económico.
+    - Sexo.
+    - Número de unidades defectuosas.
+    - Calificación de un examen (valores: aprobado, no aprobado).
+    - Nivel educativo (valores: básica, pregrado, posgrado).
+    - Estatura (en metros).
+    - Temperatura (en grados centigrados).
+    - Edad (en años cumplidos).
+    - Opinión (valores: a favor, en contra, no sabe/no responde).
+    - Raza.
+    - Número de hermanos.
+    - Utilidades anuales (en millones pesos).
+    - Tiempo requerido para ejecutar una tarea (en minutos).
+    - Índice de masa corporal (en kg/m$^2$).
+    - Concentración de dióxido de carbono (CO$_2$, en ppm).
+    - pH (valores: básico, neutro, ácido).
+    - Resistencia eléctrica (en ohm).
+    - Presión (en pa).
+    - Densidad (en kg/m$^3$).
+    - Latitud/longitud (en grados, minutos y segundos).
+
+2. Las poblaciones tangibles son aquellas que constan de elementos físicos reales y por lo general son poblaciones finitas. De otra parte, una población conceptual es aquella que consta de todos los posibles valores que pueden haber sido observados en un proceso de medición, por ejemplo (una muestra aleatoria de una población conceptual puede consistir de valores obtenidos en un proceso de medición bajo condiciones experimentales idénticas). Cada uno de los siguientes procesos implica el muestreo de una población. Defina la población y diga si es tangible o conceptual.
+
+    a. Se recibe un lote de pernos de un distribuidor. Para verificar si el lote es aceptable respecto de la fuerza de corte, se seleccionan del lote diez pernos aleatoriamente para probarlos.
+    b. La resistencia de un resistor se mide cinco veces con el mismo óhmetro.
+    c. Se hacen ocho soldaduras con el mismo proceso y se mide la fuerza en cada una.
+    d. El ente rector de una universidad quiere determinar la condición física de los estudiantes de su institución. Se toma una muestra aleatoria de los 54,284 estudiantes activos que tiene la universidad para hacerles una prueba.
+
+3. En los siguientes estudios, identificar (a) los individuos, (b) las variables y su clasificación, y (c) la pregunta principal de investigación, (d) la población de interés y la muestra en este estudio. ¿Los resultados del estudio se pueden generalizar o no a la población? ¿Los resultados del estudio se pueden utilizar para establecer relaciones causales?
+
+    a. Dado el anonimato otorgado a las personas en las interacciones en línea, los investigadores plantearon la hipótesis de que las personas tímidas podrían tener actitudes más favorables hacia Facebook, y que la timidez podría tener una correlación positiva con el tiempo que pasan en Facebook. También plantearon la hipótesis de que las personas tímidas podrían tener menos "amigos" en Facebook, ya que tienden a tener menos amigos que las personas que no son tímidas en el mundo real. Se encuestó a 103 estudiantes de pregrado de una universidad mediante cuestionarios en línea. El estudio afirma que "los participantes fueron reclutados a través del grupo de participación de psicología de la universidad. Después de indicar su interés en el estudio, a los participantes se les envió un correo electrónico con la URL del estudio".
+    b. La chía ha ganado una reputación completamente nueva como suplemento dietético. En un estudio de 2009, un equipo de investigadores reclutó a 38 hombres y los dividió al azar en dos grupos: tratamiento o control. También reclutaron a 38 mujeres, y colocaron al azar a la mitad de estos participantes en el grupo de tratamiento y la otra mitad en el grupo de control. Un grupo recibió 25 gramos de semillas de chía dos veces al día y el otro recibió un placebo. Los sujetos se ofrecieron como voluntarios para ser parte del estudio. Después de 12 semanas, los científicos no encontraron diferencias significativas entre los grupos en cuanto a apetito o pérdida de peso.
+
+4. Haciendo un estudio sobre la intención de voto en una población conformada por 5 millones de votantes, de los cuales 2,900,000 son mujeres, se elige una muestra formada por 3,000 personas. ¿Cuántas mujeres y cuántos hombres deberá haber en la muestra elegida guardando las proporciones dadas en la población?
