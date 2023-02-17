@@ -1,0 +1,239 @@
+---
+title: "Taller 2"
+author: 
+  - Lina Buitrago PhD(c), labuitragor@unal.edu.co
+  - Juan Sosa PhD, jcsosam@unal.edu.co
+date: ""
+output:
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Tablas a una vía de clasificación
+
+1. El pH indica la concentración de iones de hidrógeno presentes en determinadas disoluciones, y determina muchas características notables de la estructura y de la actividad de las moléculas correspondientes. El pH de una disolución se puede medir de manera aproximada empleando indicadores: ácidos o bases débiles que presentan un color diferente según el pH; generalmente se emplea un papel indicador, que consiste en papel impregnado con una mezcla de indicadores cualitativos para la determinación del pH (el indicador más conocido es el papel de litmus o papel tornasol). Tal medición utiliza una escala que va de 1 a 14. Por debajo de 7 unidades, las disoluciones son ácidas; igual a 7 unidades, las disoluciones son neutras; y por encima de 7 unidades, las disoluciones son básicas.
+
+    ```{r, eval = TRUE, echo=FALSE, out.width="50%", fig.pos = 'H', fig.align = 'center'}
+    knitr::include_graphics("02-ph.jpg")
+    ```
+
+    El siguiente conjunto de datos corresponde al pH (aproximado) de una muestra de disoluciones:
+    
+    ```{r, eval=F, echo=T}
+    pH <- c(8,9,8,10,10,9,10,7,12,12,11,12,9,10,11,11,9,10,11,9,9,10,11,9,8,10,8,9,10,
+            8,9,13,13,7,10,10,9,9,9,9,10,13,11,6,8,7,7,10,8,5,11,11,7,10,10,12,8,9,13,
+            11,10,11,10,9,9,8,11,12,10,9,7,10,11,10,9)
+    ```
+
+    a. Hacer la tabla de distribución de frecuencias con $m = 14$ categorias (1 a 14) utilizando los datos dados en `pH`. La tabla debe estar constituida por las categorías de la varible, las frecuencias absolutas, las frecuencias relativas, las frecuencias absolutas acumuladas, y las frecuencias relativas acumuladas.
+
+    ```{r, eval=T, echo=F}
+    # datos
+    pH <- c(8,9,8,10,10,9,10,7,12,12,11,12,9,10,11,11,9,10,11,9,9,10,11,9,8,10,8,9,10,
+            8,9,13,13,7,10,10,9,9,9,9,10,13,11,6,8,7,7,10,8,5,11,11,7,10,10,12,8,9,13,
+            11,10,11,10,9,9,8,11,12,10,9,7,10,11,10,9)
+    # tamaño de la muestra
+    n <- length(pH)
+    # frecuencias absolutas
+    nj <- table(pH)
+    # agregar "manualmente" ceros en las categorias 1, 2, 3, 4, y 14
+    nj <- c(0, 0, 0, 0, nj, 0)
+    names(nj) <- 1:14
+    # frecuencias relativas
+    hj <- nj/n
+    # frecuencias acumuladas
+    Nj <- cumsum(nj)
+    Hj <- cumsum(hj)
+    # tabla
+    tab <- data.frame(pH = 1:14, nj, hj = 100*hj, Nj, Hj = 100*Hj)
+    tab <- round(tab, digits = 2)
+    colnames(tab) <- c("pH", "F. Absoluta", "F. Relativa (%)", "F. Abs. Acumulada", "F. Rel. Acumulada (%)")
+    # librerias para mostrar la tabla
+    library(knitr)
+    library(kableExtra)
+    # mostrar tabla
+    kable_styling(kable_input = kable(x = tab,  digits = 2, align = "l"), full_width = FALSE)
+    ```
+
+    ```{r, eval=F, echo=T}
+    # tamaño de la muestra
+    n <- length(pH)
+    # frecuencias absolutas
+    nj <- table(pH)
+    print(nj)
+    # agregar "manualmente" ceros en las categorias 1, 2, 3, 4, y 14
+    nj <- c(0, 0, 0, 0, nj, 0)
+    names(nj) <- 1:14
+    # frecuencias relativas
+    hj <- nj/n
+    # frecuencias acumuladas
+    Nj <- cumsum(nj)
+    Hj <- cumsum(hj)
+    ```
+
+    b. Hacer un diagrama de barras para las frecuencias relativas.
+    
+    ```{r, eval=T, echo=T}
+    barplot(height = 100*hj, xlab = "pH", ylab = "F. Relativa (%)", density = 15, 
+            col = "lightblue", border = "blue")
+    ```
+
+
+    c. Hacer un diagrama de barras para las frecuencias relativas acumuladas.
+    
+    ```{r, eval=T, echo=T}
+    barplot(height = 100*Hj, xlab = "pH", ylab = "F. Rel. Acumulada (%)", density = 15, 
+            col = "lightblue", border = "blue")
+    ```
+
+    d. Usando la información de la tabla y de los diagramas, responder las siguientes preguntas:
+    
+    - ¿Cuántas observaciones se realizaron en este caso?
+    
+      Número de observaciones: $n=75$.
+      ```{r, eval=F, echo=T}
+      # tamaño de la muestra
+      length(pH)
+      ```
+    - ¿Cuántas observaciones en la muestra tienen un pH netro? ¿ácido? ¿básico?
+    
+      Número de observaciones pH neutro: $n_7 = 6$.
+      
+      Número de observaciones pH ácido: $n_1+\ldots+n_6 = 2$.
+      
+      Número de observaciones pH básico: $n_8+\ldots+n_{14} = 67$.
+      ```{r, eval=F, echo=T}
+      # numero observaciones pH neutro
+      sum(nj[7])
+      # numero observaciones pH acido
+      sum(nj[1:6])
+      # numero observaciones pH basico
+      sum(nj[8:14])
+      ```
+    - ¿Qué porcentaje de observaciones tienen un pH neutro? ¿ácido? ¿básico?
+    
+      Porcentaje de observaciones pH neutro: $h_7 = 8\%$.
+      
+      Porcentaje de observaciones pH ácido: $h_1+\ldots+h_6 = 2.66\%$.
+      
+      Porcentaje de observaciones pH básico: $h_8+\ldots+h_{14} = 89.33\%$.
+      ```{r, eval=F, echo=T}
+      # porcentaje observaciones pH neutro
+      sum(100*hj[7])
+      # porcentaje observaciones pH acido
+      sum(100*hj[1:6])
+      # porcentaje observaciones pH basico
+      sum(100*hj[8:14])
+      ```
+    - ¿Que porcentaje de observaciones tienen un pH entre 9 y 11 unidades, inclusive?
+    
+      Porcentaje de observaciones pH entre 9 y 11: $h_9+h_{10}+h_{11} = H_{11}-H_8 = 65.33\%$.
+      ```{r, eval=F, echo=T}
+      # porcentaje observaciones entre 9 y 11
+      sum(100*hj[9:11])
+      # otra manera
+      100*(Hj[11] - Hj[8])
+      ```
+    e. Comentar brevemente el comportamiento del pH en esta muestra de disoluciones.
+    
+        Comentarios.
+
+2. Considere la información de la siguiente distribución de frecuencias:
+
+    a. Completar la tabla.
+
+      | Clase |  F. Absoluta |  F. Relativa |  F. Abs. Acumulada |  F. Rel. Acumulada |
+      |:-----:|:------------:|:------------:|:------------------:|:------------------:|
+      | 5     | 4            |  0.05        | 4                  | 0.05               | 
+      | 10    | 12           |  0.15        | 16                 | 0.20               | 
+      | 15    | 20           |  0.25        | 36                 | 0.45               |
+      | 20    | 24           |  0.30        | 60                 | 0.75               |
+      | 25    | 20           |  0.25        | 80                 | 1                  |
+      | Total | 80           |  1.00        | N.A                | N.A.               |
+      
+      ```{r, eval = F, echo=T}
+      # tamaño de la muestra
+      n <- 80
+      # h1
+      4/80
+      # n2
+      0.15*n
+      # n3
+      0.25*n
+      # N4
+      0.75*n
+      # N1 
+      4
+      # N2
+      4+12
+      # N3
+      4+12+20
+      # H1
+      0.05
+      # H2
+      16/n
+      # H3
+      36/n
+      # H5
+      1
+      # h4
+      0.75-0.45
+      # h5
+      1-0.75
+      # n4
+      0.3*n
+      # n5
+      0.25*n
+      # suma frecuencias absolutas
+      4+12+20+24+20
+      # suma frecuencias relativas
+      0.05+0.15+0.25+0.30+0.25
+      ```
+
+    b. ¿Falso o verdadero? Justifique su respuesta.
+
+         - La cantidad de datos mayores a 15 es 44\%. 
+
+            FALSO. La cantidad de datos mayores a 15 es $n_4+n_5=44$.
+
+         - La cantidad de datos mayores que 5 pero menores que 20 es 36.
+
+            FALSO. La cantidad de datos mayores que 5 pero menores que 20 es $n_2+n_3=32$. 
+
+          - La proporción de datos mayores que 10 es 95.
+
+            FALSO. La proporción de datos mayores que 10 es $h_3+h_4+h_5 = H_5-H_2 = 0.8$.
+
+          - La proporción de datos entre 10 y 20, inclusive, es 0.7.
+
+            VERDADERO. La proporción de datos entre 10 y 20, inclusive, es $h_2+h_3+h_4 = H_4-H_1 = 0.7$.
+
+3. En dos estudios diferentes donde se quiere categorizar una variable cuantitativa continua, se tiene que los tamaños de muestra son $n=25$ y $n=10000$ individuos, respectivamente. Calcule el número de clases para cada estudio con los dos métodos, y comente por qué no es ideal el método empírico para una muestra grande.
+
+El número de clases para cada estudio de acuerdo con los dos métodos es:
+
+| Estudio |  Muestra | Regla empírica | Regla de Sturges |
+|:-------:|:--------:|:--------------:|:----------------:|
+| 1       | 25       |  5             | 6                |
+| 2       | 10000    |  100           | 14               |
+
+Calcular el número de categorías por medio de la regla empírica para el estudio 2 no es conveniente porque el número de clases que resulta es excesivamente alto. Una tabla de resumen con 100 categorías no constituye un buen resumen de los datos disponibles.
+
+```{r}
+# tamaños de muestra
+n1 <- 25
+n2 <- 10000
+# regla empirica
+round(sqrt(n1))
+round(sqrt(n2))
+# regla de sturges
+round(1 + 3.3*log(n1, base = 10))
+round(1 + 3.3*log(n2, base = 10))
+```
+
