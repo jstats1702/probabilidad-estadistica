@@ -1,0 +1,82 @@
+---
+title: "Taller 3"
+author: 
+  - Lina Buitrago PhD(c), labuitragor@unal.edu.co
+  - Juan Sosa PhD, jcsosam@unal.edu.co
+date: ""
+output:
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1. Considere le siguiente distribución de frecuencias:
+
+| Intervalo     | Marca de clase | F. Absoluta | F. Relativa | F. Abs. Acumulada | F. Rel. Acumulada |
+|:-------------:|:--------------:|:-----------:|:-----------:|:-----------------:|:-----------------:|
+| $[0 ; 10]$    |                |             |             | 60                |                   |
+| $(10 ; 20]$   |                |             | 0.4         |                   |                   |
+| $(20 ; 30]$   |                | 30          |             | 170               |                   |
+| $(30 ; 100]$  |                |             | 0.1         |                   |                   |
+| $(100 ; 200]$ |                |             |             | 200               |                   |
+| Total         |                |             |             | N.A.              | N.A.              |
+
+a. Completar la tabla.
+b. ¿Cuántos individuos asumen un valor de la variable de hasta 100?
+c. ¿Qué porcentaje de individuos asumen un valor de la variable de entre 10 y 100?
+d. Calcular el promedio de la variable.
+
+2. Considere el conjunto de datos dados en el archivo de texto `taller_03_datos.txt`. Este archivo contiene las calificaciones promedio de una muestra aleatoria de estudiantes de una Universidad en el primer semestre de este año. A continuación se presenta el procedimiento **importar** este conjunto de datos en `R`.
+
+```{r, echo=T, eval=F}
+# importar base de datos
+base_de_datos <- read.table(file = "C:/Users/Juan Camilo/Dropbox/UN/probabilidad_y_estadistica_2022_1/taller_03_datos.txt")
+# extraer los valores de la variable
+cal <- base_de_datos$V1
+# tamaño de la muestra
+n <- length(cal)
+```
+
+Observe que para importar la base de datos exitósamente en `R` por medio de la rutina `read.table`, hay que proporcionar la **ruta de acceso** correcta. ¡No olvide actualizar esta ruta!
+
+En este enlace https://www.youtube.com/watch?v=MgsVmIoPoyQ&ab_channel=JuanSosa puede encontrar un tutorial completo para **importar y consultar bases de datos**.
+
+a. Calcular el máximo, el mínimo, el rango, y el promedio de las calificaciones.
+b. Hacer la distribución de frecuencias de las calificaciones con $m=10$ intervalos.
+
+3. Se estudiaron dos métodos de recuperación de proteínas. Se hicieron trece corridas usando cada método y se registró la parte de la proteína recuperada para cada corrida. Los resultados son los siguientes: Método 1: 0.32, 0.35, 0.37, 0.39, 0.42, 0.47, 0.51, 0.58, 0.60, 0.62, 0.65, 0.68, 0.75. Método 2: 0.25, 0.40, 0.48, 0.55, 0.56, 0.58, 0.60, 0.65, 0.70, 0.76, 0.80, 0.91, 0.99. Calcular el mínimo, el máximo, el rango, y el promedio de cada método. ¿Qué diferencias se observan entre los resultados de los dos métodos?
+
+4. Una muestra de temperaturas para iniciar una cierta reacción química dio un promedio muestral de 87.3 grados centígrados. ¿Cuál es el promedio muestral en 
+grados Fahrenheit?
+
+5. Veintiuna personas tienen una estatura promedio de 168 centímetros. Si se considera la información de una persona adicional, ¿cuál es la estatura que debe tener esta persona para que la estatura promedio se incremente dos centímetros?
+
+6.  Con la información dada en la siguiente tabla, calcular la calificación de un estudiante en la última unidad de la asignatura considerando que quiere aprobar la materia con 3.2.
+
+| Unidad    | Valor (\%) | Calificación |
+|:---------:|:----------:|:------------:| 
+| I         | 20 | 3.7 |
+| II        | 25 | 2.4 |
+| III       | 20 | 3.0 |
+| IV        | 15 | 3.2 |
+| V         |    |     |
+
+7. Un grupo de 200 estudiantes, cuya estatura promedio es de 160.96 centímetros, se divide en dos grupos, uno con una estatura promedio de 163.4 centímetros y otro, con una de 157.3 centímetros. ¿Cuántos estudiantes tiene cada grupo?
+
+8. A continuación se presentan los salarios mensuales en miles de pesos, pagados por una empresa del Estado a su personal. En la empresa se presenta un conflicto laboral. El gerente propone un aumento del 2\% para cada uno de los empleados, mientras que la junta directiva propone un aumento neto de 10 mil pesos mensuales.
+
+| Salario       |	300 | 400 | 500 | 600 | 700 |
+|:-------------:|:---:|:---:|:---:|:---:|:---:|
+| No. empleados | 10  | 16  | 35  | 26  | 13  |
+
+Con base en el promedio, ¿qué es más ventajoso para el Estado y qué para cada grupo de empleados?
+
+9. Muestre que si $k_1$ y $k_2$ son constantes, entonces $M(k_1 + k_2x)=k_1 + k_2M(x)$.
+
+10. Considere un conjunto de datos particionados en $m$ grupos con tamaños $n_1,\ldots,n_m$ y medias $\bar{x}_1,\ldots,\bar{x}_m$, tales que $n_1=\ldots=n_m=c$. Muestre que si $n = c\cdot m$, entonces la media de todo el conjunto de datos $\bar{x}$ coincide con la media de las medias de los grupos $\bar{\bar{x}}$.
+
