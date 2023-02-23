@@ -1,0 +1,347 @@
+---
+title: "Medidas de Variabilidad"
+author: 
+  - Lina Buitrago PhD(c), labuitragor@unal.edu.co
+  - Juan Sosa PhD, jcsosam@unal.edu.co
+date: ""
+output:
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introducción
+
+Las **medidas de variabilidad** son aquellas que miden la **dispersión de los datos**, es decir, indican qué tan "parecidos" o que tan "diferentes" son entre si los valores observados. 
+Estas medidas son indispensables, dado que **una medida de tendencia central por si sola podría ser engañosa** cuando los datos son muy variables.
+
+Las medidas de variabilidad más utilizadas son:
+
+  - Rango.
+  - Rango intercuartílico.
+  - Varianza.
+  - Desviación estándar (desviación típica).
+  - Coeficiente de variación.
+
+# Rango
+
+El **rango** o **recorrido** del conjunto de datos $x_1,x_2,\ldots,x_n$, denotado con $R$, se calcula como la diferencia entre el valor máximo y el valor mínimo del conjunto de datos. Es decir:
+\[
+R = x_{\max} - x_{\min}
+\]
+donde $x_{\min}$ y $x_{\max}$ son respectivamente el valor mínimo y máximo de las $n$ observaciones.
+
+## Características
+
+- El rango es una medida de dispersión asociada con la amplitud del conjunto de datos.
+- Está dado en las mismas unidades de la variable de estudio.
+- Es sensible a valores extremos.
+- No da razón de la dispersión de los datos respecto a un valor particular o a una medida de tendencia central.
+
+## Ejemplo
+
+Los datos que se presentan a continuación corresponden a los tiempos (en minutos) de ejecución de una tarea determinada de una muestra de empleados de dos empresas.
+
+Empresa 1: 34.5, 30.7, 32.9, 36.0, 34.1, 34.0, 32.3
+
+Empresa 2: 34.0, 27.5, 31.6, 39.7, 35.3, 34.7, 31.7
+
+Calcular e interpretar el rango en cada caso.
+
+El rango de la empresa 1 es
+\[
+R = x_{\max} - x_{\min} = 36.0 - 30.7 = 5.3,
+\]
+mientras que el rango de la empresa 2 es
+\[
+R = x_{\max} - x_{\min} = 39.7 - 27.5 = 12.2.
+\]
+Se observa que el recorrido de los tiempos de la segunda empresa es mayor que el recorrido de los tiempos de la primera en 6.9 minutos.
+
+```{r}
+# datos empresa 1
+x_1 <- c(34.5, 30.7, 32.9, 36.0, 34.1, 34.0, 32.3)
+# datos empresa 2
+x_2 <- c(34.0, 27.5, 31.6, 39.7, 35.3, 34.7, 31.7)
+# rango
+max(x_1) - min(x_1)
+max(x_2) - min(x_2)
+# otra manera
+diff(range(x_1))
+diff(range(x_2))
+```
+
+# Rango intercuartílico
+
+El **rango intercuartílico** del conjunto de datos $x_1,x_2,\ldots,x_n$, denotado con $RI$, se calcula como la diferencia entre el tercer y primer cuartil del conjunto de datos. Es decir:
+\[
+RI = Q_3 - Q_1
+\]
+donde $Q_1$ y $Q_3$ son respectivamente el primer y tercer cuartil de las $n$ observaciones.
+
+## Características
+
+- En el rango intercuartílico se concentran el 50\% central de las observaciones.
+- Está dado en las mismas unidades de la variable de estudio.
+- Es una medida robusta (poco influenciable) a valores extremos.
+- No da razón de la dispersión de los datos respecto a un valor particular o a una medida de tendencia central.
+
+## Ejemplo
+
+El rango intercuartílico de la empresa 1 es
+\[
+RI = Q_3 - Q_1 = 34.30 - 32.60 = 1.70,
+\]
+mientras que el rango intercuartílico de la empresa 2 es
+\[
+RI = Q_3 - Q_1 = 35.00 - 31.65 = 3.35.
+\]
+Se observa que el recorrido del 50\% de los tiempos "intermedios" de la segunda empresa es mayor que el mismo recorrido de los tiempos de la primera en 1.65 minutos. Aunque todavía hay una diferencia clara, no es tan notoria como sí lo es con el rango, lo que sugiere que hay tiempos considerablemente superiores en la primera empresa en comparación con la segunda.
+
+```{r}
+# datos empresa 1
+x_1 <- c(34.5, 30.7, 32.9, 36.0, 34.1, 34.0, 32.3)
+# datos empresa 2
+x_2 <- c(34.0, 27.5, 31.6, 39.7, 35.3, 34.7, 31.7)
+# rango intercuartilico
+diff(quantile(x = x_1, probs = c(0.25, 0.75)))
+diff(quantile(x = x_2, probs = c(0.25, 0.75)))
+```
+
+# Desviación de un dato respecto al promedio
+
+Una forma de medir la variabilidad de un conjunto de datos se hace a partir de las **desviación de las observaciones respecto al promedio**, las cuales están dadas por:
+\[
+d_i = x_i - \bar{x}
+\]
+para $i = 1,\ldots,n$, donde $\bar{x}$ es el promedio observado del conjunto de datos.
+
+## Características
+
+- Una desviación positiva(negativa) indica que el dato es mayor(menor) que el promedio.
+- Una desviación igual a 0 quiere decir que el dato es exactamente igual al promedio. 
+- La suma de todas las desviaciones del conjunto de datos es cero, es decir, $\displaystyle\sum_{i=1}^{n} d_i = 0$.
+
+Dado que el resultado de dicha sumatoria siempre es igual a cero, una alternativa para definir una medida de variabilidad respecto al promedio, consiste en elevar al cuadrado cada uno de los sumandos, $(x_i-\bar{x})^2$. Esto da lugar al concepto de varianza.
+
+# La varianza
+
+La **varianza muestral**, **cuasi-varianza** o **varianza corregida** del conjunto de datos $x_1,x_2,\ldots,x_n$, denotada con $s^2$, se calcula como:
+$$
+  V(x)=s^2 = \frac{1}{n-1}\sum_{i=1}^{n} (x_i - \bar{x})^2
+$$ 
+donde $\bar{x}$ es el promedio observado del conjunto de datos.
+
+## Características
+
+- Está dada en las unidades de la variable de estudio al cuadrado.
+- La relación entre la varianza y la dispersión de un conjunto de datos es directa.
+- Si la varianza es un valor "pequeño", entonces los datos están poco dispersos (homogéneos) respecto al promedio; si la varianza es un valor "grande", sucede lo contrario. 
+- Es sensible a datos atípicos.
+
+## Propiedades
+
+- $V(x)\geq 0$.
+- Si $k$ es una constante, entonces $V(k)=0$.
+- Si $k$ es una constante, entonces $V(k\,x)=k^2\,V(x)$.
+- Si $k_1$ y $k_2$ son constantes, entonces $V(k_1\,x + k_2)=k_1^2\,V(x)$.
+- Una forma alternativa para calcular la varianza muestral es:
+$$
+s^2 = \frac{1}{n-1}\left(\sum_{i=1}^n x_i^2 - n\,\bar{x}^2\right).
+$$
+
+## Ejemplo
+
+Se tienen los siguientes conjuntos de datos:
+
+Conjunto de datos I:   50,  50,  50,  50 ,  50
+
+Conjunto de datos II:  45,  50,  55,  47 ,  53
+
+Conjunto de datos III: 3,   97,  10,  105,  35
+
+A continuación se presenta el valor del promedio y de la varianza para los tres conjuntos de datos, junto con un diagrama de caja para cada uno.
+
+| Conjunto | $\bar{x}$ | $s^2$    |
+|:--------:|:---------:|:--------:|
+| I        | 50        | 0.0      |
+| II       | 50        | 17.0     |
+| III      | 50        | 2317.0  |
+
+¿Para cuál de los tres conjuntos la media resulta ser una buena representación de los datos? ¿Para cuál la peor? ¿Por qué?
+
+```{r echo=TRUE, eval=TRUE}
+# datos
+x_1 <- rep(50, 5)
+x_2 <- c(45, 50, 55, 47, 53)
+x_3 <- c(3, 97, 10, 105, 35)
+# promedio
+mean(x_1)
+mean(x_2)
+mean(x_3)
+# varianza
+var(x_1)
+var(x_2)
+var(x_3)
+```
+
+## Datos agrupados
+
+En algunas ocasiones, los datos disponibles están disponibles en una tabla de frecuencias:
+
+| $y_j$    | $n_j$    | $h_j$    | 
+|:--------:|:--------:|:--------:|
+| $y_1$    | $n_1$    | $h_1$    | 
+| $y_2$    | $n_2$    | $h_2$    |
+| $\vdots$ | $\vdots$ | $\vdots$ |
+| $y_m$    | $n_m$    | $h_m$    |
+| Total    | $n$      | $1$      |
+
+donde las $y_j, j=1,...,m$ son los valores que toma la variable de estudio (categorías), mientras que los $n_j$ y $h_j$ son las frecuencias absolutas y relativas de la $j$-ésima categoría, respectivamente. Así, se tiene que:
+$$
+M(y)=\bar{y}=\frac{1}{n}\sum_{j=1}^{m}n_j y_j = \sum_{j=1}^m h_jy_j
+$$
+y
+$$
+V(y)=s^2=\frac{1}{n-1}\sum_{j=1}^{m} n_j (y_j-\bar{y})^2
+$$
+con $n=\displaystyle\sum_{j=1}^{m}n_j$.	
+
+# La desviación estándar
+
+Debido a que la varianza se encuentra en unidades al cuadrado, buscando una medida más fácil de comprender, se hace necesaria la definición de la desviación estándar. 
+
+La **desviación estándar** o **desviación típica** del conjunto de datos $x_1,x_2,\ldots,x_n$, denotada con $s$, se calcula como:
+$$
+s = \sqrt{s^2} = \sqrt{\frac{1}{n-1}\sum_{i=1}^{n} (x_i - \bar{x})^2}\,.
+$$
+
+## Estandarización
+
+Se denomina **estandarización o tipificación** al proceso de restar de una variable la media y luego dividir por la desviación estándar. De este modo, si $x_1,x_2,\ldots, x_n$ es un conjunto de $n$ realizaciones de una variable $X$, entonces cuando se realiza este proceso se obtiene una nueva variable, denotada con $Z$, cuyas observaciones está dadas por
+$$
+z_i= \frac{x_i - \bar{x}}{s}
+$$
+para $i = 1,\ldots,n$.La variable $Z$ se denomina **variable estandarizada** o **variable tipificada**.
+
+- La estandarización se utiliza cuando se quieren comparar individuos bajo escenarios diferentes. Por ejemplo, si se quiere comparar el nivel académico de dos estudiantes de diferentes universidades para otorgar una beca de estudios. 
+- Una variable estandarizada es una variable adimensional (no tiene unidades de medición).
+- Si $z_1,z_2,\ldots, z_n$ son los valores de una variable estandarizada, entonces $M(z) = 0$ y $V(z) = 1$.
+
+### Ejemplo
+
+Teniendo en cuenta los datos del Ejemplo 1, estandarizar las observaciones de cada empresa. Comentar los resultados obtenidos.
+
+En este caso se tiene que
+$$
+\bar{x}_1=33.500, \,\, s_{1} = 1.708, \,\, \bar{x}_2=33.500 \,\,\, \text{y} \,\,  s_{2}= 3.791
+$$
+donde $\bar{x}_i$ y $s_{i}$ son respectivamente la media muestral y la desviación estándar muestral de los tiempos (en minutos) de ejecución en cada empresa, con $i=1,2$. 
+
+Los tiempos estandarizados en cada caso son:
+
+Empresa 1: $0.585$, $-1.639$, $-0.351$, $1.463$, $0.351$, $0.292$, $-0.702$
+
+Empresa 2: $0.131$, $-1.582$, $-0.501$, $1.635$, $0.474$, $0.316$, $-0.474$
+
+Por ejemplo, se observa que el individuo 1 de la primera empresa es definitivamente más lento en su contexto que el individuo 1 de la segunda compañía a pesar de que tienen tiempos muy próximos.
+
+```{r}
+# datos empresa 1
+x_1 <- c(34.5, 30.7, 32.9, 36.0, 34.1, 34.0, 32.3)
+# datos empresa 2
+x_2 <- c(34.0, 27.5, 31.6, 39.7, 35.3, 34.7, 31.7)
+# promedio y desviacion estandar empresa 1
+m_1 <- mean(x_1)
+print(m_1)
+s_1 <- sd(x_1)
+print(s_1)
+# promedio y desviacion estandar empresa 2
+m_2 <- mean(x_2)
+print(m_2)
+s_2 <- sd(x_2)
+print(s_2)
+# datos estandarizados empresa 1
+(x_1 - m_1)/s_1
+# datos estandarizados empresa 2
+(x_2 - m_2)/s_2
+# promedio y varianza datos estandarizados empresa 1
+mean((x_1 - m_1)/s_1)
+var((x_1 - m_1)/s_1)
+# promedio y varianza datos estandarizados empresa 2
+mean((x_2 - m_2)/s_2)
+var((x_2 - m_2)/s_2)
+```
+
+# Coeficiente de variación de Pearson
+
+Para comparar la dispersión de dos o más conjuntos de datos no es adecuado comparar directamente las varianzas o las desviaciones estándar porque:
+
+- Dichas medidas están influenciadas por la escala de medida de los datos.
+- Por si mismas no ofrecen una medida que describa la magnitud de la variabilidad de los mismos.
+
+Es necesario eliminar tal influencia generada por las unidades de medida. El coeficiente de variación, es una medida que no depende de las unidades de medición.
+
+El **coeficiente de variación de Pearson** del conjunto de datos $x_1,x_2,\ldots,x_n$, denotado con $CV(x)$, se calcula como:
+
+$$
+CV(x)= \left| \frac{s}{\bar{x}} \right|
+$$
+donde $|a|$ es el valor absoluto de $a$.
+
+- Compara la magnitud de la dispersión de la variable con la media del conjunto de datos, de tal forma que la maginitud es relativa al valor del promedio. 
+- Las unidades del numerador y del denominador se cancelan y en consecuencia el coeficiente de variación es una medida adimensional.
+- A pesar de no ser una proporción, se acostumbra expresar el coeficiente en porcentaje y dependiendo del valor que tome se dice que si el coeficiente de correlación:
+1. Está entre 0\% y 5\%, entonces la dispersión del conjunto de datos es mínima.   
+2. Está entre 5\% y 15\%, entonces la dispersión del conjunto de datos es moderada.
+3. Es superior a 15\%, entonces la dispersión del conjunto de datos es alta.
+
+## Características
+
+-  Es una medida adimensional.
+-  La relación entre el coeficiente de variación y la dispersión de un conjunto de datos es directa.
+-  Es sensible a valores atípicos.
+-  Es un valor no negativo.
+-  Si el promedio es igual a 0, entonces el coeficiente de variación no está definido.
+
+### Ejemplo
+
+Un inversionista potencial piensa adquirir acciones en una de dos compañías --A o B-- listadas en la bolsa de valores. Si ninguna de las compañías ofrece dividendos a sus clientes y ambas tienen igual clasificación en términos de crecimiento potencial --como lo aseguran varios servicios de inversión-- el posible inversionista quizás considere la volatilidad (variabilidad) de ambas acciones para tomar una decisión en cuanto a la inversión. En los últimos meses, el precio promedio de las acciones en la compañía A fue de USD 50 con una desviación estándar de USD 10. Además, durante el mismo periodo, el precio promedio de las acciones en la compañía B fue de USD 12 con una desviación estándar de USD 4. ¿Cómo puede determinar el inversionista cuáles acciones son más variables?
+
+- En términos de la desviación estándar, el precio de las acciones de la compañía A parece más volátil que el de las acciones de la compañía B.
+- Como los precios promedio por acción de las dos compañías son tan diferentes, será conveniente que el inversionista potencial considere la variabilidad del precio con respecto al promedio. Si $X$ denota el "precio (en dólares) de las acciones" en el periodo de tiempo examinado, para la compañía A: 
+$$
+CV_{\text{A}} = \left|\frac{10}{50}\right|100\% = 20.0\%\,.
+$$
+Mientras que para la compañía B:
+$$
+CV_{\text{B}} = \left|\frac{4}{12}\right|100\% = 33.3\%\,.
+$$
+- Entonces, en relación con la media, el precio de las acciones de la compañía B es mucho más variable que el de las acciones de la compañía A.
+
+## Ejercicio
+
+Calcular e interpretar los cuartiles del peso del conjunto de datos asociados con la muestra de materiales.
+
+# Referencias
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-sosacoverbook.png")
+```
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-devorecoverbook.jpg")
+```
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-navidicoverbook.png")
+```
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-wackerlycoverbook.jpg")
+```
