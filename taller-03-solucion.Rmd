@@ -1,0 +1,367 @@
+---
+title: "Taller 3"
+author: 
+  - Lina Buitrago PhD(c), labuitragor@unal.edu.co
+  - Juan Sosa PhD, jcsosam@unal.edu.co
+date: ""
+output:
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1. Considere le siguiente distribución de frecuencias:
+
+| Intervalo     | Marca de clase | F. Absoluta | F. Relativa | F. Abs. Acumulada | F. Rel. Acumulada |
+|:-------------:|:--------------:|:-----------:|:-----------:|:-----------------:|:-----------------:|
+| $[0 ; 10]$    | 5              | 60          | 0.3         | 60                | 0.3               |
+| $(10 ; 20]$   | 15             | 80          | 0.4         | 140               | 0.7               |
+| $(20 ; 30]$   | 25             | 30          | 0.15        | 170               | 0.85              |
+| $(30 ; 100]$  | 65             | 20          | 0.1         | 190               | 0.95              |
+| $(100 ; 200]$ | 150            | 10          | 0.05        | 200               | 1                 |
+| Total         | N.A.           | 200         | 1           | N.A.              | N.A.              |
+
+a. Completar la tabla.
+
+En este caso el número de catergorías es $m = 5$ y además $n = 200$ ya que $N_5=200$. De otra parte, las marcas de clase corresponden a los puntos medios de cada intervalo, es decir, $y_j = \frac{l_{j-1}+l_j}{2}$, done $l_{j-1}$ y $l_j$ son los límites del intervalo $j$, para $j=1,\ldots,m$. Observe que los intervalos no tienen amplitud constante. Además:
+
+- $n_1=N_1=60$.
+- $n_2=n*h_2=80$ y $n_4=n*h_4=20$.
+- $n_5=n-(n_1+n_2+n_3+n_4)=10$.
+- $h_1=n_1/n$, $h_3=n_3/n$.
+
+Finalmente, las frecuencias acumuladas se calculan con las fórmulas usuales:
+
+- $N_j = \sum_{k=1}^j n_k$, para $j=1,\ldots,m$.
+- $H_j = \sum_{k=1}^j h_k = N_j/n$, para $j=1,\ldots,m$.
+
+```{r}
+# número de categorías
+m <- 5
+# tamaño de la muestra
+n <- 200
+# limites inferiores de los intervalos
+li <- c(0, 10, 20, 30, 100)
+# limites superiores de los intervalos
+ls <- c(10, 20, 30, 100, 200)
+# marcas de clase
+y <- (li + ls)/2
+y
+# n_2
+0.4*n
+# n_4
+0.1*n
+# n_5
+n - (60+80+30+20)
+# h_1
+60/200
+# h_3
+30/200
+# h_5
+10/200
+# suma de frecuencias relativas
+0.3 + 0.4 + 0.15 + 0.1 + 0.05
+# frecuencias absolutas
+nj <- c(60, 80, 30, 20, 10)
+nj
+# frecuencias relativas
+hj <- nj/n
+hj
+# frecuencias absolutas acumuladas
+Nj <- cumsum(nj)
+Nj
+# frecuencias relativas acumuladas
+Hj <- Nj/n
+Hj
+```
+
+b. ¿Cuántos individuos asumen un valor de la variable de hasta 100?
+
+La cantidad de individuos que asumen un valor de la variable de hasta 100 es $N_4 = 190$.
+
+c. ¿Qué porcentaje de individuos asumen un valor de la variable de entre 10 y 100?
+
+El porcentaje de individuos que asumen un valor de la variable de entre 10 y 100 es $H_4-H_1 = 95\%-30\% = 65\%$.
+
+d. Calcular el promedio de la variable.
+
+El promedio de la variable es $\bar{y} = \frac{1}{n}\sum_{j=1}^m n_j\,y_j = \sum_{j=1}^m h_j\,y_j = 25.25$, donde $y_j$ es la marca de clase de la categoría $j$, para $j=1,\ldots,m$.
+
+```{r}
+# calculo del promedio
+sum(nj*y)/n
+# otra manera
+sum(hj*y)
+```
+
+2. Considere el conjunto de datos dados en el archivo de texto `taller_03_datos.txt`. Este archivo contiene las calificaciones promedio de una muestra aleatoria de estudiantes de una Universidad en el primer semestre de este año. A continuación se presenta el procedimiento **importar** este conjunto de datos en `R`.
+
+```{r, echo=T, eval=F}
+# importar base de datos
+base_de_datos <- read.table(file = "C:/Users/Juan Camilo/Dropbox/UN/probabilidad_y_estadistica_2022_1/taller_03_datos.txt")
+
+# extraer los valores de la variable
+cal <- base_de_datos$V1
+
+# tamaño de la muestra
+n <- length(cal)
+```
+
+Observe que para importar la base de datos exitósamente en `R` por medio de la rutina `read.table`, hay que proporcionar la **ruta de acceso** correcta. ¡No olvide actualizar esta ruta!
+
+En este enlace https://www.youtube.com/watch?v=MgsVmIoPoyQ&ab_channel=JuanSosa puede encontrar un tutorial completo para **importar y consultar bases de datos**.
+
+a. Calcular el máximo, el mínimo, el rango, y el promedio de las calificaciones.
+
+| Medida   | Valor |
+|:--------:|:-----:|
+| Máximo   | 4.08  |
+| Mínimo   | 3.4   |
+| Rango    | 0.68  | 
+| Promedio | 3.698 |
+
+```{r, echo=F, eval=T}
+# importar base de datos
+base_de_datos <- read.table(file = "C:/Users/Juan Camilo/Dropbox/UN/probabilidad_estadistica/taller_03_datos.txt")
+# extraer los valores de la variable
+cal <- base_de_datos$V1
+# tamaño de la muestra
+n <- length(cal)
+```
+
+```{r}
+# maximo
+max(cal)
+# minimo
+min(cal)
+# rango
+max(cal) - min(cal)
+# promedio
+mean(cal)
+```
+
+b. Hacer la distribución de frecuencias de las calificaciones con $m=10$ intervalos.
+
+| Clase    | F. Absoluta  | F. Relativa  | F. Abs. Acumulada | F. Rel. Acumulada |
+|:--------:|:------------:|:------------:|:-----------------:|:-----------------:|
+| $[3\text{.}40  ; 3\text{.}47)$ |	15   | 1.5\%	 | 15	   | 1.5\%  |
+| $[3\text{.}74  ; 3\text{.}54)$ |	42   | 4.2\%	 | 57	   | 5.7\%  |
+| $[3\text{.}54  ; 3\text{.}60)$ |	126  | 12.6\%	 | 183	 | 18.3\% |
+| $[3\text{.}60  ; 3\text{.}67)$ |	231  | 23.1\%	 | 414	 | 41.4\% |
+| $[3\text{.}67  ; 3\text{.}74)$ |	250  | 25.0\%	 | 664	 | 66.4\% |
+| $(3\text{.}74  ; 3\text{.}81]$ |	189  | 18.9\%	 | 853	 | 85.3\% |
+| $(3\text{.}81  ; 3\text{.}88]$ |	97   | 9.7\%	 | 950	 | 95.0\% |
+| $(3\text{.}88  ; 3\text{.}94]$ |	45   | 4.5\%	 | 995	 | 99.5\% |
+| $(3\text{.}94  ; 4\text{.}01]$ |	4    | 0.4\%	 | 999	 | 99.9\% |
+| $(4\text{.}01  ; 4\text{.}08]$ |	1    | 0.1\%	 | 1000	 | 100\%  |
+| Total                          | 1000  | 100\%   | N.A   | N.A    |
+
+```{r}
+# numero de categorias
+m <- 10
+# minimo
+xmin <- min(cal)
+# maximo
+xmax <- max(cal)
+# rango
+R <- xmax - xmin
+# amplitud
+a <- R/m
+# limites de los interalos
+lim <- xmin + (0:m)*a
+round(x = lim, digits = 2)
+# frecuencia absoluta
+nj <- table(cut(x = cal, breaks = lim, include.lowest = T))
+nj
+# frecuencias relativas
+hj <- nj/n
+100*hj
+# frecuencias absolutas acumuladas
+Nj <- cumsum(nj)
+Nj
+# frecuencias relativas acumuladas
+Hj <- Nj/n
+100*Hj
+```
+
+3. Se estudiaron dos métodos de recuperación de proteínas. Se hicieron trece corridas usando cada método y se registró la parte de la proteína recuperada para cada corrida. Los resultados son los siguientes: Método 1: 0.32, 0.35, 0.37, 0.39, 0.42, 0.47, 0.51, 0.58, 0.60, 0.62, 0.65, 0.68, 0.75. Método 2: 0.25, 0.40, 0.48, 0.55, 0.56, 0.58, 0.60, 0.65, 0.70, 0.76, 0.80, 0.91, 0.99. Calcular el mínimo, el máximo, el rango, y el promedio de cada método. ¿Qué diferencias se observan entre los resultados de los dos métodos?
+
+A continuación se presentan las medidas correspondientes:
+
+| Medida   | Método 1 | Método 2 |
+|:--------:|:--------:|:--------:|
+| Máximo   | 0.75     | 0.99     |
+| Mínimo   | 0.32     | 0.25     |
+| Rango    | 0.43     | 0.74     |
+| Promedio | 0.516    | 0.633    |
+
+Se observa que el segundo método parece tener mayor variabilidad, y al mismo tiempo, una mayor capacidad promedio de recuperación de proteinas.
+
+```{r}
+# datos
+metodo_1 <- c(0.32, 0.35, 0.37, 0.39, 0.42, 0.47, 0.51, 0.58, 0.60, 0.62, 0.65, 0.68, 0.75)
+metodo_2 <- c(0.25, 0.40, 0.48, 0.55, 0.56, 0.58, 0.60, 0.65, 0.70, 0.76, 0.80, 0.91, 0.99)
+# maximo
+max(metodo_1)
+max(metodo_2)
+# minimo
+min(metodo_1)
+min(metodo_2)
+# rango
+max(metodo_1) - min(metodo_1)
+max(metodo_2) - min(metodo_2)
+# promedio
+mean(metodo_1)
+mean(metodo_2)
+```
+
+4. Una muestra de temperaturas para iniciar una cierta reacción química dio un promedio muestral de 87.3 grados centigrados. ¿Cuál es el promedio muestral en 
+grados Fahrenheit?
+
+Sea $X$ = "la temperatura de la reacción en grados centigrados" y $Y$ = "la temperatura de la reacción en grados Fahrenheit". En este caso se tiene que $Y = \tfrac95 X + 32$, y por en por lo tanto, $\bar{Y} =  \tfrac95\bar{X} + 32$. Así, se tiene que el promedio de la reacción química en grados Fahrenheit es $\bar{y} = \tfrac95\,(87.3) + 32 = 189.14$.
+
+```{r}
+# promedio en grados Fahrenheit
+(9/5)*(87.3) + 32 
+```
+
+5. Veintiuna personas tienen una estatura promedio de 168 centímetros. Si se considera la información de una persona adicional, ¿cuál es la estatura que debe tener esta persona para que la estatura promedio se incremente dos centímetros?
+
+En este caso se tiene que $\bar{x} = \frac{1}{n}\sum_{i=1}^n x_i = 168$, con $n=21$. Para que el promedio de la estatura se incremente dos centímetros al considerar la información de una persona adicional, se debe satisfacer que:
+$$
+\frac{1}{22}\left(\sum_{i=1}^n x_i + x_{22}\right) = 168 + 2\,,
+$$
+donde $x_{22}$ es la estatura de la persona adicional. Resolviendo se obtiene que
+$$
+x_{22} = (168+2)*22 - 21*168 = 212\,,
+$$
+dado que $\sum_{i=1}^n x_i = n\bar{x} = 21*168$. Por lo tanto, para incrementar el promedio incial en tan solo 2 cm, la nueva persona debería tener una estatura de 212 cm. 
+
+```{r}
+# estatura persona adicional
+(168+2)*22 - 21*168
+```
+
+6.  Con la información dada en la siguiente tabla, calcular la calificación de un estudiante en la última unidad de la asignatura considerando que quiere aprobar la materia con 3.2.
+
+| Unidad    | Valor (\%) | Calificación |
+|:---------:|:----------:|:------------:| 
+| I         | 20 | 3.7 |
+| II        | 25 | 2.4 |
+| III       | 20 | 3.0 |
+| IV        | 15 | 3.2 |
+| V         |    |     |
+
+Aquí, se considera la formulación de un promedio ponderado. En este caso, el valor de la unidad V es 1-0.2-0.25-0.2-0.15=20\% y así se debe satisfacer que:
+$$
+\bar{x} = (0.2)(3.7) + (0.25)(2.40) + (0.2)(3.0) + (0.15)(3.2) + (0.2)*x_5 = 3.2
+$$
+donde $\bar{x}$ es el promedio de las calificaciones del estudiante y $x_5$ es la calificación de la última prueba. Despejando $x_5$ del planteamiento anterior, se tiene que la califición del estudiante en la última prueba debería ser:
+$$
+x_5=\frac{3.2 - ( (0.2)(3.7) + (0.25)(2.40) + (0.2)(3.0) + (0.15)(3.2) ) }{0.2} = 3.9
+$$
+
+```{r}
+# valor de la ultima unidad
+1-0.2-0.25-0.2-0.15
+# x_5
+(3.2 - (0.2*3.7 + 0.25*2.40 + 0.2*3.0 + 0.15*3.2))/0.2
+```
+
+
+7. Un grupo de 200 estudiantes, cuya estatura promedio es de 160.96 centímetros, se divide en dos grupos, uno con una estatura promedio de 163.4 centímetros y otro, con una de 157.3 centímetros. ¿Cuántos estudiantes tiene cada grupo?
+
+En este caso se tiene que el promedio total es $\bar{x} = 160.96$ y los promedios de los grupos son $\bar{x}_1=163.4$ y $\bar{x}_2=157.3$. Bajo estas condiciones, se tiene que el promedio total se puede expresar como 
+$$
+\bar{x} = \frac{n_1\bar{x}_1 + n_2\bar{x}_2}{n}=\frac{n_1(163.4) + n_2(157.3)}{n} = 160.96
+$$
+con 
+$$n=n_1+n_2=200$$ 
+donde $n_1$ y $n_2$ son los tamaños de los grupos 1 y 2, respectivamente. Este plantemiento corresponde al de dos ecuaciones con dos incognitas, a saber, $n_1$ y $n_2$. Despejando $n_1$ de la ecuación 2 y reemplazando en la ecuación 1, se obtiene que:
+$$
+\frac{(200-n_2)(163.4) + n_2(157.3)}{200} = 160.96
+$$
+y por lo tanto
+$$
+n_2 = \frac{200*160.96 - 200*163.4}{157.3-163.4} = 80.
+$$
+Así, el segund grupo tiene $n_2=80$ individuos, y por lo tanto, el primer grupo tiene $n_1 = 200-n_2 = 120$ individuos. 
+
+```{r}
+# n_2
+(200*160.96 - 200*163.4)/(157.3-163.4)
+
+```
+
+8. A continuación se presentan los salarios mensuales en miles de pesos, pagados por una empresa del Estado a su personal. En la empresa se presenta un conflicto laboral. El gerente propone un aumento del 2\% para cada uno de los empleados, mientras que la junta directiva propone un aumento neto de 10 mil pesos mensuales.
+
+| Salario       |	300 | 400 | 500 | 600 | 700 |
+|:-------------:|:---:|:---:|:---:|:---:|:---:|
+| No. empleados | 10  | 16  | 35  | 26  | 13  |
+
+Con base en el promedio, ¿qué es más ventajoso para el Estado y qué para cada grupo de empleados?
+
+Sea $Y$ = "el salario mensual en miles de pesos de los empleados de la empresa del Estado". Dado que los datos están agrupados en una tabla de frecuencias, se tiene que el promedio correspondiente es
+$$
+\bar{y} = \frac{1}{n}\sum_{j=1}^m n_j\,y_j = \sum_{j=1}^mh_j\,y_j = 516
+$$
+donde el número de grupos es $m=5$ y el tamaño de la muestra es $n = \sum_{j=1}^m n_j = 100$.
+
+La propuesta del gerente da como resultado un promedio de salarios general de $1.02*516=526.32$, es decir \$ 526,320; mientras que la pripuesta de la junta directiva da como resultado un promedio de salarios general de $516+10=526$, es decir \$ 526,000. Por lo tanto la propuesta más ventajosa para el Estado es la de la junta directiva. De otra parte, para cada grupo de empleados, cada propuesta da como resultado los siguientes salarios:
+
+| Propuesta   |	300 | 400 | 500 | 600 | 700 |
+|:-----------:|:---:|:---:|:---:|:---:|:---:|
+| Gerente     | 306 | 408 | 510 | 612 | 714 |
+| Junta       | 310 | 410 | 510 | 610 | 710 |
+
+En consecuencia, lo mas ventajoso para los grupos 1 y 2 es la propuesta de la junta; para el grupo 3, las dos propuestas son equivalentes; y finalmente, para los grupos 4 y 5 lo más ventajoso es la propuesta del gerente.
+
+```{r}
+# frecuencias absolutas
+nj <- c(10, 16, 35, 26, 13)
+# tamaño de la muestra
+n <- sum(nj)
+n
+# valores de la variable
+yj <- c(300, 400, 500, 600, 700)
+# promedio
+sum(nj*yj)/n
+# promedio propuesta del gerente
+1.02*516
+# propuesta del gerente para cada grupo
+1.02*yj
+# propuesta de la junta para cada grupo
+yj + 10
+```
+
+9. Muestre que si $k_1$ y $k_2$ son constantes, entonces $M(k_1 + k_2x)=k_1 + k_2M(x)$.
+
+$$
+\begin{align}
+M(k_1 + k_2x) &= \frac{1}{n}\sum_{i=1}^n(k_1 + k_2x_i)\\
+&=\frac{1}{n}\left(\sum_{i=1}^n k_1 + \sum_{i=1}^nk_2x_i\right)\\
+&=\frac{1}{n}\left(n\,k_1 + k_2\sum_{i=1}^nx_i\right)\\
+&=\frac{1}{n}\left(n\,k_1 + k_2\,n\,M(x)\right)\\
+&=\frac{1}{n}\,n\,k_1 + \frac{1}{n}\,k_2\,n\,M(x)\\
+&=k_1 + k_2M(x)\,.
+\end{align}
+$$
+
+10. Considere un conjunto de datos particionados en $m$ grupos con tamaños $n_1,\ldots,n_m$ y medias $\bar{x}_1,\ldots,\bar{x}_m$, tales que $n_1=\ldots=n_m=c$. Muestre que si $n = c\cdot m$, entonces la media de todo el conjunto de datos $\bar{x}$ coincide con la media de las medias de los grupos $\bar{\bar{x}}$.
+
+$$
+\begin{align}
+\bar{x} &= \frac{1}{n}\sum_{j=1}^m n_j\,\bar{x}_j\\
+&= \frac{1}{n}\sum_{j=1}^m c\,\bar{x}_j\\
+&= \frac{1}{n}c\sum_{j=1}^m\bar{x}_j\\
+&= \frac{c}{n}\,m\,\frac{1}{m}\sum_{j=1}^m\bar{x}_j\\
+&= \left(\frac{c\,m}{n}\right)\cdot\left(\frac{1}{m}\sum_{j=1}^m\bar{x}_j\right)\\
+&= 1\cdot\bar{\bar{x}}\\
+&= \bar{\bar{x}}\,.
+\end{align}
+$$
