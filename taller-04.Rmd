@@ -1,0 +1,84 @@
+---
+title: "Taller 4"
+author: 
+  - Lina Buitrago PhD(c), labuitragor@unal.edu.co
+  - Juan Sosa PhD, jcsosam@unal.edu.co
+date: ""
+output:
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1. Determinar y justificar si las siguientes afirmaciones son Falsas o Verdaderas.
+
+- La mitad de las observaciones de una muestra es menor o igual que la media. 
+- La media   de un conjunto de datos es el valor que ocurre con más frecuencia.
+- La media   de una muestra es igual a una de las observaciones de la muestra.
+- Es preferible utilizar un instrumento de medición que genere observaciones con una desviación estándar grande.
+- Por lo general, la media y la mediana de un conjunto de datos son valores muy similares.
+
+2. Yanowitz, en *In-use Emissions From Heavy-Duty Diesel Vehicles*, investigó los factores que afectan las emisiones de un vehículo diesel, y obtuvo datos acerca de la emisión de partículas para una muestra de 138 vehículos conducidos en bajas altitudes (cerca del nivel del mar) y para una muestra de 62 vehículos conducidos a grandes altitudes (aproximadamente a una milla del nivel del mar). Todos los vehículos se fabricaron entre 1991 y 1996. Las muestras contenían proporciones parecidas de vehículos de bajo y alto kilometraje. Los datos, en unidades de gramos de partículas por galón de combustible consumido, se presentan en el archivo `EP.txt`. En esta base de datos, "emision" es la variable emisión de partículas (en unidades de gr/gal) y "altitud" es la varaible altitud a la que se conduce el vehículo (0 = baja; 1 = alta). A grandes altitudes, la presión barométrica es más baja, así la razón de eficiencia aire/combustible también es más baja. Por esta razón se pensó que la emisión de partículas podría ser mayor a grandes a altitudes.
+
+- Completar la siguiente tabla:
+
+| Altitud | $n$ | Mín. | Cuar. 1 | Cuar. 2 | Cuar. 3 | Máx. | Media | DE | CV |
+|:-------:|:---:|------|---------|---------|---------|------|-------|----|----|
+| Baja    | 138 |      |         |         |         |      |       |    |    |
+| Ala     | 62  |      |         |         |         |      |       |    |    |
+
+DE: Desviación Estándar. CV: Coeficiente de Variación.
+
+- Comparar los resultados para determinar si los datos apoyan el supuesto de que la emisión de partículas podría ser mayor a grandes a altitudes.
+
+A continuación se presenta el procedimiento **importar** este conjunto de datos en `R`.
+
+```{r, echo=T, eval=F}
+# importar base de datos
+datos <- read.table(file = "C:/Users/Juan Camilo/Dropbox/UN/probabilidad_estadistica/EP.txt", header = TRUE)
+# extraer los valores de emision con altitud baja en el objeto llamado baja
+baja <- datos$emision[base_de_datos$altitud == 0]
+# extraer los valores de emision con altitud alta en el objeto llamado alta
+alta <- datos$emision[base_de_datos$altitud == 1]
+# tamaños de la muestra
+n_baja <- length(baja)
+n_alta <- length(alta)
+```
+
+3. El artículo *Computing and Using Rural versus Urban Measures in Statistical Applications* (C. Goodall, K. Kafadar y J. Tukey, The American Statistician, 1998:101-111) analiza los métodos para medir el grado a los cuales los condados de los Estados Unidos son urbanos más que rurales. La siguiente tabla de frecuencias presenta las frecuencias de población de los condados de los Estados Unidos. 
+
+| Población (en miles) | No. de condados |
+|:--------------------:|:---------------:|
+| 0.064   – 5.405      | 305             |
+| 5.405   – 8.780      | 294             |
+| 8.780   – 12.417     | 331             |
+| 12.417  – 16.384     | 286             |
+| 16.384  – 21.619     | 306             |
+| 21.619  – 28.526     | 273             |
+| 28.526  – 40.342     | 334             |
+| 40.342  – 65.536     | 326             |
+| 65.536  – 131.072    | 290             |
+| 131.072 – 8388.608   | 323             |
+
+- Completar la distribución de frecuencias (frecuencia relativa y frecuencias acumuladas).
+- Calcular la media, la mediana, la moda, y el coeficiente de variación.
+- Comentar los resultados del numeral anterior.
+
+4. Una muestra de temperaturas para iniciar una cierta reacción química dio un promedio muestral de (C) 87.3 y una desviación estándar muestral de (C) 1.04. ¿Cuáles son el promedio muestral y la desviación estándar en grados Fahrenheit? 
+
+5. Sean $X$ y $Y$ dos variables tales que:
+\[
+\sum_{i=1}^{10} x_i = 110, \quad
+\sum_{i=1}^{10} y_i = 60, \quad
+\sum_{i=1}^{10} x_i^2 = 3156 \quad \text{y}\quad 
+\sum_{i=1}^{10} y_i^2 = 1138.
+\]
+Para cada variable calcular el coeficiente de variación. Interpretar y comparar los resultados obtenidos.
+
+6. En cierta región la distribución de predios por extensión tiene una media de 35.4 hectáreas y una desviación típica de 19.33 hectáreas, mientras que la distribución por canon de arrendamiento tiene una media de \$245,750 y una desviación de \$7,470. ¿Cual de las dos distribuciones tiene mayor variabilidad? ¿Por qué?
