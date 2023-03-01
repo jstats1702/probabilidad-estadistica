@@ -1,0 +1,201 @@
+---
+title: "Análisis Gráfico"
+author: 
+  - Lina Buitrago PhD(c), labuitragor@unal.edu.co
+  - Juan Sosa PhD, jcsosam@unal.edu.co
+date: ""
+output:
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+# Introducción
+
+Una de las primeras etapas en el análisis de datos es la **exploración de los datos** por medio de gráficos, en la cual se evidencian las características de las variables de manera directa y precisa. Los gráficos son extremadamente útiles para describir la **distribución de un conjunto de datos**.
+
+En la estadística descriptiva se utilizan gráficas de diversos tipos dependiendo de las variables de estudio. Entre ellos se destacan los siguientes: 
+
+- Diagramas de barras (sectores).
+- Diagramas de caja.
+- Histogramas.
+- Dispersogramas.
+
+El objetivo principal es **dar a entender de manera clara y sencilla el comportamiento de una o varias variables** con el fin de identificar fácilmente **patrones** y **anomalias** como:
+
+- Concentración de los valores de una variable en alguna clase.
+- Existencia de categorías sin propósito.
+- Presencia de datos atípicos. 
+
+Se debe tener especial atención en los **detalles que conforman las visualizaciones**, como el título principal, el título de los ejes, el color, el tamaño, y la escala.
+
+# Variables cualitativas
+
+## Diagrama de barras
+
+En un diagrama de barras se representa cada categoría mediante una barra, de forma que su tamaño sea proporcional a la frecuencia.
+
+Ver la rutina `barplot` en `R`.
+
+## Diagrama de sectores
+
+En un diagrama de sectores se divide un círculo en tantas porciones como categorías, de forma que a cada clase le corresponda un sector del círculo con tamaño proporcional a la frecuencia de la clase.
+
+Estos diagramas también se pueden utilizar para variables cuantitativas discretas cuando la cantidad de categorías lo permite.
+
+Ver la rutina `pie` en `R`.
+
+## Ejemplo
+
+Considere la Encuesta de Desarrollo e Innovación Tecnológica (EDIT), 2015-2016, para Colombia. En esta encuesta se toman todas las empresas industriales a nivel nacional que cumplen los parámetros de inclusión (establecimientos industriales con 10 o más personas ocupadas o que registren un valor de producción anual mayor o igual a un valor determinado). Toda la información al respecto de la encuesta se encuentra disponible en https://www.dane.gov.co/. La base de datos dada en `EDIT.txt` contiene la información de $n=1718$ empresas que reportaron los datos en relación con:
+
+- Departamento interno de I+D (1 = Sí, 2 = "No").
+- Disminución en el pago de impuestos (1 = Alta, 2 = Media, 3 = Nula).
+- Ventas nacionales totales (en miles de millones de pesos).
+
+A continuación se resume la información de la variable departamento de I+D. 
+
+```{r, echo=F, eval=T, fig.align='center'}
+# IMPORTANTE: no olvide cambiar este directorio
+setwd("C:/Users/Juan Camilo/Dropbox/UN/probabilidad_estadistica/")
+# importar datos
+EDIT <- read.table(file = "EDIT.txt", header = TRUE)
+# tamaño de la muestra
+n <- nrow(EDIT)
+# tabla de frecuencias relativas
+tabla <- 100*table(EDIT$ID)/n
+names(tabla) <- c("Sí","No")
+print(round(x = addmargins(tabla), digits = 2))
+# diagramas
+par(mfrow = c(1,2))
+barplot(height = tabla, xlab = "Departamento I+D", ylab = "Porcentaje", col = "gray90")
+pie(x = tabla, col = c("white", "gray90"))
+```
+
+```{r, echo=T, eval=F}
+# importar datos
+# IMPORTANTE: no olvide cambiar este directorio
+setwd("C:/Users/Juan Camilo/Dropbox/UN/probabilidad_estadistica/")
+EDIT <- read.table(file = "EDIT.txt", header = TRUE)
+# tamaño de la muestra
+n <- nrow(EDIT)
+# tabla de frecuencias relativas
+tabla <- 100*table(EDIT$ID)/n
+names(tabla) <- c("Sí","No")
+print(round(x = addmargins(tabla), digits = 2))
+# diagramas
+par(mfrow = c(1,2))
+barplot(height = tabla, xlab = "Departamento I+D", ylab = "Porcentaje", col = "gray90")
+pie(x = tabla, col = c("white", "gray90"))
+```
+
+Ahora, de manera conjunta, se caracteriza el departamento de I+D y la disminución de costos en el pago de impuestos.
+```{r, echo=F, eval=T, fig.align='center'}
+# tabla de frecuencias relativas
+tabla <- round(100*table(EDIT$ID, EDIT$Disminucion)/n, 3)
+rownames(tabla) <- c("Sí","No")
+colnames(tabla) <- c("Alta","Media","Nula")
+print(round(x = addmargins(tabla), digits = 2))
+# diagrama de barras
+barplot(height = tabla, xlab = "Disminución en el pago", ylab = "Porcentaje",
+        legend.text = TRUE, beside = TRUE, 
+        args.legend = list(x = "topleft", bty = "n"))
+```
+
+```{r, echo=T, eval=F}
+# tabla de frecuencias relativas
+tabla <- round(100*table(EDIT$ID, EDIT$Disminucion)/n, 3)
+rownames(tabla) <- c("Sí","No")
+colnames(tabla) <- c("Alta","Media","Nula")
+print(round(x = addmargins(tabla), digits = 2))
+# diagrama de barras
+barplot(height = tabla, xlab = "Disminución en el pago", ylab = "Porcentaje",
+        legend.text = TRUE, beside = TRUE, args.legend = list(x = "topleft", bty = "n"))
+```
+
+# Variables cuantitativas
+
+## Histogramas
+
+Un histograma se construye a partir de la distribución de la frecuencias asociando a cada categoría un rectángulo que tiene a cada intervalo como base. El criterio para calcular la **densidad** (altura) de cada rectángulo es mantener la proporcionalidad entre la frecuencia y el área de cada intervalo. 
+
+Las densidades satisfacen 
+$$\sum_{j=1}^{m} a_j\,d_j = 1$$
+donde $m$ es el número de intervalos, y $a_j$ y $d_j$ son respectivamente la amplitud y la densidad del intervalo $j$. 
+
+Si la amplitud de los intervalos es constante, $a_j = a$, entonces $d_j= \frac{h_j}{a}$, donde $h_j$ es la frecuencia relativa del intervalo $j$.
+
+Para seleccionar el número de categorías $m$ se distinguen tres alternativas:
+
+- Elegir $m$ arbitrariamente.
+- Elegir $m$ mediante la fórmula $m \approx \sqrt{n}$.
+- Elegir $m$ mediante la fórmula $m \approx 1 + 3\text{.}3 \log_{10} (n)$ (regla de Sturges).
+
+## Diagramas de caja
+
+En un diagrama de caja:
+
+- La línea inferior de la caja es el $P_{25}$.
+- La línea central el $P_{50}$.  
+- La línea superior el $P_{75}$.
+- Los bigotes están dados por $P_{25}-1.5RI$ y $P_{75}+1.5RI$, donde $RI=P_{75}-P_{25}$ (Rango Intercuartílico).
+- Los datos que se ubican por fuera de los bigotes se denominan datos atípicos.
+- Los datos que se encuentren a una distancia mayor de $3.0RI$ del cuartil más cercano, se denominan datos atípicos extremos.
+
+Los histogramas y los diagramas de caja permiten **caracterizar visualmente la localización, la dispersión, la simetría y los datos atípicos** de una variable cuantitativa (por lo general continua).
+
+## Ejemplo
+
+A continuación se muestran las medidas de tendencia central y de localización, junto con el histograma y el diagrama de caja asociados con las ventas nacionales totales (en miles de millones de pesos) de las compñias del ejemplo anterior.
+
+```{r, echo=F, eval=T, fig.align='center'}
+# medidas de tendencia y localizacion
+summary(EDIT$Ventas)
+# diagramas
+par(mfrow = c(1,2))
+hist(x = EDIT$Ventas, freq = FALSE, nclass = 25,
+     xlab = "Ventas (miles de millones)", ylab = "Densidad", main = "")
+boxplot(x = EDIT$Ventas, horizontal = TRUE, xlab = "Ventas (miles de millones)", 
+        ylim = c(0,150))
+```
+
+```{r, echo=T, eval=F}
+# medidas de tendencia y localizacion
+summary(EDIT$Ventas)
+# histograma
+hist(x = EDIT$Ventas, freq = FALSE, nclass = 25,
+     xlab = "Ventas (miles de millones)", ylab = "Densidad", main = "")
+# diagrama de caja
+boxplot(x = EDIT$Ventas, horizontal = TRUE, ylim = c(0,150),
+        xlab = "Ventas (miles de millones)")
+```
+
+## Ejemplo
+
+La base de datos `sinteticos.txt` contiene los datos de cuatro variables cuantitativas $x,y,z,v$ para una muestra de $n=1000$ individuos. Estas variables exhiben diferentes características en términos de tendencia, localización, variabilidad, y forma. A continuación se presentan las medidas de tendencia central y de localización, junto con el histograma y el diagrama de caja asociados con estas variables.
+
+```{r echo=TRUE, fig.align='center'}
+# importar datos
+# recuerden actualizar el directorio de trabajo
+datos <- read.table(file = "sinteticos.txt", header = TRUE)
+# medidas de tendencia y localizacion
+summary(datos)
+```
+
+```{r echo=TRUE, fig.align='center', fig.height=16, fig.width=8}
+# histogramas y diagramas de caja
+par(mfrow = c(4,2))
+hist(x = datos$x, freq = FALSE, xlab = "x", ylab = "Densidad", main = "", xlim = range(datos$x))
+boxplot(x = datos$x,  horizontal = TRUE, xlab = "x", ylim = range(datos$x))
+hist(x = datos$y, freq = FALSE, xlab = "y", ylab = "Densidad", main = "", xlim = range(datos$y))
+boxplot(x = datos$y,  horizontal = TRUE, xlab = "y", ylim = range(datos$y))
+hist(x = datos$z, freq = FALSE, xlab = "z", ylab = "Densidad", main = "", xlim = range(datos$z))
+boxplot(x = datos$z,  horizontal = TRUE, xlab = "z", ylim = range(datos$y))
+hist(x = datos$v, freq = FALSE, xlab = "v", ylab = "Densidad", main = "", xlim = range(datos$v))
+boxplot(x = datos$v,  horizontal = TRUE, xlab = "v", ylim = range(datos$v))
+```
+
