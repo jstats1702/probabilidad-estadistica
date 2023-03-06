@@ -55,5 +55,5 @@ d. Comentar los resultados obtenidos.
 2. Relacione cada histograma con el diagrama de caja que representa el mismo conjunto de datos.
 
 ```{r, eval = TRUE, echo=FALSE, out.width="70%", fig.pos = 'H', fig.align = 'center'}
-knitr::include_graphics("05- histogramas_cajas.png")
+knitr::include_graphics("05-histogramas_cajas.png")
 ```

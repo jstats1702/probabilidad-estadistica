@@ -1,0 +1,183 @@
+---
+title: "Taller 5"
+author: 
+  - Lina Buitrago PhD(c), labuitragor@unal.edu.co
+  - Juan Sosa PhD, jcsosam@unal.edu.co
+date: ""
+output:
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Considere la base de datos dada en el archivo `taller05_datos.txt`, la cual contiene los datos de $n=1,000$ individuos en relación con las siguientes variables:
+
+- Ingresos (en millones de pesos).
+- Sexo (1 = Hombre; 0 = Mujer).
+
+A continuación se presenta el procedimiento **importar** este conjunto de datos en `R`. Observe que para importar la base de datos exitosamente en `R` por medio de la rutina `read.table`, hay que proporcionar la **ruta de acceso** correcta. ¡No olvide actualizar esta ruta!
+
+```{r, echo=T, eval=T}
+# importar base de datos en el objeto llamado datos
+datos <- read.table(file = "C:/Users/Juan Camilo/Dropbox/UN/probabilidad_estadistica/taller_05_datos.txt", header = TRUE, sep = ";")
+
+# tamaño de la muestra
+n <- nrow(datos)
+
+# extraer los ingresos de los hombres en x_h
+x_h <- datos$ingresos[datos$sexo == 1]
+
+# extraer los ingresos de los mujeres en x_m
+x_m <- datos$ingresos[datos$sexo == 0]
+```
+
+El objetivo de este ejercicio es comparar el comportamiento de los ingresos en términos del sexo.
+
+a. Hacer una tabla de frecuencias relativas y un diagrama de barras para la variable sexo.
+
+La siguiente tabla contiene las frecuencias relativas de la variable sexo expresadas en puntos porcentuales: 
+
+```{r}
+# tabla 
+tab <- 100*table(datos$sexo)/n
+names(tab) <- c("Mujere", "Hombre")
+tab
+```
+
+El siguiente gráfico representa la información de la tabla anterior:
+
+```{r}
+# grafico de barras
+b <- barplot(tab, ylab = "Porcentaje (%)", xlab = "Sexo", col = "gray95", border = "darkgray")
+text(x = b, y = tab-2, labels = tab, font = 4)
+```
+
+b. Completar la siguiente tabla y hacer un histograma con 15 categorias y un diagrama de caja para cada grupo.
+
+| Grupo     | Tamaño | Mín.   | Máx.   | Prom.    | Cuar. 1   | Cuar. 2   | Cuar. 3   | DE       | CV (\%) |
+|-----------|:------:|:------:|:-------|:--------:|:---------:|:---------:|:---------:|:--------:|:-------:|
+| Todos     | 1000   | 0.053  | 10.205 | 2.845    | 1.714     | 2.470     | 3.658     | 1.629    | 57.251  |
+| Hombres   | 525    | 0.053  | 8.385  | 2.857    | 1.731     | 2.485     | 3.619     | 1.625    | 56.877  |
+| Mujeres   | 475    | 0.143  | 10.205 | 2.832    | 1.697     | 2.458     | 3.767     | 1.635    | 57.725  |
+
+DE: desviación estándar. CV: coeficiente de variación de Pearson.
+
+```{r, eval=F}
+# TODOS
+# datos
+y <- datos$ingresos
+# tamaño
+length(y)
+# medidas de tendencia
+summary(y)
+# DE y CV
+round(c(sd(y), 100*sd(y)/mean(y)), 3)
+# HOMBRES
+# tamaño
+ length(x_h)
+# medidas de tendencia
+summary(x_h)
+# DE y CV
+round(c(sd(x_h), 100*sd(x_h)/mean(x_h)), 3)
+# MUJERES
+# tamaño
+length(x_m)
+# medidas de tendencia
+summary(x_m)
+# DE y CV
+round(c(sd(x_m), 100*sd(x_m)/mean(x_m)), 3)
+```
+
+Los siguientes gráficos representan la distribución de los ingresos de ambos grupos:
+
+```{r}
+par(mfrow=c(2,2))
+# HOMBRES
+hist(x_h, freq = F, nclass = 15, xlab = "Ingresos (en millones)", 
+     col = "lightblue", border = "blue", ylab = "Densidad", main = "Hombres")
+boxplot(x_h, horizontal = T, col = "lightblue", border = "blue")
+# MUJERES
+hist(x_m, freq = F, nclass = 15, xlab = "Ingresos (en millones)", 
+     col = "mistyrose", border = "red", ylab = "Densidad", main = "Mujeres")
+boxplot(x_h, horizontal = T, col = "mistyrose", border = "red")
+
+```
+
+c. Teniendo en cuenta los dos grupos, calcular la proporción de variabilidad debida tanto a la dispersión dentro (intravarianza) como entre (intervarianza) de los grupos.
+
+La descomposición de la varianza se calcula cuando se tienen grupos (que conforman una partición) dentro de la muestra y se busca determinar si la variabilidad de la variable de estudio se debe más a las **diferencias entre los grupos** (intervarianza) o **dentro de los grupos** (intravarianza).
+
+Ahora, suponga que $A_1,A_2,\ldots,A_m$ conforman una partición de la muestra, y que $\bar{x}_1,\bar{x}_2,\ldots,\bar{x}_m$ y $s^2_{1},s^2_{2},\ldots,s^2_{m}$ son los promedios y las varianzas muestrales de la variable para cada $A_1,A_2,\ldots,A_m$, respectivamente. Así, se tiene que la varianza se puede descomponer como:
+$$
+V(x) = \frac{1}{n-1}\sum_{j=1}^{m}(n_j-1)\,s^2_j + \frac{1}{n-1}\sum_{j=1}^{m}n_j(\bar{x}_j-\bar{x})^2 =s^2_w +s^2_b
+$$
+donde $\bar{x}=\displaystyle\frac1n\sum_{j=1}^{m} n_j\,\bar{x}_j = \frac1n\sum_{j=1}^m\sum_{i=1}^{n_j} x_{i,j}$ es la media de la muestra, $x_{i,j}$ es la observación $i$ del grupo $j$,
+$s^2_w=\displaystyle\frac{1}{n-1}\sum_{j=1}^{m}(n_j-1)\,s^2_j$ es la **intravarianza** y $S^2_b=\displaystyle\frac{1}{n-1}\sum_{j=1}^{m}n_j(\bar{x}_j-\bar{x})^2$ la **intervarianza**.
+
+Nota: Dado un conjunto $\Omega$, se dice que la colección de subconjuntos $A_1,A_2,\ldots,A_m$ conforman una partición de $\Omega$ si:
+
+1. $\displaystyle\bigcup_{j=1}^{m}A_j=\Omega$.
+2. $A_i\cap A_j=\phi$, para todo $i\neq j$.
+
+En este caso la variabilidad total es:
+$$s_T^2 = \frac{1}{n-1}\sum_{i=1}^n (y_i - \bar{y})^2 = 2.65337\,.$$
+De otra parte, la variabilidad dentro (intra) es
+$$
+s^2_w = \frac{1}{n-1}\sum_{j=1}^m (n_j - 1)s^2_j = 2.653217\,, 
+$$
+mientras que la variabilidad entre (inter) es
+$$
+s^2_b = \frac{1}{n-1}\sum_{j=1}^m n_j\,(\bar{y}_j - \bar{y})^2 = 0.000153
+$$
+donde $m=2$ grupos. Se observa que la suma de las variabilidades intra e inter coincide exactamente con la variabilidad total:
+$$
+s_T^2 = s^2_w + s^2_b = 2.653217 + 0.000153 = 2.65337
+$$
+Por lo tanto, la proporción de variabilidad debida a la variabilidad dentro es 
+$$
+\frac{s^2_w}{s^2_T} = 99.994\%
+$$
+y proporción de variabilidad debida a la variabilidad entre es 
+$$
+\frac{s^2_b}{s^2_T} = 0.006\%.
+$$
+
+```{r, eval=F}
+# variabilidad TOTAL
+var_t <- var(y)
+var_t
+# variabilidad INTRA
+var_w <- ((length(x_h)-1)*var(x_h) + (length(x_m)-1)*var(x_m))/(length(y)-1)
+var_w
+# variabilidad INTER
+var_b <- (length(x_h)*(mean(x_h)-mean(y))^2 + length(x_m)*(mean(x_m)-mean(y))^2)/(length(y)-1)
+var_b
+# suma INTRA e INTER
+var_w + var_b
+# proporcion INTRA
+var_w/var_t*100
+# proporcion INTRA
+var_b/var_t*100
+```
+
+d. Comentar los resultados obtenidos.
+
+Los resultados del numeral b. indican que, aunque la dispersión de ambos grupos respecto al promedio es semejante (alta en ambos casos), tanto en promedio como mediana los hombres perciben un ingreso ligeramente superior que el de las mujeres. Como era de esperarse, tanto los gráficos como las medidas de tendencia indican que la distribución de los ingresos es sesgada positivamente en ambos grupos (observe que la mediana es menor que la media, y la presencia de datos atípicos superiores). De otra parte, los resultados del numeral c. indican que la variabilidad total de los ingresos se debe casi que totalmente debido a las diferencias dentro de cada uno de los grupos, dado que las diferencia entre el promedio de los grupos y el promedio total no es substancial.
+
+2. Relacione cada histograma con el diagrama de caja que representa el mismo conjunto de datos.
+
+Se observa que las distribuciones están relacionadas como sigue:
+
+- a - 4.
+- b - 2.
+- c - 1.
+- d - 3.
+
+```{r, eval = TRUE, echo=FALSE, out.width="70%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("05-histogramas_cajas.png")
+```
