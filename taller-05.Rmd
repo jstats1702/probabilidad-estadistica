@@ -1,0 +1,59 @@
+---
+title: "Taller 5"
+author: 
+  - Lina Buitrago PhD(c), labuitragor@unal.edu.co
+  - Juan Sosa PhD, jcsosam@unal.edu.co
+date: ""
+output:
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1. Considere la base de datos dada en el archivo `taller05_datos.txt`, la cual contiene los datos de $n=1,000$ individuos en relación con las siguientes variables:
+
+- Ingresos (en millones de pesos).
+- Sexo (1 = Hombre; 0 = Mujer).
+
+A continuación se presenta el procedimiento **importar** este conjunto de datos en `R`. Observe que para importar la base de datos exitosamente en `R` por medio de la rutina `read.table`, hay que proporcionar la **ruta de acceso** correcta. ¡No olvide actualizar esta ruta!
+
+```{r, echo=T, eval=F}
+# importar base de datos en el objeto llamado datos
+datos <- read.table(file = "C:/Users/Juan Camilo/Dropbox/UN/probabilidad_estadistica/taller_05_datos.txt", header = TRUE, sep = ";")
+
+# tamaño de la muestra
+n <- nrow(datos)
+
+# extraer los ingresos de los hombres en x_h
+x_h <- datos$ingresos[datos$sexo == 1]
+
+# extraer los ingresos de los mujeres en x_m
+x_m <- datos$ingresos[datos$sexo == 0]
+```
+
+El objetivo de este ejercicio es comparar el comportamiento de los ingresos en términos del sexo.
+
+a. Hacer una tabla de frecuencias relativas y un diagrama de barras para la variable sexo.
+b. Completar la siguiente tabla y hacer un histograma con 15 categorias y un diagrama de caja para cada grupo.
+
+| Grupo     | Tamaño | Mín. | Máx. | Prom. | Cuar. 1 | Cuar. 2 | Cuar. 3 | DE       | CV |
+|-----------|:------:|:------:|:-------|:--------:|:---------:|:---------:|:---------:|:--------:|:-------:|
+| Todos     |        |        |        |          |           |           |           |          |         |
+| Hombres   |        |        |        |          |           |           |           |          |         |
+| Mujeres   |        |        |        |          |           |           |           |          |         |
+
+DE: desviación estándar. CV: coeficiente de variación de Pearson.
+
+c. Teniendo en cuenta los dos grupos, calcular la proporción de variabilidad debida tanto a la dispersión dentro (intravarianza) como entre (intervarianza) de los grupos.
+d. Comentar los resultados obtenidos.
+
+2. Relacione cada histograma con el diagrama de caja que representa el mismo conjunto de datos.
+
+```{r, eval = TRUE, echo=FALSE, out.width="70%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("05- histogramas_cajas.png")
+```
