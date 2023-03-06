@@ -1,0 +1,442 @@
+---
+title: "Medidas de Asociación"
+author: 
+  - Lina Buitrago PhD(c), labuitragor@unal.edu.co
+  - Juan Sosa PhD, jcsosam@unal.edu.co
+date: ""
+output:
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introducción
+
+Con el propósito de investigar el **nexo entre dos variables**, se quiere describir el comportamiento del conjunto correspondiente mediante gráficas que evidencien la **interacción entre las características** objeto de estudio, y a través de medidas estadísticas que den cuenta de la **asociación entre las variables** de interés.
+
+# Variables cualitativas
+
+## Tablas de doble entrada
+
+En este escenario se dispone de un conjunto de $n$ individuos, cada uno de ellos observado en dos atributos que en adelante se representan mediante $X$ y $Y$. Se supone que la variable $X$ tiene $k$ categorías, es decir, $X$ asume los valores $x_1, x_2,\ldots,x_k$, y que la variable $Y$ tiene $p$ categorías, es decir, $Y$ asume los valores $y_1, y_2,\ldots,y_p$
+
+Se elabora una tabla de frecuencias conformada por $k \times p$ casillas o categorías, denotadas con $C_{ij}$, para $i=1,\ldots,k$ y $j=1,\ldots,p$, organizadas de tal forma que se tengan $k$ filas y $p$ columnas con las categorías de las variables $X$ y $Y$, respectivamente. Tal estructura se denomina **tabla de doble entrada** o **tabla de contingencia** o **tabla de clasificación**.
+
+La **frecuencia absoluta conjunta** de la clase $C_{ij}$, denotada con $n_{ij}$, es la cantidad de observaciones que hacen parte de la $i$-ésima fila y la $j$-ésima columna para $i=1,\ldots,k$ y $j=1,\ldots,p$.
+
+| **$X/Y$**     | **$y_{1}$**  | **$y_{2}$**  | **$\cdots$** | **$y_{j}$**  | **$\cdots$** | **$y_{p}$**  |   **Total**  |
+|:-------------:|:------------:|:------------:|:------------:|:------------:|:------------:|:------------:|:------------:|
+| **$x_{1}$**   |   $n_{11}$   |   $n_{12}$   |   $\cdots$   |   $n_{1j}$   |   $\cdots$   |   $n_{1p}$   | $n_{1\cdot}$ |
+| **$x_{2}$**   |   $n_{21}$   |   $n_{22}$   |   $\cdots$   |   $n_{2j}$   |   $\cdots$   |   $n_{2p}$   | $n_{2\cdot}$ |
+| **$\vdots$**  |   $\vdots$   |   $\vdots$   |   $\ddots$   |   $\vdots$   |   $\ddots$   |   $\vdots$   |   $\vdots$   |
+| **$x_{i}$**   |   $n_{i1}$   |   $n_{i2}$   |   $\cdots$   |   $n_{ij}$   |   $\cdots$   |   $n_{ip}$   | $n_{i\cdot}$ |
+| **$\vdots$**  |   $\vdots$   |   $\vdots$   |   $\ddots$   |   $\vdots$   |   $\ddots$   |   $\vdots$   |   $\vdots$   |
+| **$x_{k}$**   |   $n_{k1}$   |   $n_{k2}$   |   $\cdots$   |   $n_{kj}$   |   $\cdots$   |   $n_{kp}$   | $n_{k\cdot}$ |
+| **Total**     | $n_{\cdot 1}$| $n_{\cdot 2}$|   $\cdots$   | $n_{\cdot j}$|   $\cdots$   | $n_{\cdot p}$|     $n$      |
+
+La **frecuencia relativa conjunta** de la clase $C_{ij}$, denotada con $h_{ij}$, es la proporción de la frecuencia absoluta conjunta de la $ij$-ésima categoría respecto a la cantidad total de observaciones, esto es,
+\[
+    h_{ij} = \frac{n_{ij}}{n}
+\]
+para $i=1,\ldots,k$ y $j=1,\ldots,p$.
+
+| **$X/Y$**     | **$y_{1}$**  | **$y_{2}$**  | **$\cdots$** | **$y_{j}$**  | **$\cdots$** | **$y_{p}$**  |   **Total**  |
+|:-------------:|:------------:|:------------:|:------------:|:------------:|:------------:|:------------:|:------------:|
+| **$x_{1}$**   |   $h_{11}$   |   $h_{12}$   |   $\cdots$   |   $h_{1j}$   |   $\cdots$   |   $h_{1p}$   | $h_{1\cdot}$ |
+| **$x_{2}$**   |   $h_{21}$   |   $h_{22}$   |   $\cdots$   |   $h_{2j}$   |   $\cdots$   |   $h_{2p}$   | $h_{2\cdot}$ |
+| **$\vdots$**  |   $\vdots$   |   $\vdots$   |   $\ddots$   |   $\vdots$   |   $\ddots$   |   $\vdots$   |   $\vdots$   |
+| **$x_{i}$**   |   $h_{i1}$   |   $h_{i2}$   |   $\cdots$   |   $h_{ij}$   |   $\cdots$   |   $h_{ip}$   | $h_{i\cdot}$ |
+| **$\vdots$**  |   $\vdots$   |   $\vdots$   |   $\ddots$   |   $\vdots$   |   $\ddots$   |   $\vdots$   |   $\vdots$   |
+| **$x_{k}$**   |   $h_{k1}$   |   $h_{k2}$   |   $\cdots$   |   $h_{kj}$   |   $\cdots$   |   $h_{kp}$   | $h_{k\cdot}$ |
+| **Total**     | $h_{\cdot 1}$| $h_{\cdot 2}$|   $\cdots$   | $h_{\cdot j}$|   $\cdots$   | $h_{\cdot p}$|     $1$      |
+
+
+La **frecuencia absoluta marginal de la fila** $i$, denotada con $n_{i\bullet}$, es el total de observaciones de la $i$-ésima categoría de la variable de las filas para $i=1,\ldots,k$. 
+
+Así mismo, la **frecuencia absoluta marginal de la columna** $j$, denotada con $n_{\bullet j}$, es el total de observaciones de la $j$-ésima categoría de la variable de las columnas para $j=1,\ldots,p$. 
+
+A partir de la definición se tiene que
+\[
+     n_{i \bullet} = n_{i1} + n_{i2} + \ldots + n_{ip} = \sum_{j=1}^{p} n_{ij} \quad\text{para $i=1,\ldots,k$,}
+\]
+y además,
+\[
+     n_{\bullet j} = n_{1j} + n_{2j} + \ldots + n_{kj} = \sum_{i=1}^{k} n_{ij} \quad\text{para $j=1,\ldots,p$.}
+\]
+
+Las **frecuencias relativas marginales** se definen análogamente.
+
+### Propiedades
+
+\[
+    \sum_{i=1}^{k}\sum_{j=1}^{p} n_{ij} = \sum_{i=1}^{k} n_{i\bullet} = \sum_{j=1}^{p} n_{\bullet j} = n.
+\]
+
+\[
+    \sum_{i=1}^{k}\sum_{j=1}^{p} h_{ij} = \sum_{i=1}^{k} h_{i\bullet} = \sum_{j=1}^{p} h_{\bullet j} = 1.
+\]
+
+\[
+     h_{i \bullet} = \sum_{j=1}^{p} h_{ij} \quad\text{para $i=1,\ldots,k$.}
+\]
+
+\[
+     h_{\bullet j} = \sum_{i=1}^{k} h_{ij} \quad\text{para $j=1,\ldots,p$.}
+\]
+
+### Ejemplo
+
+La siguiente tabla corresponde a una tabla de contingencia en la que se estudia la variable sexo ($X$) y nivel educativo ($Y$) de una muestra de personas. Obtener las frecuencias relativas conjuntas y marginales correspondientes.
+
+| $X / Y$ | Bachillerato | Pregrado | Posgrado | Total |
+|:-------:|:------------:|:--------:|:--------:|:-----:|
+| Hombre  | 4            | 9        | 12       | 25    |
+| Mujer   | 12           | 7        | 2        | 21    |
+| Total   | 16           | 16       | 14       | 46    |
+
+En este caso se tiene que
+\[
+  k = 2,\,\, p=3,\,\,
+  n_{1 \bullet} = 25,\,\, n_{2 \bullet} = 21,\,\,
+  n_{\bullet 1} = 16,\,\, n_{\bullet 2} = 16,\,\, n_{\bullet 3} = 14 \quad\text{y}\quad
+  n = 46.
+\]
+En la siguiente tabla se presentan las frecuencias relativas correspondientes que han sido calculadas con respecto al tamaño de la muestra, es decir, con respecto a $n=46$, usando las fórmulas
+$$
+    h_{ij} = \frac{n_{ij}}{n}, \,\, h_{i \bullet}=\frac{n_{i \bullet}}{n} \quad\text{y}\quad h_{\bullet j} = \frac{n_{\bullet j}}{n}
+$$
+donde $n_{ij}$ es la frecuencia absoluta conjunta de la $ij$-ésima categoría para $i=1,2$ y $j=1,2,3$.
+
+Por ejemplo, se observa que el porcentaje de empleados que son hombres es $54.3\%$, el porcentaje de empleados que tienen estudios de posgrado es $30.4\%$ y que el porcentaje de empleados que son hombres y tienen bachillerato es $8.7\%$.
+
+| $X / Y$ | Bachillerato | Pregrado | Posgrado | Total    |
+|:-------:|:------------:|:--------:|:--------:|:--------:|
+| Hombre  | 8.7\%        |	19.6\%  |	26.1\%   |	54.3\%  |
+| Mujer   | 26.1\%       |	15.2\%  |	4.3\%    |	45.7\%  |
+| Total   | 34.8\%       |	34.8\%  |	30.4\%   |	100.0\% |
+
+```{r}
+# datos
+tabla <- rbind(c(4, 9, 12), c(12, 7, 2))
+rownames(tabla) <- c("Hombre","Mujer")
+colnames(tabla) <- c("Bachillerato","Pregrado","Posgrado")
+print(tabla)
+# agregar totales
+addmargins(A = tabla, margin = c(1,2))
+# frecuencias relativas
+addmargins(A = 100*prop.table(x = tabla), margin = c(1,2))
+```
+
+
+## Perfiles o distribuciones condicionadas
+
+Los **perfiles fila** están asociados con una tabla de doble entrada en la que se calculan las frecuencias relativas conjuntas respecto a los totales de las filas correspondientes. 
+
+Análogamente, se definen los **perfiles columna**.
+
+A partir de la definición, se tiene que la frecuencia relativa de la $ij$-ésima categoría de una tabla de **perfiles fila**, denotada con $h_{ij|i\bullet}$, está dada por:
+\[
+    h_{ij|i\bullet}=\frac{n_{ij}}{n_{i \bullet}},
+\]
+mientras que la frecuencia relativa de la $ij$-ésima categoría de una tabla de **perfiles columna**, denotada con $h_{ij|\bullet j}$, se está dada por:
+\[
+    h_{ij|\bullet j}=\frac{n_{ij}}{n_{\bullet j}}
+\]
+para $i=1,\ldots,k$ y $j=1,\ldots,p$.
+
+### Propiedades
+
+$$
+h_{ij|i\bullet}=\frac{h_{ij}}{h_{i \bullet}} \quad\text{para $i=1,\ldots,k$ y $j=1,\ldots,p$.}
+$$
+
+$$
+h_{ij|i\bullet}=\frac{h_{ij}}{h_{i \bullet}} \quad\text{para $i=1,\ldots,k$ y $j=1,\ldots,p$.}
+$$
+
+$$
+\sum_{j=1}^p h_{ij|i\bullet} = 1 \quad\text{para $i=1,\ldots,k$.}
+$$
+
+$$
+    \sum_{i=1}^k h_{ij|\bullet j} = 1 \quad\text{para $j=1,\ldots,p$.}
+$$
+
+### Ejemplo
+
+Elaborar los perfiles fila y los perfiles columna de la muestra para la tabla bidimensional del ejemplo anterior.
+
+Los perfiles fila y los perfiles columna de la muestra se las siguientes tablas. Las frecuencias relativas de estas tablas se calcularon con las fórmulas
+\[
+    h_{ij|i\bullet } =\frac{n_{ij}}{n_{i \bullet}} \quad\text{y}\quad
+    h_{ij|\bullet j} =\frac{n_{ij}}{n_{\bullet j}}
+\]
+para $i=1,2$ y $j=1,2,3$.
+
+Por ejemplo, se observa que de los hombres, tiene posgrado el 48.0\%, mientras que de los individuos con posgrado, es hombre el 85.7\%. Al interpretar las frecuencias relativas de los perfiles es indispensable fijarse cuál es el grupo de individuos de referencia.
+
+| $X / Y$ | Bachillerato | Pregrado | Posgrado | Total |
+|:-------:|:------------:|:--------:|:--------:|:-----:|
+| Hombre  | 4            | 9        | 12       | 25    |
+| Mujer   | 12           | 7        | 2        | 21    |
+| Total   | 16           | 16       | 14       | 46    |
+
+Perfiles fila:
+
+| $X / Y$ | Bachillerato | Pregrado | Posgrado | Total    |
+|:-------:|:------------:|:--------:|:--------:|:--------:|
+| Hombre  | 16.0\%	     | 36.0\%	  |	48.0\%	 |	100.0\% |
+| Mujer   | 57.1\%	     |	33.3\%	|	9.5\%	   |	100.0\% |
+| Total   | 34.8\%	     |	34.8\%	|	30.4\%	 |	100.0\% |
+
+Perfiles columna:
+
+| $X / Y$ | Bachillerato | Pregrado | Posgrado |  Total   |
+|:-------:|:------------:|:--------:|:--------:|:--------:|
+| Hombre  | 25.0\%       |	56.3\%  |	85.7\%   |	54.3\%  |
+| Mujer   | 75.0\%       |	43.8\%  |	14.3\%   |	45.7\%  |
+| Total   | 100.0\%      |	100.0\% |	100.0\%  |	100.0\% |
+
+```{r, eval=T, echo=F, fig.align='center'}
+# datos
+tabla <- rbind(c(4, 9, 12), c(12, 7, 2))
+rownames(tabla) <- c("Hombre","Mujer")
+colnames(tabla) <- c("Bachi","Preg","Posg")
+# perfiles fila
+pf <- 100*prop.table(x = tabla, margin = 1)
+# perfiles columna
+pc <-100*prop.table(x = tabla, margin = 2)
+# diagrama de barras perfiles fila
+par(mfrow = c(1,2))
+barplot(height = t(pf), ylim = c(0,120), legend.text = TRUE, 
+        args.legend = list(x = "top", bty = "n", ncol = 3), 
+        main = "Perfil fila", xlab = "Sexo", ylab = "Porcentaje (%)")
+# diagrama de barras perfiles columna
+barplot(height = pc, beside = FALSE, las = 1, ylim = c(0, 120), 
+        legend.text = TRUE, args.legend = list(x = "top", bty = "n", ncol = 2), 
+        main = "Perfil columna", xlab = "Nivel educativo", ylab = "Porcentaje (%)")
+```
+
+```{r}
+# datos
+tabla <- rbind(c(4, 9, 12), c(12, 7, 2))
+rownames(tabla) <- c("Hombre","Mujer")
+colnames(tabla) <- c("Bachillerato","Pregrado","Posgrado")
+# perfiles fila
+addmargins(A = 100*prop.table(x = tabla, margin = 1), margin = 2)
+# perfiles columna
+addmargins(A = 100*prop.table(x = tabla, margin = 2), margin = 1)
+```
+```{r, eval=F, echo=T}
+# perfiles fila
+pf <- 100*prop.table(x = tabla, margin = 1)
+# perfiles columna
+pc <-100*prop.table(x = tabla, margin = 2)
+# diagrama de barras perfiles fila
+barplot(height = t(pf), ylim = c(0,120), legend.text = TRUE, 
+        args.legend = list(x = "top", bty = "n", ncol = 3), 
+        main = "Perfil fila", xlab = "Sexo", ylab = "Porcentaje (%)")
+# diagrama de barras perfiles columna
+barplot(height = pc, beside = FALSE, las = 1, ylim = c(0, 120), 
+        legend.text = TRUE, args.legend = list(x = "top", bty = "n", ncol = 2), 
+        main = "Perfil columna", xlab = "Nivel educativo", ylab = "Porcentaje (%)")
+```
+
+# Variables cuantitativas
+
+## Gráficos
+
+Cuando se trabaja con dos variables cuantitativas, es costumbre denominar a la variable $X$ representada en el eje $x$ **variable independiente** y a la variable $Y$ representada en el eje $y$ **variable dependiente**.
+
+Es costumbre mostrar las observaciones de una muestra correspondiente a un conjunto de datos bivariado como sigue.
+
+| $X$   | $Y$   |
+|:-----:|:-----:|
+| $x_1$ | $y_1$ | 
+| $x_1$ | $y_1$ | 
+| $\vdots$ | $\vdots$ | 
+| $x_n$ | $y_n$ | 
+
+### Ejemplo
+
+Ena un muestra de $n=25$ materiales se miden el peso (en kilogramos) y la temperatura (en grados centígrados), obteniéndose los resultados que se presentan a continuación. Elaborar un **dispersograma** o **nube de puntos** de la peso ($Y$) frente al temperatura ($X$).
+
+Temperatura: 12.3, 13.2, 12.5, 13.1, 12.9, 13.1, 12.4, 12.9, 13.2, 12.3, 12.4, 13.0, 12.5, 12.6, 12.8, 12.9, 12.5, 13.1, 13.0, 12.7, 12.2, 13.3, 12.4, 12.3, 12.6
+
+Peso: 39.5, 41.0, 39.7, 40.8, 40.7, 41.3, 39.2, 40.4, 41.2, 38.8, 39.4, 40.2, 39.7, 39.8, 40.0, 40.3, 39.6, 41.1, 41.3, 40.3, 39.4, 41.1, 39.9, 39.6, 40.2
+
+En la siguiente figura se muestra el diagrama de dispersión del peso frente a la temperatura de los materiales. Se observa que la relación entre las variables es directa y aparentemente fuerte. 
+```{r, eval=T, echo=T, fig.align='center'}
+# datos
+temp <- c(12.3, 13.2, 12.5, 13.1, 12.9, 13.1, 12.4, 12.9, 13.2, 12.3, 12.4, 13.0, 12.5, 
+          12.6, 12.8, 12.9, 12.5, 13.1, 13.0, 12.7, 12.2, 13.3, 12.4, 12.3, 12.6)
+peso <- c(39.5, 41.0, 39.7, 40.8, 40.7, 41.3, 39.2, 40.4, 41.2, 38.8, 39.4, 40.2, 39.7, 
+          39.8, 40.0, 40.3, 39.6, 41.1, 41.3, 40.3, 39.4, 41.1, 39.9, 39.6, 40.2)
+# dispersograma
+plot(x = temp, y = peso, xlab = "Temperatura (C)", ylab = "Peso (Kg)", main = "Peso vs. Temperatura", col = "blue", pch = 18)
+```
+
+
+## Covarianza
+
+La **covarianza muestral** del conjunto de datos bivariado $(x_1,y_1),(x_2,y_2),\ldots,(x_n,y_n)$, denotada con $COV(x,y)$ o $s_{xy}$, se calcula como:
+$$
+    COV(x,y)=\frac{1}{n-1}\sum_{i=1}^{n} (x_i - \bar{x})(y_i - \bar{y})
+$$
+
+- Si $COV(x,y) > 0$, entonces $y$ tiende a aumentar cuando lo hace $x$ (relación directa).
+- Si $COV(x,y) < 0$, entonces $y$ tiende a disminuir cuando lo hace $x$ (relación inversa).
+- Si $COV(x,y) \approx 0$, entonces los puntos se reparten "equitativamente" alrededor de $(\bar{x},\bar{y})$.
+
+```{r, eval = TRUE, echo=FALSE, out.width="60%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("06-nubes.png")
+```
+
+### Ejemplo
+
+Calcular e interpretar la covarianza entre el peso y la temperatura con el conjunto de datos bivariado del ejemplo anterior.
+
+Para obtener la covarianza entre la temperatura y el peso, primero se deben calcular los promedios de estas variables. En este caso se tiene que $\bar{x} = 12.728$ y $\bar{y} = 40.180$. Luego de calcular los respectivos promedios, se procede a calcular las diferencias y los productos, de tal forma que la covarianza entre la temperatura y el peso es
+
+\begin{align*}
+   COV(x,y) &= \frac{1}{n-1}\sum_{i=1}^{n} (x_i - \bar{x})(y_i - \bar{y}) \\
+   &= \frac{1}{25-1} \left((12.3-12.728)(39.5-40.180)+\ldots+(12.6-12.728)(40.2-40.180) \right) \\
+   &= 0.226.
+\end{align*}
+
+Dado que la covarianza entre la temperatura y el peso es positiva, entonces la relación entre las dos variables es directa, como se aprecia en la Figura. Las unidades de la covarianza son unidades mixtas que en este caso corresponden a grados $\times$ kilogramo.
+
+```{r}
+# datos
+temp <- c(12.3, 13.2, 12.5, 13.1, 12.9, 13.1, 12.4, 12.9, 13.2, 12.3, 12.4, 13.0, 12.5, 
+          12.6, 12.8, 12.9, 12.5, 13.1, 13.0, 12.7, 12.2, 13.3, 12.4, 12.3, 12.6)
+peso <- c(39.5, 41.0, 39.7, 40.8, 40.7, 41.3, 39.2, 40.4, 41.2, 38.8, 39.4, 40.2, 39.7, 
+          39.8, 40.0, 40.3, 39.6, 41.1, 41.3, 40.3, 39.4, 41.1, 39.9, 39.6, 40.2)
+# promedios
+mean(temp)
+mean(peso)
+# covarianza
+cov(temp, peso)
+# otra manera
+n <- length(temp)
+sum((temp - mean(temp))*(peso-mean(peso)))/(n-1)
+```
+
+### Propiedades
+
+Si $(X,Y)$ es una variable bidimensional y $a$, $b$, $c$ y $d$ constantes, entonces se tiene que:
+
+- $COV(x,y) = COV(y,x)$.
+- $COV(x,x) = V(x)$.
+- $COV(a\,x + b , c\,y + d) = a\,c\,COV(x,y)$.
+- Una fórmula alternativa para calcular la covarianza es
+$$
+COV(x,y)= \frac{1}{n-1}\sum_{i=1}^{n} (x_i - \bar{x}) (y_i - \bar{y}) = \frac{1}{n-1}\left(\sum_{i=1}^{n} x_i\,y_i - n\,\bar{x}\,\bar{y}\right).
+$$
+- Si $X$ y $Y$ son variables conmensurables, entonces
+$$
+    V(x + y) = V(x) + V(y) + 2\,COV(x,y)\,.
+$$
+
+### Ejemplo
+
+La covarianza entre los costos de producción ($C$) y las utilidades ($U$) de una compañía es 5.61. El presidente de la empresa está implementando una política de calidad para que los costos disminuyan 1\% y las utilidades aumenten 5\%. ¿Con esta política de calidad la covarianza entre los costos de producción y las utilidades aumenta o disminuye? 
+
+Si V y W denotan respectivamente la covarianza entre los costos de producción y las utilidades bajo la política de calidad, entonces
+$$
+    V=C-0.01C=0.99C\quad \text{y} \quad W= U + 0.05U=1.05U.
+$$
+En consecuencia,
+$$
+COV(V,W)= (0.99)(1.05)\,COV(X,Y)=(1.0395)(5.61)=5.831
+$$
+y por lo tanto con esta política la covarianza entre las variables aumenta.
+
+### Características
+
+- Tiene propiedades aritméticas directas y sencillas de aplicar.
+- Es sensible a datos atípicos.
+- Está dada en unidades mixtas de medición (unidades de la variable independiente multiplicadas por las unidades de la variable dependiente).
+- Si la covarianza es aproximadamente cero, esto no quiere decir que no pueda existir una relación entre las variables.
+
+## Coeficiente de correlación
+
+Una covarianza "grande" indica que hay una relación de tipo lineal entre las dos variables. Pero, ¿qué significa que la covarianza sea "grande"? 
+
+La covarianza está dada en unidades mixtas de medición, lo que motiva definir una medida de la relación entre dos variables cuantitativas, que no se vea "afectada" por los cambios de unidad de medida, es decir, que sea adimensional. 
+
+El **coeficiente de correlación de Pearson** del conjunto de datos $(x_1,y_1),(x_2,y_2),\ldots,(x_n,y_n)$, denotado con $r$, se calcula como:
+$$    
+r = \frac{COV(x,y)}{s_x*\,s_y}\,.
+$$
+El coeficiente de correlación está ligado directamente con el grado de la **asociación lineal** de las variables. De hecho, el coeficiente de correlación únicamente caracteriza la fortaleza de la relación lineal entre dos variables cuantitativas. 
+
+La siguiente figura presenta varios coeficientes de correlación asociados con diferentes nubes de puntos.
+```{r, eval = TRUE, echo=FALSE, out.width="80%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("06-correlations.png")
+```
+
+El coeficiente de correlación siempre toma valores entre $-1$ y 1:
+
+- Es igual a 1.0, entonces la relación lineal entre las variables es perfecta.
+- Está entre 0.9 y 1.0, entonces la relación lineal entre las variables es alta o fuerte.
+- Está entre 0.7 y 0.9, entonces la relación lineal entre las variables es moderada.
+- Está entre 0.5 y 0.7, entonces la relación lineal entre las variables es aceptable.
+- Está entre 0.0 y 0.5, entonces la relación lineal entre las variables es reducida o mínima.
+- Es igual a 0.0, entonces no existe una relación lineal entre las variables.
+
+### Ejemplo
+
+Calcular el coeficiente de correlación con los datos del ejemplo de la temperatura y el peso.
+
+Para calcular el coeficiente de correlación entre la temperatura y el peso se necesita obtener previamente las desviaciones estándar correspondientes. En este caso se tiene que $s_x= 0.339$ y $s_y= 0.724$.
+Así, el coeficiente de correlación es
+\[
+    r = \frac{COV(x,y)}{s_x * s_y} = \frac{(0.226)}{(0.339)(0.724)} = 0.920.
+\]
+Este coeficiente indica que la relación lineal entre la temperatura y el peso de los materiales es directa y además fuerte.
+
+```{r}
+# datos
+temp <- c(12.3, 13.2, 12.5, 13.1, 12.9, 13.1, 12.4, 12.9, 13.2, 12.3, 12.4, 13.0, 12.5, 
+          12.6, 12.8, 12.9, 12.5, 13.1, 13.0, 12.7, 12.2, 13.3, 12.4, 12.3, 12.6)
+peso <- c(39.5, 41.0, 39.7, 40.8, 40.7, 41.3, 39.2, 40.4, 41.2, 38.8, 39.4, 40.2, 39.7, 
+          39.8, 40.0, 40.3, 39.6, 41.1, 41.3, 40.3, 39.4, 41.1, 39.9, 39.6, 40.2)
+# desviaciones estandar
+sd(temp)
+sd(peso)
+# coeficiente de correlacion
+cor(temp, peso)
+# otra forma
+cov(temp, peso)/(sd(temp)*sd(peso))
+```
+
+### Características
+
+ - Únicamente toma valores entre $-1$ y $1$.
+ - Es sensible a datos atípicos.
+ - Es una medida adimensional.
+ - Tiene el mismo signo de la covarianza.
+ - Tiene propiedades aritméticas directas y sencillas de aplicar.
+ 
+# Referencias
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-sosacoverbook.png")
+```
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-devorecoverbook.jpg")
+```
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-navidicoverbook.png")
+```
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-wackerlycoverbook.jpg")
+```
