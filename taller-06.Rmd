@@ -1,0 +1,72 @@
+---
+title: "Taller 6"
+author: 
+  - Lina Buitrago PhD(c), labuitragor@unal.edu.co
+  - Juan Sosa PhD, jcsosam@unal.edu.co
+date: ""
+output:
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1. Relacione cada diagrama de dispersión con el enunciado que lo describa mejor.
+
+```{r, eval = TRUE, echo=FALSE, out.width="70%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("06-dispersogramas.png")
+```
+
+i.   La relación entre $x$ y $y$ es casi lineal.
+ii.  La relación entre $x$ y $y$ no es lineal.
+iii. No hay mucho que relacione a $x$ con $y$.
+iv.  La relación entre $x$ y $y$ es casi lineal, menos un dato atípico.
+
+2. Considere los siguientes datos bivariados: $x$: 1.4, 2.4, 4.0, 4.9, 5.7, 6.3, 7.8, 9.0, 9.3, 11.0, y además, $y$: 2.3, 3.7, 5.7, 9.9, 6.9, 15.8, 15.4, 36.9, 34.6, 53.2.
+
+- Hacer un dispersograma de $y$ frente a $x$ y calcular el coeficiente de correlación correspondiente. ¿La relación entre $x$ y $y$ es lineal?
+- Hacer un dispersograma de $\ln(y)$ frente a $x$ y calcular el coeficiente de correlación correspondiente. ¿La relación entre $x$ y $\ln(y)$ es lineal?
+- ¿Para estos datos, ¿es más fácil trabajar con $x$ y $y$ o con $x$ y $\ln(y)$? ¿Por qué?
+
+3. Considere la base de datos dada en el archivo `taller_06_datos.txt`, la cual contiene los datos de $n=1000$ individuos en relación con las siguientes variables:
+
+- Peso (en kilogramos).
+- Estatura (en metros).
+
+a. Hacer un dispersograma del peso ($y$) en función de la estatura ($x$).
+b. Calcular e interpretar la covarianza entre la estatura y el peso. 
+c. Calcular e interpretar el coeficiente de correlación entre el peso y la estatura.
+d. Por un error con la calibración del instrumento para medir el peso, los datos del peso deben disminuirse 5\% junto con un aumento constate de 2500 gramos para todos los individuos. Calcular nuevamente la covarianza y el coeficiente de correlación.
+
+4. Considerar la siguiente información:
+$$
+\sum_{i=1}^{10} x_i = 110,\,\,
+\sum_{i=1}^{10} y_i = 60 ,\,\,
+\sum_{i=1}^{10} x_i^2 = 3156,\,\,
+\sum_{i=1}^{10} y_i^2 = 1138\,\,\,\text{y}\,\,
+\sum_{i=1}^{10} x_i y_i = 1868.
+$$
+a. Calcular e interpretar el coeficiente de correlación de Pearson entre $X$ y $Y$.
+b. Calcular e interpretar nuevamente el coeficiente de correlación de Pearson si para todos los individuos de la muestra la variable $X$ aumenta en 5\% y la variable $Y$ aumenta en 3\%.
+
+5. Considere la información de la siguiente tabla de contingencia en relación con la opinión acerca de una medida sanitaria en un sector de la ciudad.
+
+|        | A favor | En contra | NS/NR | 
+|--------|:-------:|:---------:|:-----:|
+| Hombre | 241     | 53        | 12    |
+| Mujer  | 204     | 12        | 11    |
+
+a. Calcular y graficar las frecuencias relativas.
+b. Calcular y graficar los perfiles fila.
+c. Calcular y graficar los perfiles columna.
+d. Completar:
+
+- El porcentaje de individuos que son hombres y están en contra es:
+- De las mujeres, el porcentaje que está a favor es:
+- De los los individuos en contra, el porcentaje de hombres es:
+
+e. Comentar brevemente los resultados obtenidos.

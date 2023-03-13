@@ -1,0 +1,248 @@
+---
+title: "Fundamentos de Probabilidad"
+author: 
+  - Lina Buitrago PhD(c), labuitragor@unal.edu.co
+  - Juan Sosa PhD, jcsosam@unal.edu.co
+date: ""
+output:
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Introducción
+
+Muchos fenómenos no son de carácter **determinístico**, es decir, no conocemos de antemano el resultado del mismo, razón por la cual, es necesario **cuantificar la posibilidad de ocurrencia de eventos bajo incertidumbre**.
+
+De otra parte, resulta fundamental el conocimiento de los conceptos básicos de probabilidad, pues los **modelos de probabilidad** son la base para hacer **inferencias sobre poblaciones**, por medio de **intervalos de confianza** y **pruebas de hipótesis**.
+
+# Conteo
+
+En algunos casos el cálculo de probabilidades implica **contar el número de formas** en las que se puede desenvolver una situación particular. 
+
+A continuación se presentan algunos **principios fundamentales de conteo**. 
+
+## Principio multiplicativo del conteo
+
+Sean $E_1,\ldots,E_m$ una secuencia de subprocesos que conforman un proceso completo $T$. Si $E_j$ ocurre de $n_j$ formas, para $j=1,\ldots,m$, entonces, el **número de formas total** en que puede ocurrir el proceso completo $T$ es 
+$$
+n = \prod_{j=1}^{m}n_j = n_1\times\ldots\times n_m\,.
+$$
+
+## Ejemplo
+
+En una consulta un médico determina que su paciente debe tomar medicación para dos condiciones. Para la primera tiene 3 opciones de medicamentos y para la segunda 5, ¿cuántas posibles prescripciones diferentes puede hacer el médico?
+
+- Medicamento 1: $n_1=3$
+- Medicamento 2: $n_2=5$
+
+El número de prescripciones total es $n = n_1\times n_2=3\times 5=15$.
+
+## Ejercicio
+
+¿De cuántas maneras se puede contestar un examen de Falso-Verdadero conformado por 5 preguntas?
+
+## Ejercicio
+
+¿De cuántas maneras se puede clasificar una empresa de acuerdo con su ubicación (ciudad capital, ciudad intermedia, otra ciudad), su actividad económica (servicios, comercial, industrial, mixta), y su constitución (pública, privada)? 
+
+## Ejercicio
+
+Una compañía está comenzando un proyecto para aumentar su capacidad de producción. El proyecto se divide en dos grandes etapas: diseño y construcción. La administración no puede predecir de antemano el tiempo exacto requerido para completar cada etapa del proyecto. Proyectos similares indican tiempos de finalización de la etapa de diseño de 2, 3 o 4 meses, y tiempos de finalización de la etapa de construcción de 6, 7 u 8 meses. ¿Cuántos posibles rangos de tiempo se pueden considerar para llevar a cabo el proyecto?
+
+## ¿De cuántas formas se pueden seleccionar $k$ elementos de $n$, con $k\leq n$, si el orden sí importa y no hay repeticiones?
+
+La operación resultante se llama **permutación sin repetición**:
+$$
+P^n_k=n\times (n-1)\times ...\times (n-(k-1))=\frac{n!}{(n-k)!}
+$$
+donde $n! = 1\times 2\times ...\times n$, para $n\geq 1$. Por definición $0!=1$.
+
+## Ejemplo
+
+La información en el ADN se almacena como un código compuesto por cuatro bases químicas, adenina (A), guanina (G), citosina (C) y timina (T). El ADN humano consta de unos 3 mil millones de bases, y más del 99 por ciento de esas bases son iguales en todas las personas.
+
+¿De cuántas maneras se puede ordenar la secuencia AGCT sin repetir ninguna base?
+$$
+P^4_4=\frac{4!}{0!} = 24
+$$
+
+```{r}
+# permutacion
+factorial(4)/factorial(0)
+# lista de posibilidades
+lista <- gtools::permutations(n = 4, r = 4, v = c("A", "G", "C", "T"))
+head(lista)
+dim(lista )
+```
+
+## ¿De cuántas formas se pueden seleccionar $k$ elementos de $n$, con $k\leq n$, si el orden sí importa y sí hay repeticiones?
+
+La operación resultante se llama **permutación con repetición**:
+$$
+n^k=n\times n\times....\times n
+$$
+
+## Ejemplo
+
+¿Cuántas posibles claves de 3 dígitos se pueden obtener con los números de 1 a 5?
+$$
+5^3 = 125
+$$
+```{r}
+# permutacion con repeticion
+5^3
+# lista de posibilidades
+lista <- gtools::permutations(n = 5, r = 3, v = 1:5, repeats.allowed = TRUE)
+head(lista)
+dim(lista)
+```
+
+## ¿De cuántas formas se pueden seleccionar $k$ elementos de $n$, con $k\leq n$, si el orden no importa y no hay repeticiones?
+
+La operación resultante se llama **combinación**:
+$$
+\binom{n}{k} = \frac{n!}{k!\,(n-k)!}
+$$
+
+## Ejemplo
+
+¿De cuántas formas se pueden seleccionar 3 personas en un grupo de 20?
+$$\binom{20}{3}=\frac{20!}{3!\,17!}=1140$$
+
+```{r}
+# combinacion
+factorial(20)/(factorial(3)*factorial(17))
+# otra manera
+choose(n = 20, k = 3)
+# lista de posibilidades
+lista <- gtools::combinations(n = 20, r = 3, v = 1:20)
+head(lista)
+dim(lista)
+```
+
+## Ejercicio
+
+Considere un procedimiento de control de calidad en el cual un inspector selecciona aleatoriamente dos de cinco partes para ser inspeccionadas. En un grupo de cinco partes, ¿cuántas combinaciones de dos partes pueden seleccionarse?
+
+## Ejercicio
+
+En un grupo de 15 hombres y 18 mujeres, ¿de cuántas formas se pueden seleccionar 5 hombres y 6 mujeres?
+
+## Ejercicio
+
+En una repisa hay 5 libros diferentes de administración y 3 libros diferentes de finanzas. ¿De cuántas maneras pueden ordenarse en un estante si se quiere que los libros de una misma disciplina estén juntos?
+
+# Teoría de conjuntos
+
+A continuación una descripción de las **operaciones entre conjuntos**, dado que son fundamentales en el cálculo de probabilidades.
+
+Sea $\Omega$ el conjunto universal con $A\subset\Omega$ y $B\subset\Omega$.
+
+1. **Complemento**: $A^c=\left\lbrace x\in\Omega:x\notin A\right\rbrace$. 
+2. **Unión**: $A\cup B=\left\lbrace x\in\Omega:x\in A\text{ o }x\in B\right\rbrace$.
+3. **Intersección**: $A\cap B=\left\lbrace x\in\Omega:x\in A\text{ y }x\in B\right\rbrace$.
+4. **Diferencia**: $A-B=\left\lbrace x\in\Omega:x\in A\text{ y }x\notin B\right\rbrace$.
+5. **Leyes de De Morgan**: $(A\cup B)^c=A^c\cap B^c$ y $(A\cap B)^c=A^c\cup B^c$.
+
+```{r, eval = TRUE, echo=FALSE, out.width="90%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("07-operaciones_conjuntos2.png")
+```
+
+# Probabilidad
+
+Para definir qué es una **medida de probabilidad** es preciso definir algunos conceptos previamente.
+
+## Experimento aleatorio
+
+Un **experimento aleatorio** es cualquier experimento que satisface las siguientes condiciones:
+
+- Todos los posibles resultados del experimento son conocidos antes de ejecutarlo.
+- El resultado de cualquier ejecución del experimento no se puede conocer de antemano.
+- El experimento se puede repetir bajo las mismas condiciones.
+
+## Espacio muestral 
+
+El **espacio muestral** $\Omega$ es el conjunto de todos los posibles resultados de un experimento aleatorio.
+
+## Ejercicio
+
+Determinar y clasificar (finito, infinito no numerable, infinito no numerable) el espacio muestral asociados con los siguientes experimentos aleatorios.
+
+1. Lanzar      un dado corriente una vez.
+2. Catalogar   si fueron o no aprobadas cuatro leyes especificas en el Congreso.
+3. Registrar   el número de lanzamientos de una moneda corriente hasta obtener tres sellos.
+4. Cuantificar el tiempo (en minutos) que un empleado tarda haciendo una tarea.
+
+## Evento
+
+Cualquier subconjunto del espacio muestral se llama **evento aleatorio**.
+
+Cuando un evento tiene un solo elemento se denomina **evento elemental** o **evento simple**.
+
+El conjunto $\Phi$ se llama **evento imposible**, que nunca sucede, y el conjunto $\Omega$ se llama **evento seguro**, que siempre sucede.
+
+Si $A$ es un evento y el resultado observado del experimento aleatorio es un elemento de $A$ significa que el evento $A$ **ha sucedido**. 
+
+## Ejercicio
+
+Considere el lanzamiento de un dado corriente una vez. ¿Cuáles son todos los posibles eventos? ¿Cuántos son?
+
+## Medida de probabilidad
+  
+Una medida de probabilidad es una **función** que le asigna un número entre $0$ y $1$ a los eventos de un experimento aleatorio:
+$$
+A\longrightarrow P(A)
+$$
+que satisface:
+ 
+- $P(A)\geq0$.
+- $P(\Omega)=1$.
+- Si $A_1, A_2,\ldots$ son **eventos mutuamente excluyentes** incluidos en $\Omega$, entonces
+$$
+P\left(\bigcup_{i=1}^{\infty}A_i \right)=\sum_{i=1}^{\infty}P(A_i)\,.
+$$
+Observe que la **probabilidad de un evento** $A$ es una medida de la **incertidumbre** relacionada con la posibilidad de la ocurrencia del evento $A$.
+
+## Asignación Laplaceana de probabilidades
+
+Se define la probabilidad del evento $A$ como la razón entre el número de casos favorables al evento $A$ y el número total de casos posibles.
+
+Observaciones:
+
+- La validez de este cálculo depende de que los eventos simples sean **equiprobables**.
+
+## Asignación clásica (frecuentista) de probabilidades
+
+Se define la probabilidad del evento $A$ como la **frecuencia relativa** de la ocurrencia de $A$ asociada con un "gran número" de repeticiones del experimento aleatorio:
+\[
+P(A) = \lim_{n\to\infty} h_n(A)
+\]
+
+Observaciones:
+
+- Cuanto mayor sea el número de repeticiones del experimento, tanto mejor será la **estimación** de la probabilidad.
+- La validez de este cálculo depende de que las condiciones bajo las que se realice el experimento sean **semejantes**.
+
+# Referencias
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-sosacoverbook.png")
+```
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-devorecoverbook.jpg")
+```
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-navidicoverbook.png")
+```
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-wackerlycoverbook.jpg")
+```
