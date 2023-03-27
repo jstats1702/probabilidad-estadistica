@@ -1,0 +1,317 @@
+---
+title: "Taller 7"
+author: 
+  - Lina Buitrago PhD(c), labuitragor@unal.edu.co
+  - Juan Sosa PhD, jcsosam@unal.edu.co
+date: ""
+output:
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1. Sea $\Omega = \{0, 1, 2, 3, 4, 5, 6, 7, 8, 9\}$ el espacio muestral correspondiente a un experimento aleatorio dado y
+\[
+A = \{0, 1, 2, 3\},\,\, B = \{4, 5, 6, 7\}, \,\, C = \{2, 4, 6\}, \,\,  \,\, D = \{1, 8, 9\}.
+\]
+eventos incluidos en $\Omega$. Listar los elementos de los conjuntos que corresponden a los siguientes eventos:
+
+a. $(A^C \cup D)^C =\{1, 4, 5, 6, 7, 8, 9\}^C = \{0,2,3\}$.
+b. $B \cap C^C = \{4, 5, 6, 7\} \cap \{0,1,3,5,7,8,9\} = \{5,7\}$ .
+c. $(D^C \cap A)^C \cup C = D \cup A^C\cup C = \{1, 8, 9\}\cup\{4,5,6,7,8,9\}\cup\{2, 4, 6\}=\{1,2,4,5,6,7,8,9\}$.
+d. $(\Omega ^C \cap B)^C = \Omega\cup B^C = \Omega$.
+e. $B \cap C \cap D^C =\{4, 5, 6, 7\}\cap\{2,4,6\}\cap\{2,3,4,5,6,7\} = \{4,6\}$.
+
+2. Los estudiantes de un curso de estadística se clasifican como estudiantes de administración, economía o ingeniería; como repitente o no repitente y también como hombre o mujer. Encuentre el número total de clasificaciones posibles para los estudiantes de este curso.
+
+Aplicando directamente el principio fundamental del conteo, el número total de clasificaciones es:
+$$
+3*2*2 = 12.
+$$
+
+3. Siete personas se quieren organizar en una fila.
+
+a. ¿De cuántas maneras diferentes pueden hacerlo? Este es una permutación sin repetición, y por lo tanto la cantidad pedida es:
+$$
+P^7_7 = \frac{7!}{(7-7)!} = 5040.
+$$
+
+```{r}
+factorial(7)
+```
+
+b. ¿De cuántas maneras diferentes pueden hacerlo si una de ellas no debe estar al comienzo de la fila? En este caso se aplica el principio fundamental del conteo junto con una permutación sin repetición, y por lo tanto la cantidad pedida es:
+$$
+6*P^6_6 = 6*\frac{6!}{(6-6)!} = 4320.
+$$
+
+```{r}
+6*factorial(6)
+```
+
+4. Una caja contiene siete fichas rojas, seis blancas y cuatro azules. ¿Cuántas selecciones de tres fichas se pueden formar si:
+
+a. las tres deben ser rojas? El número total de fichas es $7+6+4=17$. Aplicando el principio fundamental del conteo junto con combinaciones, se tiene que la cantidad pedida es:
+$$
+{7 \choose 3}*{6 \choose 0}*{4 \choose 0} = 35
+$$
+
+```{r}
+choose(7,3)
+```
+
+Observe que ${6 \choose 0} = {4 \choose 0} = 1$.
+
+b. ninguna puede ser blanca? Usando la misma metodología, se tiene que la cantidad pedida es:
+$$
+{7 \choose 3}*{6 \choose 0}*{4 \choose 0}+{7 \choose 2}*{6 \choose 0}*{4 \choose 1}+{7 \choose 1}*{6 \choose 0}*{4 \choose 2}+{7 \choose 0}*{6 \choose 0}*{4 \choose 3} = 165
+$$
+
+```{r}
+choose(7,3) + choose(7,2)*choose(4,1) + choose(7,1)*choose(4,2) + choose(4,3)
+```
+
+c. las tres deben ser del mismo color? Usando la misma metodología, se tiene que la cantidad pedida es:
+$$
+{7 \choose 3}*{6 \choose 0}*{4 \choose 0}+{7 \choose 0}*{6 \choose 3}*{4 \choose 0}+{7 \choose 0}*{6 \choose 0}*{4 \choose 3} = 59.
+$$
+
+```{r}
+choose(7,3) + choose(6,3) + choose(4,3)
+```
+
+d. las tres son de colores diferentes? Usando la misma metodología, se tiene que la cantidad pedida es:
+$$
+{7 \choose 1}*{6 \choose 1}*{4 \choose 1} = 168.
+$$
+
+```{r}
+choose(7,1)*choose(6,1)*choose(4,1)
+```
+
+5. Un director de personal tiene ocho candidatos para cubrir cuatro puestos. De éstos, cinco son hombres y tres, mujeres. Si, de hecho, toda combinación de candidatos tiene la misma probabilidad de ser elegido que cualquier otra, ¿cuál es la probabilidad de que ninguna mujer sea contratada?
+
+Aplicando el principio fundamental del conteo junto con combinaciones, y calculando la probabilidad desde el punto de vista Laplaceano, se tiene que la probabilidad pedida es:
+$$
+\frac{{5 \choose 4}*{3 \choose 0}}{{8 \choose 4}} = 7.14\%.
+$$
+
+```{r}
+choose(5,4)/choose(8,4)
+```
+
+6. ¿Cuántos números de tres cifras se pueden formar con los dígitos 0, 1, 2, 3, 4, 5 y 6 si puede haber repeticiones? ¿Cuántos son pares?  ¿Cuántos son mayores que 330?
+
+a. Si puede haber repeticiones: $6*7^2=294$ (omitiendo los números que inicien con 0).
+
+```{r}
+6*7^2
+```
+b. De estos números de tres cifras, son pares: $6*7*4=168.$
+
+```{r}
+6*7*4
+```
+c. De estos número de tres cifras, son mayores que 330: $1*1*6 + 1*3*7 + 3*7*7 = 174.$ 
+
+```{r}
+1*1*6 + 1*3*7 + 3*7*7
+```
+
+7. Un comité de doce personas será elegido entre diez hombres y diez mujeres. ¿De cuántas formas se puede hacer la selección si:
+
+a. no hay restricciones? Dado que se trata de un grupo de individuos, sin orden y sin repetición, es preciso usar una combinación como sigue:
+$$
+{20 \choose 12}
+$$
+
+b. debe de haber seis hombres y seis mujeres? Aplicando el principio fundamental del conteo junto con combinaciones, se tiene que la cantidad pedida es:
+$$
+{10 \choose 6}*{10 \choose 6}
+$$
+
+c. debe de haber un número par de mujeres? Usando la misma metodología, se tiene que la cantidad pedida es:
+$$
+{10 \choose 10}*{10 \choose 2} + {10 \choose 8}*{10 \choose 4} + {10 \choose 6}*{10 \choose 6} + {10 \choose 4}*{10 \choose 8} + {10 \choose 2}*{10 \choose 10}
+$$
+
+d. debe de haber más mujeres que hombres? Usando la misma metodología, se tiene que la cantidad pedida es:
+$$
+{10 \choose 2}*{10 \choose 10} + {10 \choose 3}*{10 \choose 9} +  {10 \choose 4}*{10 \choose 8} + {10 \choose 5}*{10 \choose 7}
+$$
+
+e. debe de haber al menos ocho hombres? Usando la misma metodología, se tiene que la cantidad pedida es:
+$$
+{10 \choose 8}*{10 \choose 4} + {10 \choose 9}*{10 \choose 3} + {10 \choose 10}*{10 \choose 2}
+$$
+
+8. ¿De cuántas formas diferentes pueden contestarse nueve preguntas de verdadero o falso? Aplicando el principio fundamental del conteo directamente se tiene que la cantidad pedida es $2^9$.
+
+9.  Un estudiante debe responder siete de diez preguntas de un examen. ¿De cuántas formas puede hacer su selección si
+
+a. no hay restricciones? En este caso, no importa el orden de las preguntas no es determinante y no hay repetición de preguntas. Por lo tanto, aplicando combinaciones se tiene que la cantidad pedida es:
+$$
+10\choose7
+$$
+
+b. debe contestar las dos primeras preguntas? Aplicando el principio fundamental del conteo junto con combinaciones, se tiene que la cantidad pedida es:
+$$
+1*1* {8\choose5}
+$$
+
+c. debe contestar al menos cuatro de las primeras seis preguntas?
+$$
+{6\choose4}*{4\choose 3} + {6\choose5}*{4\choose 2} + {6\choose6}*{4\choose 1} 
+$$
+
+10. El número de permutaciones de un conjunto de $n$ objetos repartidos en varias categorías es igual a
+\[
+\dbinom{n}{n_1,n_2,\ldots,n_k} = \frac{n!}{n_1! n_2! \ldots  n_k!}
+\]
+donde $n_i$ es la cantidad de elementos del $i$-ésimo tipo para $i=1,\ldots,k$ con $n_1 + n_2 + \ldots + n_k = n$.
+La fórmula anterior se obtiene teniendo en cuenta que los elementos de la $i$-ésima categoría no se pueden diferenciar entre sí, por lo que hay $n_i!$ permutaciones de estos elementos que hacen alusión al mismo arreglo puesto que pertenecen a la misma categoría. Por consiguiente, es necesario descontar todas las permutaciones repetidas de los elementos de cada categoría que se encuentran enumeradas en la cantidad $n!$.
+
+a. ¿Cuántas palabras distintas --con o sin sentido-- se pueden formar con las letras de la palabra "estadística"? Aplicando permutaciones de objetos repartidos en categorias, se tiene que la cantidad pedida es:
+$$
+\dbinom{11}{1,2,2,2,1,2,1} = \frac{11!}{1!*2!*2!*2!*1!*2!*1!}
+$$
+
+b. En una clase de biología molecular tienen la siguiente secuencia de ADN: "ATGCAAATCCATCCCG". Para que los alumnos de la clase comprendan por qué es necesario el uso de métodos computacionales intensivos se les pregunta: ¿cuántas posibles secuencias del mismo tamaño que la anterior es posible encontrar usando las mismas bases nitrogenadas que se tienen en el ejemplo?
+$$
+\dbinom{16}{5,3,2,6} = \frac{16!}{5!*3!*2!*6!}
+$$
+
+10. Una entidad educativa ha propuesto tres proyectos para la mejora de la educación en una región del país. Para $i = 1, 2, 3$, se define $A_i$ como el evento que representa "el proyecto $i$ fue aceptado". Un experto indica que $\textsf{Pr}(A_1) = 0.30$, $\textsf{Pr}(A_2) = 0.22$, $\textsf{Pr}(A_3) = 0.35$, $\textsf{Pr}(A_1 \cap A_2) = 0.08$, $\textsf{Pr}(A_1 \cap A_3) = 0.09$, $\textsf{Pr}(A_2 \cap A_3) = 0.06$, $\textsf{Pr}(A_1 \cap A_2 \cap A_3) = 0.02$. Expresar verbalmente y determinar la probabilidad de que ocurra cada uno de los siguientes eventos:
+
+a. $A_1 \cup A_2$. El proyecto 1 o el proyecto 2 fue aceptado:
+$$
+P(A_1 \cup A_2) = P(A_1)+P(A_2)-P(A_1\cap A_2) = 0.30+0.22-0.08=0.44.
+$$
+
+b. $A_1^C \cap A_2^C$. El proyecto 1 y el proyecto 2 no fueron aceptados.
+$$
+P(A_1^C \cap A_2^C) = P((A_1\cup A_2)^C) = 1 - P(A_1\cup A_2) = 1 - 0.44 = 0.56.
+$$
+
+c. $A_1 \cup A_2 \cup A_3$. Alguno de los proyectos fue aceptado.
+$$
+P(A_1 \cup A_2 \cup A_3) = P(A_1)+ P(A_2)+P(A_3)-P(A_1\cap A_2)-P(A_1\cap A_3)-P(A_2\cap A_3)+P(A_1\cap A_2\cap A_3) = 0.30+0.22+0.35-0.08-0.09-0.06+0.02 = 0.66.
+$$
+
+d. $A_1^C \cap A_2^C \cap A_3^C$. Ninguno de los proyectos fue aceptado.
+$$
+P(A_1^C \cap A_2^C \cap A_3^C) = P((A_1\cup A_2\cup A_3)^C) = 1-P(A_1\cup A_2\cup A_3) = 1-0.66 = 0.34.
+$$
+
+e. $A_1^C \cap A_2^C \cap A_3$. El proyecto 3 fue aceptado pero los proyectos 1 y 2 no.
+\begin{align*}
+P(A_1^C \cap A_2^C \cap A_3) &= P(A_3\cap (A_1\cup A_2)^C) = P(A_3 - (A_1\cup A_2))\\
+&= P(A_3) - P(A_3\cap(A_1\cup A_2))\\
+&= P(A_3) - P((A_1\cap A_3)\cup (A_2\cap A_3))\\
+&= P(A_3)-(P(A_1\cap A_3)+ P(A_2\cap A_3) - P(A_1\cap A_2 \cap A_3))\\
+&= 0.35 - (0.09+0.06-0.02) = 0.22
+\end{align*}
+
+f. $\left(A_1^C \cap A_2^C\right) \cup A_3$. Los proyectos 1 o 2 no fueron aceptados o el proyecto 3 sí.
+\begin{align*}
+P((A_1^C \cap A_2^C) \cup A_3) &= P((A_1 \cup A_2)^C \cup A_3)\\
+&=P((A_1 \cup A_2)^C) + P(A_3) - P((A_1 \cup A_2)^C\cap A_3)\\
+&=(1-P(A_1 \cup A_2)) + P(A_3) - P(A_1^C \cap A_2^C \cap A_3)\\
+&=(1-0.44)+0.35-0.22 = 0.69.
+\end{align*}
+
+```{r, eval = TRUE, echo=FALSE, out.width="50%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("07-ven_taller_07.jpg")
+```
+
+11. La tabla que se muestra a continuación muestra la proporción de adultos de áreas no metropolitanas, clasificados como lectores o no lectores de un periódico particular y si votaron o no en las elecciones pasadas.
+
+| Votaron | Lectores | No lectores |
+|:-------:|:--------:|:-----------:|
+| Sí      | 0.63     | 0.13        |
+| No      | 0.14     | 0.10        |
+        
+Calcular la probabilidad de que un individuo escogido al azar: i. Ejerza su derecho al voto. ii. Lea el periódico. iii. Ejerza su derecho al voto y lea el periódico. iv. Ejerza su derecho al voto o lea el periódico. v. Lea el periódico pero no ejerza su derecho al voto. vi. No ejerza su derecho al voto y no lea el periódico. vii. No ejerza su derecho al voto si este era uno de los lectores.
+
+Se definen los siguientes eventos: $S =$ "el individuo sí vota", $N =$ "el individuo no vota", $L =$ "el individuo sí es lector", $M =$ "el individuo no es lector".
+
+a. $P(S) = 0.63 + 0.13 = 0.76$.
+b. $P(L)= 0.63 + 0.14 = 0.77$.
+c. $P(S\cap L) = 0.63$.
+d. $P(S \cup L) = P(S) + P(L) - P(S\cap L) =0.76+0.77-0.63 =0.9$.
+e. $P(L-N) = P(L)-P(L\cap N) = 0.77-0.14 = 0.63$.
+f. $P(N \cap M) = 0.10$.
+g. $P(N \mid L) = P(N\cap L)/P(L) = 0.14/0.77 = 0.18189$.
+
+12.  Un sistema contiene dos componentes, $A$ y $B$. El sistema sólo funcionará si ambos funcionan. La probabilidad de que $A$ funcione es 0.98, que $B$ funcione es 0.95 y que $A$ o $B$ funcionen es 0.99. ¿Cuál es la probabilidad de que el sistema funcione?
+
+Dado que
+$$
+P(A\cup B) = P(A)+P(B)-P(A\cap B)
+$$
+se tiene que 
+$$
+P(A\cap B) = P(A)+P(B)-P(A\cup B) = 0.98+0.95-0.99 = 0.94.
+$$
+
+13. El cuerpo humano puede contener uno o dos antígenos, A y B. A la sangre que contiene sólo el antígeno A se le denomina tipo A, a la que contiene sólo el B se le conoce como tipo B, a la que contiene a ambos se le llama tipo AB y a la sangre que no contiene ninguno se le denomina tipo O. En un banco de sangre, 35% de los donantes de sangre tiene el tipo de sangre A, 10% el tipo B y 5% el tipo AB.
+
+a. ¿Cuál es la probabilidad que se elija aleatoriamente a un donante de sangre de tipo O?
+$$
+P(A^C\cap B^C) = P((A\cup B)^C) = 1 - P(A\cup B) = 1-(P(A\cap B ^C)+P(B\cap A^C)+P(A\cap B)) = 1 - (0.35+0.10+0.05) = 0.5.
+$$
+
+b. Un receptor con sangre tipo A puede recibir sin ningún peligro de un donante sangre que no tenga el antígeno B. ¿Cuál es la probabilidad de que un donante elegido aleatoriamente pueda donar al receptor con sangre tipo A?
+$$
+P(B^C) = 1 - P(B) = = 1 - (P(B\cap A^C) + P(A\cap B)) = 1-(0.1+0.05) = 0.85.
+$$
+
+14. De un estudio realizado en una universidad, se sabe que el 35\% de los estudiantes hacen deporte por lo menos una vez a la semana y que el 40\% de los estudiantes tienen un promedio general superior a 4.0. Además, el 30\% de los que hacen deporte por lo menos una vez a la semana tienen un promedio general superior a 4.0.
+
+Se definen los eventos $D =$ "el estudiante hace deporte por lo menos una vez a la semana", $S =$ "el estudiante tiene un promedio general superior a 4.0". Se sabe que $P(D) = 0.35$, $P(S)=0.4$, y $P(S\mid D)=0.3$.
+
+a. ¿Cuál es la probabilidad de que un estudiante elegido al azar haga deporte por lo menos una vez a la semana y tenga un promedio general superior a 4.0?
+$$
+P(D\cap S) = P(S\mid D)P(D) = 0.3*0.35 = 0.105.
+$$
+b. ¿Cuál es la probabilidad de que un estudiante elegido al azar, que tiene un promedio general superior a 4.0, haga deporte por lo menos una vez a la semana?
+$$
+P(D \mid S) = \frac{P(D\cap S)}{P(S)} = \frac{0.105}{0.4} = 0.2625.
+$$
+c. ¿Cuál es la probabilidad de que un estudiante elegido al azar haga deporte por lo menos una vez a la semana o tenga una nota media superior a 4.0?
+$$
+P(D\cup S) = P(D) + P(S) - P(D\cap S) = 0.35+0.4-0.105 = 0.645.
+$$
+d. ¿Cuál es la probabilidad de que un estudiante elegido al azar, que no tiene un promedio general superior a 4.0, no haga deporte por lo menos una vez a la semana?
+$$
+P(D^C\mid S^C) = \frac{P(D^C\cap S^C)}{P(S^C)} = \frac{P((D\cup S)^C)}{1-P(S)} = \frac{1-P(D\cup S)}{1-P(S)} = \frac{1-0.645}{1-0.4} = 0.59166.
+$$
+e. ¿Son independientes los eventos "hace deporte por lo menos una vez a la semana" y "tiene un promedio general superior a 4.0"? ¿Son mutuamente excluyentes?
+Dado que  $P(S)=0.4 \neq P(S\mid D)=0.3$ se concluye que los eventos $S$ y $D$ no son independientes. Además, dado que $P(D\cap S) \neq 0$ se concluye que los eventos no son excluyentes.
+
+15. Un analista de bolsa examina las perspectivas de las acciones de un gran número de compañías. Cuando se investigó el comportamiento de estas acciones un año antes, se descubrió que el 15\% experimentaron un crecimiento superior al de la media, el 40\% inferior y el 45\% restante se mantuvieron alrededor de la media. El 30\% de los valores
+que crecieron por encima de la media fueron clasificados como buenas adquisiciones por
+el analista, al igual que el 15\% de las que crecieron alrededor de la media y el 20\% de las que tuvieron un crecimiento inferior. ¿Cuál es la probabilidad de que un valor clasificado como buena adquisición por el analista crezca por encima de la media del mercado?
+
+Se definen los eventos $S =$ "la acción experimenta un crecimiento superior al de la media", $I =$ "la acción experimenta un crecimiento inferior al de la media", y $A =$ "la acción experimenta un crecimiento alrededor de la media", y $B =$ "la acción es clasificada como buena adquisición". Se sabe que $P(S) = 0.15$, $P(A) = 0.45$, $P(I) = 0.4$, y además que, $P(B\mid S) = 0.3$, $P(B\mid A) = 0.15$, y $P(B\mid I) = 0.2$. Se pide calcular
+$$
+P(S\mid B) = \frac{P(S\cap B)}{P(B)} = \frac{P(B\mid S)P(S)}{P(B\mid S)P(S)+P(B\mid A)P(A)+P(B\mid I)P(I)} = \frac{(0.3)(0.15)}{(0.3)(0.15)+(0.15)(0.45)+(0.2)(0.4)} = 0.23376.
+$$
+
+16.  Una empresa que debe decidir si adquiere un determinado paquete de acciones, solicita un informe a tres asesores financieros para que se pronuncien de forma favorable o desfavorable a la compra. Por experiencias anteriores en operaciones similares, se sabe que los tres asesores tienen actitudes ante el riesgo diferente e independiente. Esta situación se refleja en las probabilidades de aconsejar la compra de este tipo de operaciones que son respectivamente 0.8, 0.5 y 0.3. Con esta información se pide calcular la probabilidad de que
+
+Se definen los eventos $A_i =$ "el asesor $i$ aconseja la compra, para $i=1,2,3$. Se tiene que $P(A_1)=0.8$, $P(A_2)=0.5$, y $P(A_3)=0.3$. Además, como los eventos son independientes, se tiene que $P(A_i\cap A_j) = P(A_i)P(A_j)$ para $i\neq j$ y $P(A_1\cap A_2\cap A_3) = P(A_1)P(A_2)P(A_3)$.
+
+a. al menos uno de ellos aconseje la compra.
+$$
+P(A_1\cup A_2\cup A_3) =  P(A_1)+ P(A_2)+P(A_3)-P(A_1\cap A_2)-P(A_1\cap A_3)-P(A_2\cap A_3)+P(A_1\cap A_2\cap A_3) = 0.8+0.5+0.3-(0.8*0.5)-(0.8*0.3)-(0.5*0.3)+(0.8*0.5*0.3) = 0.93.
+$$
+b. ninguno de ellos aconseje adquirir el paquete de acciones.
+$$
+P(A_1^C\cap A_2^C\cap A_3^C) = P((A_1\cup A_2\cup A_3)^C) = 1 - P(A_1\cup A_2\cup A_3) = 1 - 0.93 = 0.07.
+$$

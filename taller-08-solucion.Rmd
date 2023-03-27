@@ -1,0 +1,382 @@
+---
+title: "Taller 8"
+author: 
+  - Lina Buitrago PhD(c), labuitragor@unal.edu.co
+  - Juan Sosa PhD, jcsosam@unal.edu.co
+date: ""
+output:
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1. Un consultor que habitualmente evalúa un proceso de producción reporta el número de defectos importantes encontrados en cada artículo examinado. Sea $X$ el número de defectos importantes en un artículo seleccionado al azar. Se sabe que la función de distribución acumulada de $X$ es:
+$$
+F_X(x) = 
+\begin{cases} 
+0.00  \,,\,\,\,        x < 0; \\
+0.06  \,,\,\,\, 0 \leq x < 1; \\
+0.19  \,,\,\,\, 1 \leq x < 2; \\
+0.39  \,,\,\,\, 2 \leq x < 3; \\
+0.67  \,,\,\,\, 3 \leq x < 4; \\
+0.92  \,,\,\,\, 4 \leq x < 5; \\
+0.97  \,,\,\,\, 5 \leq x < 6; \\
+1.00  \,,\,\,\, 6 \leq x    ; \\
+\end{cases}
+$$
+
+a. Obtener la función de masa de probabilidad $f_X(x)$.
+
+El recorrido de $X$ es $\{0,1,2,3,4,5,6\}$. Además, teniendo en cuenta que $f_X(x) = F_X(x) - F_X(x^-)$, donde $x^-$ es el valor de la variable inmediatamente anterior a $x$, se tiene que
+\begin{align}
+f_X(0) &= F_X(0) = 0.06 \\
+f_X(1) &= F_X(1) - F_X(0) = 0.19-0.06 = 0.13\\
+f_X(2) &= F_X(2) - F_X(1) = 0.39-0.19 = 0.20\\
+f_X(3) &= F_X(3) - F_X(2) = 0.67-0.39 = 0.28\\
+f_X(4) &= F_X(4) - F_X(3) = 0.92-0.67 = 0.25\\
+f_X(5) &= F_X(5) - F_X(4) = 0.97-0.92 = 0.05\\
+f_X(6) &= F_X(6) - F_X(5) = 1.00-0.97 = 0.03\\
+\end{align}
+Observe que,
+$$
+\sum_k f_X(x_k) = f_X(0)+f_X(1)+\ldots+f_X(6) = 0.06+0.13+\ldots+0.03 = 1
+$$
+```{r}
+# f.m.p
+fx <- c(0.06,0.13,0.20,0.28,0.25,0.05,0.03)
+sum(fx)
+```
+
+b. Graficar $f_X(x)$ y $F_X(x)$.
+
+A contiuación se presentan los gráficos correspondientes:
+```{r}
+# recorrido de X
+x <- 0:6
+# f.m.p.
+fx <- c(0.06,0.13,0.20,0.28,0.25,0.05,0.03)
+# f.d.a.
+Fx <- cumsum(fx)
+# gráficos
+par(mfrow = c(1,2))
+# f.m.p
+plot(x = x, y = fx, xlab = "x", ylab = "f(x)", pch = 16, col = "blue")
+segments(x0 = x, y0 = 0, x1 = x, y1 = fx, lwd = 2, col = "blue")
+# f.d.a.
+plot(x = c(0, x), y = c(0, Fx), type = "s", xlab = "x", ylab = "F(x)", col = "blue", lwd = 2)
+points(x, Fx, col = "blue", pch = 16)
+```
+
+c. Calcular e interpretar $Pr(X=2)$, $Pr(X>3)$, $P(2\leq X\leq 5)$.
+
+$$
+Pr(X=2) = f_X(2) = F_X(2) - F_X(1) = 0.39-0.19 = 0.20
+$$
+$$
+Pr(X>3) = 1 - Pr(X\leq 3) = 1 - F_X(3) = 1 - 0.67 = 0.33
+$$
+$$
+P(2\leq X\leq 5) = F_X(5)-F_X(1) = 0.97 - 0.19 = 0.78
+$$
+
+d. Calcular e interpretar el valor esperado de $X$.
+
+Dado que $X$ es una v.a.d., se tiene que
+$$
+\mu_X = \sum_k x_k f_X(x_k) = 0*f_X(0) + 1*f_X(1)+\ldots+6*f_X(6) = 0*0.06+1*0.13+\ldots+6*0.03=2.8
+$$
+```{r}
+# recorrido de X
+x <- 0:6
+# f.m.p.
+fx <- c(0.06,0.13,0.20,0.28,0.25,0.05,0.03)
+# valor esperado
+sum(x*fx)
+```
+Por lo tanto, el número esperado (media) del número de defectos importantes en un artículo seleccionado al azar es 2.8.
+
+e. Calcular e interpretar el coeficiente de variación $X$.
+
+Primero, se calcula la varianza de $X$,
+$$
+\sigma^2_X = E(X^2) - (E(X))^2 = E(X^2) - 2.8^2
+$$
+donde
+$$
+E(X^2)=\sum_k x_k^2 f_X(x_k) = 0^2*f_X(0) + 1^2*f_X(1)+\ldots+6^2*f_X(6) = 0^2*0.06+1^2*0.13+\ldots+6^2*0.03=9.78
+$$
+Por lo tanto, la varianza de $X$ es 
+$$
+\sigma^2_X = E(X^2) - (E(X))^2 = 9.78 - 2.8^2 = 1.94.
+$$
+Así, el coeficiente de variación de $X$ está dado por
+$$
+CV(X)=100*\frac{\sqrt{\sigma^2_X}}{\mu_X}=49.74\%
+$$
+Como el coeficiente de variación de $X$ es 49.74\%, entonces la variabilidad del número de defectos importantes es alta respecto al valor esperado.
+```{r}
+# recorrido de X
+x <- 0:6
+# f.m.p.
+fx <- c(0.06,0.13,0.20,0.28,0.25,0.05,0.03)
+# valor esperado
+EX <- sum(x*fx)
+EX
+# valor esperado de X^2
+EX2 <- sum(x^2*fx)
+EX2
+# varianza
+VAR <- EX2 - EX^2
+VAR
+# coeficiente de variacion
+sqrt(VAR)/EX*100
+```
+
+2. La variable aleatoria $X$ que representa el pH del agua (medido en una escala continua) de un proceso experimental de limpieza tiene la siguiente función de densidad de probabilidad:
+$$
+f_X(x) =
+\begin{cases}
+k\,(7-x)^2 \,,\,\,\, 5 < x < 7; \\
+0          \,,\,\,\, \text{en otro caso}; \\
+\end{cases}
+$$
+
+a. Demostrar que el valor de $k$ para que $f_X(x)$ sea una función de densidad de probabilidad auténtica es $k=3/8=0.375$. Sugerencia: para que $f_X(x)$ sea una función de densidad autentica se debe satisfacer que $f_X(x)\geq 0$ y $\int_{-\infty}^\infty f_X(x)\,\text{d}x = 1$.
+
+Se tiene que la constante $k$ es tal que $k > 0$ dado que $(7-x)^2 > 0$ para todo $x\in (5,7)$. Además, para que $f_X(x)$ sea una f.d.p. auténtica se tiene que satisfacer que  $\int_{-\infty}^\infty f_X(x)\,\text{d}x = 1$. Por lo tanto,
+\begin{align*}
+\int_{-\infty}^\infty f_X(x)\,\text{d}x &= 1\\
+\int_{5}^7 k\,(7-x)^2\,\text{d}x &= 1\\
+k\,\int_{5}^7 (7-x)^2\,\text{d}x &= 1\\
+k* \left(-\frac{(7-x)^3}{3}\Big|_5^7\right) &= 1\\
+k*\left(\left[-\frac{(7-7)^3}{3}\right]-\left[-\frac{(7-5)^3}{3}\right]\right)&= 1\\
+k*\left(0+\frac{8}{3}\right)&= 1\\
+k&= \frac{3}{8}
+\end{align*}
+Así, la f.d.p. de $X$ es 
+$$
+f_X(x) =
+\begin{cases}
+\frac{3}{8}\,(7-x)^2 \,,\,\,\, 5 < x < 7; \\
+0          \,,\,\,\, \text{en otro caso}; \\
+\end{cases}
+$$
+b. Obtener una fórmula general para la función de distribución acumulada $F_X(x)$.
+
+Como $X$ es una v.a.c., en este caso se tiene que para $x\in(5,7)$,
+$$
+F_X(x)=Pr(X\leq x) = \int_{-\infty}^x f_X(t)\,\text{d}t = \int_{5}^x \frac{3}{8}\,(7-t)^2\,\text{d}t
+$$
+y así
+\begin{align*}
+F_X(x) &= \int_{5}^x \frac{3}{8}\,(7-t)^2\,\text{d}t \\
+&=\frac{3}{8}  \int_{5}^x \,(7-t)^2\,\text{d}t \\
+&=\frac{3}{8} * -\frac{(7-t)^3}{3} \Big|_5^x \\
+&=\frac{3}{8}*\left(\left[-\frac{(7-x)^3}{3}\right]-\left[-\frac{(7-5)^3}{3}\right]\right)\\
+&=\frac{3}{8}*\left(-\frac{(7-x)^3}{3}+\frac{8}{3}\right)\\
+&=-\frac{(7-x)^3}{8}+1\\
+\end{align*}
+y por lo tanto, la f.d.a. es:
+$$
+F_X(x) = 
+\begin{cases}
+0          \,,\,\,\, x \leq 5; \\
+1-\frac{1}{8}(7-x)^3 \,,\,\,\, 5 < x < 7; \\
+1          \,,\,\,\, x \geq 7; \\
+\end{cases}
+$$
+c. Graficar $f_X(x)$ y $F_X(x)$.
+
+A continuación se presentan los gráficos correspondientes en el recorrido $(5,7)$:
+```{r}
+# f.d.p.
+ff <- function(x) (3/8)*(7-x)^2
+# f.d.a.
+FF <- function(x)  1 - (1/8)*(7-x)^3
+# grafico
+par(mfrow = c(1,2))
+# f.m.p
+curve(expr = ff, from = 5, to = 7, col = "red",  lwd = 2, main = "f.d.p.", ylab = "f(x)")
+# f.d.a.
+curve(expr = FF, from = 5, to = 7, col = "blue", lwd = 2, main = "f.d.a.", ylab = "F(x)")
+```
+
+
+d. Calcular e interpretar $Pr(X=6)$, $Pr(X>6)$, $P(5.5\leq X\leq 6.5)$.
+
+$$
+Pr(X=6) = \int_6^6 \frac{3}{8}\,(7-x)^2 \,\text{d}x = 0
+$$
+$$
+Pr(X>6) = 1-Pr(X\leq6)=1-F_X(6) = 1-\left[ 1-\frac{1}{8}(7-6)^3 \right] = \frac{1}{8} = 0.125
+$$
+$$
+P(5.5\leq X\leq 6.5) = F_X(6.5)-F_X(5.5) = \left[ 1-\frac{1}{8}(7-6.5)^3 \right] - \left[ 1-\frac{1}{8}(7-5.5)^3 \right] = \frac{1}{8}\left( 1.5^3-0.5^3 \right)=0.40625.
+$$
+
+e. Calcular e interpretar la mediana de $X$.
+
+Se necesita encontrar $x$ tal que $F_X(x) = 0.5$. Así,
+\begin{align*}
+F_X(x) &= 0.5\\
+1-\frac{1}{8}(7-x)^3 &= 0.5\\
+\frac{1}{8}(7-x)^3 &= 0.5\\
+(7-x) &= (8*0.5)^{\frac13}\\
+x &= 7-(8*0.5)^{\frac13}
+\end{align*}
+Por lo tanto, $x=5.41$, y así, el valor del pH del agua es de lo más 5.41 el 50\% de las mediciones.
+```{r}
+7-(8*0.5)^(1/3)
+```
+
+f. Calcular e interpretar el valor esperado de $X$.
+
+Como $X$ es una v.a.c., entonces
+$$
+\mu_X=\int_{-\infty}^\infty x f_X(x)\,\text{d}x=\int_{5}^7 x * \frac{3}{8}\,(7-x)^2 \,\text{d}x = 5.5
+$$
+
+Por lo tanto, el valor esperado (media) del pH del agua es 5.5.
+
+```{r}
+f <- function(x) x*(3/8)*(7-x)^2
+integrate(f, lower = 5, upper = 7)
+```
+
+g. Calcular e interpretar el coeficiente de variación $X$.
+
+Primero, se calcula la varianza de $X$,
+$$
+\sigma^2_X = E(X^2) - (E(X))^2 = E(X^2) - 5.5^2
+$$
+donde
+$$
+E(X^2)=\int_{-\infty}^\infty x^2 f_X(x_k)\,\text{d}x = \int_{5}^7 x^2 * \frac{3}{8}\,(7-x)^2\,\text{d}x = 30.4
+$$
+Por lo tanto, la varianza de $X$ es 
+$$
+\sigma^2_X = E(X^2) - (E(X))^2 = 30.4 - 5.5^2 = 0.15.
+$$
+Así, el coeficiente de variación de $X$ está dado por
+$$
+CV(X)=100*\frac{\sqrt{\sigma^2_X}}{\mu_X}=7.04\%
+$$
+Como el coeficiente de variación de $X$ es 7.04\%, entonces la variabilidad del pH del agua es moderada respecto al valor esperado.
+```{r}
+# recorrido de X
+# f.m.p.
+f <- function(x) x^2*(3/8)*(7-x)^2
+integrate(f, lower = 5, upper = 7)
+# valor esperado
+EX <- 5.5
+EX
+# valor esperado de X^2
+EX2 <- 30.4
+EX2
+# varianza
+VAR <- EX2 - EX^2
+VAR
+# coeficiente de variacion
+sqrt(VAR)/EX*100
+
+```
+h. Debido a un error de calibración del instrumento de medición todos los valores de la variable $X$ se deben disminuir 10\%. Calcular nuevamente el valor esperado y el coeficente de variación.
+
+Sea $Y$ la v.a. que represeta la variable $X$ disminuida 10\%, es decir, $Y=X-0.1X=0.9X$. Así, se tiene que:
+$$
+E(Y) = E(0.9*X)=0.9*E(X)=0.9*5.5=4.95
+$$
+y
+$$
+CV(Y)=\frac{\sqrt{Var(Y)}}{E(Y)}=\frac{\sqrt{Var(0.9*X)}}{E(0.9*X)} = \frac{\sqrt{0.9^2*Var(X)}}{0.9*E(X)} = \frac{0.9*\sqrt{Var(X)}}{0.9*E(X)} = CV(X)=7.04\%
+$$
+
+3. El porcentaje de individuos de una ciudad a favor de una medida económica es una variable aleatoria (v.a.) $X$ con la siguiente función de densidad de probabilidad (f.d.p.):
+$$
+f_X(x) = 
+\left\{
+\begin{array}{ll}
+\theta x^{\theta-1},& \hbox{si $0<x<1$;} \\
+0,                  & \hbox{en otro caso,}
+\end{array}
+\right.
+$$
+donde $\theta > 0$ es el parámetro que controla la f.d.p. de $X$.
+
+a. ¿Cuál es la variable de estudio $X$? ¿Cuál es el rango de $X$?
+
+La variable aleatoria de estudio $X$ es "el porcentaje de individuos de una ciudad a favor de una medida económica". Además, el rango de $X$ es $(0,1)$.
+
+b. Demostrar que $f_X(x)$ es una f.d.p. válida.
+
+Dado que $\theta>0$ entonces $\theta x^{\theta-1}$ para todo $x$ en $(0,1)$. Además, se tiene que $\int_{-\infty}^\infty f(x) dx = 1$ dado que:
+$$
+\int_{-\infty}^\infty f(x) dx = \int_{0}^1 \theta x^{\theta-1} dx = x^\theta \Big|_{0}^= 1^\theta - 0^\theta = 1 - 0 = 1.
+$$
+c. Graficar la f.d.p. de $X$ para $\theta\in\{1/3, 1/2, 1, 2, 3\}$.
+
+```{r}
+f <- function(x, theta) theta*x^(theta-1) 
+curve(expr = f(x, theta = 1/3), from = 0, to = 1, xlab = "x", ylab = "f(x)", main = "", col = 1)
+curve(expr = f(x, theta = 1/2), col = 2, add = T)
+curve(expr = f(x, theta = 1),   col = 3, add = T)
+curve(expr = f(x, theta = 2),   col = 4, add = T)
+curve(expr = f(x, theta = 3),   col = 5, add = T)
+legend("topright", legend = c("1/3","1/2","1","2","3"), col = 1:5, fill = 1:5, border = 1:5, bty = "n")
+```
+
+d. Encontrar una expresión general para el valor esperado de $X$.
+
+$$
+E(X) = \int_0^1 x*\theta x^{\theta-1}dx = \int_0^1 \theta x^{\theta} = \theta\frac{x^{\theta+1}}{\theta+1}\Big|_0^1= \frac{\theta}{\theta+1}
+$$
+e. Encontrar una expresión general para la varianza de $X$.
+$$
+Var(X) = E(X^2) - E(X)^2 = E(X^2) - \left[ \frac{\theta}{\theta+1} \right]^2
+$$
+Además,
+$$
+E(X^2) = \int_0^1 x^2*\theta x^{\theta-1}dx = \int_0^1 \theta x^{\theta+1}dx = \theta\frac{x^{\theta+2}}{\theta+2}\Big|_0^1= \frac{\theta}{\theta+2}
+$$
+Por lo tanto,
+$$
+Var(X) =  \left[ \frac{\theta}{\theta+2} \right] - \left[ \frac{\theta}{\theta+1} \right]^2 = \frac{\theta}{(\theta+1)^2(\theta+2)}
+$$
+
+g. Encontrar una expresión general para el coeficiente de variación de $X$.
+
+$$
+CV(X) = \Big|\frac{\sigma_X}{\mu_X} \Big |  = \frac{\sqrt{ \frac{\theta}{(\theta+1)^2(\theta+2)} }}{ \frac{\theta}{\theta+1} } = \frac{1}{\sqrt{\theta(\theta+2)}}
+$$
+
+h. Encontrar una expresión general para la función de distribución acumulada (f.d.a.).
+
+$$
+F_X(x) = \int_{-\infty}^x f_X(u)du = \int_{0}^x \theta u^{\theta-1} du = u^{\theta}\Big|_{u=0}^{u=x} = x^\theta  
+$$
+
+Por lo tanto,
+$$
+f_X(x) = 
+\left\{
+\begin{array}{ll}
+0,                  & \hbox{si $x \leq 0$} \\
+x^{\theta},         & \hbox{si $0<x<1$;}   \\
+1,                  & \hbox{si $x \geq 1$}
+\end{array}
+\right.
+$$
+
+i. Encontrar una expresión general para la mediana de $X$.   
+
+La mediana $\pi_{50}$ es tal que $F_X(\pi_{50}) = 0.5$ y por lo tanto
+$$
+\pi_{50}^\theta = 0.5
+$$
+de donde $\pi_{50} = 0.5^{1/\theta}$.

@@ -1,0 +1,114 @@
+---
+title: "Taller 7"
+author: 
+  - Lina Buitrago PhD(c), labuitragor@unal.edu.co
+  - Juan Sosa PhD, jcsosam@unal.edu.co
+date: ""
+output:
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+1. Sea $\Omega = \{0, 1, 2, 3, 4, 5, 6, 7, 8, 9\}$ el espacio muestral correspondiente a un experimento aleatorio dado y
+\[
+A = \{0, 1, 2, 3\},\,\, B = \{4, 5, 6, 7\}, \,\, C = \{2, 4, 6\}, \,\,  \,\, D = \{1, 8, 9\}.
+\]
+eventos incluidos en $\Omega$. Listar los elementos de los conjuntos que corresponden a los siguientes eventos:
+
+a. $(A^C \cup D)^C$.
+b. $B \cap C^C$.
+c. $(D^C \cap A)^C \cup C$.
+d. $(\Omega ^C \cap B)^C$.
+e. $B \cap C \cap D^C$.
+
+2. Los estudiantes de un curso de estadística se clasifican como estudiantes de administración, economía o ingeniería; como repitente o no repitente y también como hombre o mujer. Encuentre el número total de clasificaciones posibles para los estudiantes de este curso.
+
+3. Siete personas se quieren organizar en una fila.
+a. ¿De cuántas maneras diferentes pueden hacerlo?
+b. ¿De cuántas maneras diferentes pueden hacerlo si una de ellas no debe estar al comienzo de la fila?
+
+4. Una caja contiene siete fichas rojas, seis blancas y cuatro azules. ¿Cuántas selecciones de tres fichas se pueden formar si:
+
+a. las tres deben ser rojas?
+b. ninguna puede ser blanca?
+c. las tres deben ser del mismo color?
+d. las tres son de colores diferentes?
+
+5. Un director de personal tiene ocho candidatos para cubrir cuatro puestos. De éstos, cinco son hombres y tres, mujeres. Si, de hecho, toda combinación de candidatos tiene la misma probabilidad de ser elegido que cualquier otra, ¿cuál es la probabilidad de que ninguna mujer sea contratada?
+
+6. ¿Cuántos números de tres cifras se pueden formar con los dígitos 0, 1, 2, 3, 4, 5 y 6 si puede haber repeticiones? ¿Cuántos son pares?  ¿Cuántos son mayores que 330?
+
+7. Un comité de doce personas será elegido entre diez hombres y diez mujeres. ¿De cuántas formas se puede hacer la selección si:
+
+a. no hay restricciones?
+b. debe de haber seis hombres y seis mujeres?
+c. debe de haber un número par de mujeres?
+d. debe de haber más mujeres que hombres?
+e. debe de haber al menos ocho hombres?
+
+8. ¿De cuántas formas diferentes pueden contestarse nueve preguntas de verdadero o falso?
+
+9.  Un estudiante debe responder siete de diez preguntas de un examen. ¿De cuántas formas puede hacer su selección si
+
+a. no hay restricciones?
+b. debe contestar las dos primeras preguntas?
+c. debe contestar al menos cuatro de las primeras seis preguntas?
+
+
+10. El número de permutaciones de un conjunto de $n$ objetos repartidos en varias categorías es igual a
+\[
+\dbinom{n}{n_1,n_2,\ldots,n_k} = \frac{n!}{n_1! n_2! \ldots  n_k!}
+\]
+donde $n_i$ es la cantidad de elementos del $i$-ésimo tipo para $i=1,\ldots,k$ con $n_1 + n_2 + \ldots + n_k = n$.
+La fórmula anterior se obtiene teniendo en cuenta que los elementos de la $i$-ésima categoría no se pueden diferenciar entre sí, por lo que hay $n_i!$ permutaciones de estos elementos que hacen alusión al mismo arreglo puesto que pertenecen a la misma categoría. Por consiguiente, es necesario descontar todas las permutaciones repetidas de los elementos de cada categoría que se encuentran enumeradas en la cantidad $n!$.
+
+a. ¿Cuántas palabras distintas --con o sin sentido-- se pueden formar con las letras de la palabra "estadística"?
+b. En una clase de biología molecular tienen la siguiente secuencia de ADN: "ATGCAAATCCATCCCG". Para que los alumnos de la clase comprendan por qué es necesario el uso de métodos computacionales intensivos se les pregunta: ¿cuántas posibles secuencias del mismo tamaño que la anterior es posible encontrar usando las mismas bases nitrogenadas que se tienen en el ejemplo?
+
+10. Una entidad educativa ha propuesto tres proyectos para la mejora de la educación en una región del país. Para $i = 1, 2, 3$, se define $A_i$ como el evento que representa "el proyecto $i$ fue aceptado". Un experto indica que $\textsf{Pr}(A_1) = 0.30$, $\textsf{Pr}(A_2) = 0.22$, $\textsf{Pr}(A_3) = 0.35$, $\textsf{Pr}(A_1 \cap A_2) = 0.08$, $\textsf{Pr}(A_1 \cap A_3) = 0.09$, $\textsf{Pr}(A_2 \cap A_3) = 0.06$, $\textsf{Pr}(A_1 \cap A_2 \cap A_3) = 0.02$. Expresar verbalmente y determinar la probabilidad de que ocurra cada uno de los siguientes eventos:
+
+a. $A_1 \cup A_2$.
+b. $A_1^C \cap A_2^C$.
+c. $A_1 \cup A_2 \cup A_3$.
+d. $A_1^C \cap A_2^C \cap A_3^C$.
+e. $A_1^C \cap A_2^C \cap A_3$.
+f. $\left(A_1^C \cap A_2^C\right) \cup A_3$.
+
+11. La tabla que se muestra a continuación muestra la proporción de adultos de áreas no metropolitanas, clasificados como lectores o no lectores de un periódico particular y si votaron o no en las elecciones pasadas.
+
+| Votaron | Lectores | No lectores |
+|:-------:|:--------:|:-----------:|
+| Sí      | 0.63     | 0.13        |
+| No      | 0.14     | 0.10        |
+        
+Calcular la probabilidad de que un individuo escogido al azar: i. Ejerza su derecho al voto. ii. Lea el periódico. iii. Ejerza su derecho al voto y lea el periódico. iv. Ejerza su derecho al voto o lea el periódico. v. Lea el periódico pero no ejerza su derecho al voto. vi. No ejerza su derecho al voto y no lea el periódico. vii. No ejerza su derecho al voto si este era uno de los lectores.
+
+12.  Un sistema contiene dos componentes, $A$ y $B$. El sistema sólo funcionará si ambos funcionan. La probabilidad de que $A$ funcione es 0.98, que $B$ funcione es 0.95 y que $A$ o $B$ funcionen es 0.99. ¿Cuál es la probabilidad de que el sistema funcione?
+
+13. El cuerpo humano puede contener uno o dos antígenos, A y B. A la sangre que contiene sólo el antígeno A se le denomina tipo A, a la que contiene sólo el B se le conoce como tipo B, a la que contiene a ambos se le llama tipo AB y a la sangre que no contiene ninguno se le denomina tipo O. En un banco de sangre, 35% de los donantes de sangre tiene el tipo de sangre A, 10% el tipo B y 5% el tipo AB.
+
+a. ¿Cuál es la probabilidad que se elija aleatoriamente a un donante de sangre de tipo O?
+b. Un receptor con sangre tipo A puede recibir sin ningún peligro de un donante sangre que no tenga el antígeno B. ¿Cuál es la probabilidad de que un donante elegido aleatoriamente pueda donar al receptor con sangre tipo A?
+
+14. De un estudio realizado en una universidad, se sabe que el 35\% de los estudiantes hacen deporte por lo menos una vez a la semana y que el 40\% de los estudiantes tienen un promedio general superior a 4.0. Además, el 30\% de los que hacen deporte por lo menos una vez a la semana tienen un promedio general superior a 4.0.
+
+a. ¿Cuál es la probabilidad de que un estudiante elegido al azar haga deporte por lo menos una vez a la semana y tenga un promedio general superior a 4.0?
+b. ¿Cuál es la probabilidad de que un estudiante elegido al azar, que tiene un promedio general superior a 4.0, haga deporte por lo menos una vez a la semana?
+c. ¿Cuál es la probabilidad de que un estudiante elegido al azar haga deporte por lo menos una vez a la semana o tenga una nota media superior a 4.0?
+d. ¿Cuál es la probabilidad de que un estudiante elegido al azar, que no tiene un promedio general superior a 4.0, no haga deporte por lo menos una vez a la semana?
+e. ¿Son independientes los eventos "hace deporte por lo menos una vez a la semana" y "tiene un promedio general superior a 4.0"? ¿Son mutuamente excluyentes?
+
+15. Un analista de bolsa examina las perspectivas de las acciones de un gran número de compañías. Cuando se investigó el comportamiento de estas acciones un año antes, se descubrió que el 15\% experimentaron un crecimiento superior al de la media, el 40\% inferior y el 45\% restante se mantuvieron alrededor de la media. El 30\% de los valores
+que crecieron por encima de la media fueron clasificados como buenas adquisiciones por
+el analista, al igual que el 15\% de las que crecieron alrededor de la media y el 20\% de las que tuvieron un crecimiento inferior. ¿Cuál es la probabilidad de que un valor clasificado como buena adquisición por el analista crezca por encima de la media del mercado?
+
+16.  Una empresa que debe decidir si adquiere un determinado paquete de acciones, solicita un informe a tres asesores financieros para que se pronuncien de forma favorable o desfavorable a la compra. Por experiencias anteriores en operaciones similares, se sabe que los tres asesores tienen actitudes ante el riesgo diferente e independiente. Esta situación se refleja en las probabilidades de aconsejar la compra de este tipo de operaciones que son respectivamente 0.8, 0.5 y 0.3. Con esta información se pide calcular la probabilidad de que
+
+a. al menos uno de ellos aconseje la compra.
+b. ninguno de ellos aconseje adquirir el paquete de acciones.
