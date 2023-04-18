@@ -291,3 +291,21 @@ segments(x0 = x, y0 = 0, x1 = x, y1 = fx, lwd = 2, col = "blue")
 plot(x = c(0, x), y = c(0, Fx), type = "s", xlab = "x", ylab = "F(x)", col = "blue", lwd = 2)
 points(x, Fx, col = "blue", pch = 15)
 ```
+
+# Referencias
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-sosacoverbook.png")
+```
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-devorecoverbook.jpg")
+```
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-navidicoverbook.png")
+```
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-wackerlycoverbook.jpg")
+```

@@ -1,0 +1,239 @@
+---
+title: "Medidas Características de Variables Aleatorias"
+author: 
+  - Lina Buitrago PhD(c), labuitragor@unal.edu.co
+  - Juan Sosa PhD, jcsosam@unal.edu.co
+date: ""
+output:
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+\newcommand{\pr}[1]{\textsf{P}\left[#1\right]}
+
+# Introducción
+
+Se definen las **medidas características de variables aleatorias** de uso común para cuantificar los aspectos más relevantes de las variables teniendo en cuenta su estructura probabilística.
+
+Estas medidas también se conocen como los **parámetros del modelo probabilístico asociado** con la variable aleatoria.
+
+- Medidas de **localización**: valor esperado (media), percentiles.
+- Medidas de **dispersión**: varianza, desviación estándar, coeficiente de variación.
+
+Estas medidas son el **objeto de inferencia estadística** cuando no se tiene conocimiento pleno de la función de masa/densidad.
+
+# Percentiles
+
+El percentil $p$ de una v.a.c. $X$, con $0\leq p\leq 100$, corresponde al valor $\pi_p$ tal que $F_X(\pi_p) = P(X \leq \pi_p) = p\%$, es decir, el $p\%$ del área bajo $f_X(x)$ está a la izquierda de $\pi_p$. 
+
+# Valor esperado
+
+Sea $X$ una v.a. con f.m.p. $f_X(x)$ para el caso discreto o con f.d.p. $f_X(x)$ para el caso continuo. El **valor esperado** de $X$ se define como:
+$$
+\begin{equation*}
+\textsf{E}[X]=\mu_X=
+\left\{
+  \begin{array}{ll}
+    \sum_{k} x_k f_X(x_k),              & \hbox{si $X$ es una v.a.d.} \\
+    \int_{-\infty}^{\infty} x f_X(x)dx, & \hbox{si $X$ es una v.a.c.}
+  \end{array}
+\right.
+\end{equation*}
+$$
+
+En general, si $g:\mathbb{R} \rightarrow \mathbb{R}$ es una función, entonces se tiene que el **valor esperado** de $g(X)$ se define como:
+$$
+\begin{equation*}
+\textsf{E}[g(X)]=
+\left\{
+  \begin{array}{ll}
+    \sum_{k} g(x_k) f_X(x_k),              & \hbox{si $X$ es una v.a.d.} \\
+    \int_{-\infty}^{\infty} g(x) f_X(x)dx, & \hbox{si $X$ es una v.a.c.}
+  \end{array}
+\right.
+\end{equation*}
+$$
+
+## Propiedades
+
+Sea $X$ una v.a. y $a$, $b$ números reales. Entonces se tiene que:
+
+- $\textsf E[a] = a$.
+- $\textsf E[a\,X + b] = a\,\textsf{E}[X] + b$.
+- Si $a_1,a_2\ldots,a_n$ son $n$ números reales y $X_1,X_2,\ldots,X_n$ es una secuencia de v.a. conmensurables, entonces
+\[
+\textsf E\left[ \sum_{i=1}^n a_i X_i\right] = \sum_{i=1}^n a_i \textsf E[X_i]
+\]
+
+## Ejercicio
+
+El número de errores de los estados financieros de una empresa tiene la siguiente función de masa:
+\[
+    f_X(x)=
+    \begin{cases}
+        0.60, & \text{si $x=0$}; \\
+        0.25, & \text{si $x=1$}; \\
+        0.10, & \text{si $x=2$}; \\
+        0.05, & \text{si $x=3$}; \\
+        0,    & \text{en otro caso}. \\
+    \end{cases}
+\]
+
+Calcular el número esperado de errores en los estados financieros.
+
+## Ejercicio
+
+La variable aleatoria que denota las utilidades diarias de una empresa de consultoría (en millones de pesos) tiene la siguiente función de densidad de probabilidad:
+\[
+    f_X(x)=
+    \begin{cases}
+        \frac13\,x^2, & \text{si $-1<x<2$}; \\
+        0,    & \text{en otro caso}. \\
+    \end{cases}
+\]
+
+a. Calcular la mediana de las utilidades.
+b. Calcular el valor esperado de las utilidades.
+c. Si las utilidades aumentan 8.2%, calcular nuevamente el valor esperado de las utilidades.
+
+# Varianza
+
+Sea $X$ una v.a. con f.m.p. $f_X$ para el caso discreto o con f.d.p. $f_X$ para el caso continuo.
+Se define la **varianza** de $X$ como el **segundo momento centrado alrededor de la media** de $X$, esto es:
+$$
+\begin{equation*}
+\textsf V[X] =\sigma^2_X=
+\left\{
+  \begin{array}{ll}
+    \sum_{k}(x_k-\mu_X)^2f_X(x_k), & \hbox{si $X$ es una v.a.d.;} \\
+    \int_{-\infty}^{\infty}(x-\mu_X)^2f_X(x)dx, & \hbox{si $X$ es una v.a.c..}
+  \end{array}
+\right.
+\end{equation*}
+$$
+donde $\mu_X$ es el valor esperado de $X$.
+
+## Propiedades
+
+Sea $X$ una v.a. y $a$, $b$ números reales. Entonces se tiene que:
+
+- $\textsf V[X]= \textsf E[X^2] - \textsf E[X]^2$.
+- $\textsf V[X]\geq 0$
+- $\textsf V[a]=0$
+- $\textsf V[aX+b]=a^2\textsf V[X]$
+- Si $X_1, X_2,...,X_m$ son **variables aleatorias independientes**, entonces 
+$$\textsf V\left[\sum_{i=1}^{m}X_i\right]=\sum_{i=1}^{m}\textsf V\left[X_i\right]$$
+
+## Desviación estándar
+
+Si $X$ es una v.a. con media $\mu_X$ y varianza $\sigma^2_X$, entonces la **desviación estándar** o **desviación típica** de $X$ se define como:
+$$\textsf{DE}(X)=\sigma_X=\sqrt{\sigma_X^2}\,.$$
+
+## Coeficiente de variación
+
+Además, el **coeficiente de variación de Pearson** de $X$ se define como:
+\[
+\textsf{CV}(X) = \left| \frac{\sigma_X}{\mu_X} \right|.
+\]
+
+## Ejercicio
+
+El número de errores de los estados financieros de una empresa tiene la siguiente función de masa:
+\[
+    f_X(x)=
+    \begin{cases}
+        0.60, & \text{si $x=0$}; \\
+        0.25, & \text{si $x=1$}; \\
+        0.10, & \text{si $x=2$}; \\
+        0.05, & \text{si $x=3$}; \\
+        0,    & \text{en otro caso}. \\
+    \end{cases}
+\]
+
+Calcular e interpretar el coeficiente de variación del número de errores en los estados financieros.
+
+## Ejercicio
+
+La variable aleatoria que denota las utilidades diarias de una empresa de consultoría (en millones de pesos) tiene la siguiente función de densidad de probabilidad:
+\[
+    f_X(x)=
+    \begin{cases}
+        \frac13\,x^2, & \text{si $-1<x<2$}; \\
+        0,    & \text{en otro caso}. \\
+    \end{cases}
+\]
+
+b. Calcular el coeficiente de variación de las utilidades.
+c. Si las utilidades aumentan 8.2%, calcular nuevamente el coeficiente de variación de las utilidades.
+
+## Ejercicio
+
+La **distribución de Pareto** en todas sus variedades ha sido ampliamente estudiada en la literatura económica y actuarial debido a su aplicabilidad. La distribución de Pareto converge a cero más lentamente que otras alternativas (e.g., distribución Gamma, distribución log-Normal), y por lo tanto, resulta mucho más seguro utilizarla para determinar las primas de grandes siniestros. Esta distribución no está limitada al estudio de costos, también se utiliza frecuentemente en otras áreas para estudiar riqueza, ingresos, retornos, perdidas, etc.
+
+Se dice que una variable aleatoria $X$ tiene **distribución de Pareto** con parámetros $\theta$ y $\eta$ si la función de densidad de $X$ está dada por
+$$
+f_X(x) =\frac{\theta\,\eta^\theta}{x^{\theta+1}}\,,\quad\text{para $x>\eta$,}
+$$
+donde $\eta>0$ y $\theta>0$. En esta distribución, $\eta$ se conoce como parámetro de localización (*location*), mientras que $\theta$ se denomina parámetro de forma (*shape*). En este caso, los analistas de la compañía de seguros aseguran que, para un tipo de siniestro en particular, $X$ tiene distribución de Pareto con parámetros $\eta = 1$ y $\theta = 3$, esto es, la función de densidad de $X$ es
+$$
+f_X(x) =
+\left\{
+\begin{array}{ll}
+\frac{3}{x^{4}}, &  \text{si $x>1$;} \\
+0,               &  \text{en otro caso.}
+\end{array}
+\right.
+$$
+
+Abreviadamente, esto se escribe $X\sim\text{Pareto}(\eta = 1, \theta = 3)$, donde el símbolo "$\sim$" se lee "tiene distribución".  Observe que el rango de la variable aleatoria $X$ es $(1,\infty) = \{x\in \mathbb{R}: x > 1\}$.
+
+a. Graficar la función de densidad de $X$.
+b. Demostrar que $f_X(x)$ es una función de densidad autentica, es decir, demostrar que: 
+	$$
+	\text{$f_X(x)\geq 0$ para todo $x>1$}
+	\qquad\text{y}
+	\qquad\int_{-\infty}^{\infty}f_X(x)\,\text{d}x = 1.
+	$$
+c. Demostrar que la función de distribución de $X$ es:
+	$$
+	F_X(x) = 
+	\left\{
+	\begin{array}{ll}
+	1 - \frac{1}{x^{3}} ,  & \text{si $x > 1$;}\\
+	0,                     & \text{en otro caso.}
+	\end{array}
+	\right.
+	$$
+   Graficar esta función para $1<x<10$.
+d. Demostrar que la expresión general para calcular el percentil $100p\%$ de $X$ es:
+	$$
+	x_p = \frac{1}{\sqrt[3]{1- p}}
+	$$
+	Graficar esta expresión como función de $p$ para $0<p<1$.
+e. Usando la función de distribución, calcular e interpretar las siguientes probabilidades: $\pr{X \geq 1.5}$, $\pr{1.25 < X < 1.75}$, y $\pr{X \leq 2}$.
+f. Usando la función de los percentiles, calcular e interpretar los siguientes percentiles: $x_{10}$, $x_{50}$, y $x_{95}$.
+g. Calcular e interpretar el valor esperado de $X$.
+h. Calcular e interpretar el coeficiente de variación de $X$.
+
+# Referencias
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-sosacoverbook.png")
+```
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-devorecoverbook.jpg")
+```
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-navidicoverbook.png")
+```
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-wackerlycoverbook.jpg")
+```

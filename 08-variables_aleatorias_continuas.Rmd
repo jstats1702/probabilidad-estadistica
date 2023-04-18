@@ -143,3 +143,21 @@ c. Calcular la probabilidad de que la empresa tenga perdidas.
 d. Calcular la probabilidad de que la empresa tenga ganancias.
 e. Calcular la probabilidad de que la empresa tenga ganancias superiores a un millón de pesos.
 f. Calcular los cuartiles de las utilidades.
+
+# Referencias
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-sosacoverbook.png")
+```
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-devorecoverbook.jpg")
+```
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-navidicoverbook.png")
+```
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-wackerlycoverbook.jpg")
+```
