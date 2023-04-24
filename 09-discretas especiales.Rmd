@@ -1,0 +1,282 @@
+---
+title: "Algunas Distribuciones Discretas Especiales"
+author: 
+  - Lina Buitrago PhD(c), labuitragor@unal.edu.co
+  - Juan Sosa PhD, jcsosam@unal.edu.co
+date: ""
+output:
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introducción
+
+Se presentan algunas **distribuciones probabilísticas discretas** de uso común que son fundamentales porque representan los **modelos teóricos** de los fenómenos aleatorios frecuentes.
+
+
+# Distribución Binomial
+
+La **distribución de Bernoulli** es una distribución de probabilidad que consiste en la observación de un experimento aleatorio con **dos posibles resultados**.
+
+A uno de los resultados del experimento se le denomina **"éxito"**, con probabilidad de ocurrencia $\pi$, y al otro se le llama **"fracaso"**, con probabilidad de ocurrencia $1 - \pi$, donde $\pi$ es un número real tal que $0<\pi<1$.
+
+La **distribución binomial** está conformada por $n$ **repeticiones independientes de un experimento de Bernoulli**. 
+
+Se dice que una v.a.d. $X$ que asume valores $0,1,\ldots,n$ tiene una **distribución binomial** con parámetros $n$ y $\pi$, lo que se escribe $X\sim Bin(n,\pi)$, si la f.m.p. de $X$ está dada por:
+\[
+f_X(x;n,\pi) = \left\{
+\begin{array}{ll}
+\binom{n}{x} \pi^x (1-\pi)^{n-x}, & \hbox{si $x=0,1,\ldots,n$;} \\
+0, & \hbox{en otro caso.}
+\end{array}
+\right.
+\]
+donde $n$ es un entero positivo y $\pi$ es un número real tal que $0 < \pi <1$.
+
+Si $n=1$, entonces la distribución binomial coincide con la **distribución Bernoulli** de parámetro $\pi$, lo que se escribe $X \sim Ber(\pi)$.
+
+## Propiedades
+
+Si $X$ es una v.a. tal que $X \sim Bin(n,\pi)$, entonces:
+
+- $\textsf{E}[X] = n\pi$.
+- $\textsf{V}[X] = n\pi(1-\pi)$.
+
+## Ejemplo
+
+Una empresa farmacéutica desarrolló un nuevo medicamento y lo suministró a 10 enfermos elegidos aleatoriamente. La experiencia ha demostrado que 30\% de las personas que padecen la enfermedad se recupera al tomar dicho medicamento. ¿Cuál es la probabilidad de que por lo menos nueve de las 10 personas que toman el medicamento se recuperen?
+
+En este caso se tiene que la v.a. de estudio es el "número de personas en la muestra de 10 pacientes que se recupera de la enfermedad" y el éxito consiste en recuperarse de la enfermedad y esto ocurre con una probabilidad de $0.3$. En consecuencia, la f.m.p. de $X$ es
+\[
+f_X(x;10,0.3) = \left\{
+\begin{array}{ll}
+\binom{10}{x} (0.3)^x (0.7)^{10-x}, & \hbox{si $x=0,1,\ldots,10$;} \\
+0, & \hbox{en otro caso.}
+\end{array}
+\right.
+\]
+
+Además, se pide calcular la probabilidad de que por lo menos nueve de las 10 personas que toman el medicamento se recuperen, esto es:
+\begin{align*}
+\textsf{Pr}(X \geq 9) &= \textsf{Pr}(X=9;X=10)\\
+&= \textsf{Pr}(X=9) + \textsf{Pr}(X=10) \\
+&= \binom{10}{9} (0.3)^9 (0.7)^{10-9} + \binom{10}{10} (0.3)^{10} (0.7)^{10-10} \\
+%&= 0.000138 + 0.000006 \\
+&= 0.000144.
+\end{align*}
+
+De otra parte, se observa que:
+
+- $\textsf{E}[X] = 10(0.3)=3$. Este valor indica que se espera la recuperación de 3 enfermos de una muestra aleatoria de 10 pacientes.
+- $\textsf{V}[X] = 10(0.3)(0.7) = 2.1$.
+
+En la siguiente figura se presenta el gráfico de la f.m.p. y de la f.d.a. de una variable con distribución binomial con parámetros $n=10$ y $\pi=0.3$.
+
+```{r}
+# parametros
+p <- 0.3
+n <- 10
+x <- 0:n
+# P(X >= 9)
+sum(dbinom(x = c(9, 10), size = n, prob = p))
+# valor esperado
+n*p
+# varianza 
+n*p*(1-p)
+# f.m.p.
+fx <- dbinom(x = x, size = n, prob = p)
+# f.d.a.
+Fx <- pbinom(q = x, size = n, prob = p)
+# graficos
+par(mfrow = c(1,2))
+# f.m.p
+plot(x = x, y = fx, xlab = "x", ylab = "f(x)", pch = 15, col = "blue")
+segments(x0 = x, y0 = 0, x1 = x, y1 = fx, lwd = 2, col = "blue")
+# f.d.a.
+plot(x = c(0, x), y = c(0, Fx), type = "s", xlab = "x", ylab = "F(x)", col = "blue", lwd = 2)
+points(x, Fx, col = "blue", pch = 15)
+```
+
+
+# Distribución Hipergeométrica
+
+La **distribución hipergeométrica** surge a partir del "número de éxitos en $n$ ensayos **dependientes** de un experimento de Bernoulli".
+
+Un **experimento hipergeométrico** con parámetros $n$, $M$, y $N$ está basado en las siguientes condiciones:
+
+- Se elige una muestra sin reemplazo de $n$ elementos de un conjunto compuesto por $N$ elementos, de los cuales $M$ tienen una característica de interés. 
+- Cada elemento se puede caracterizar como un "éxito" (el elemento tiene la característica de interés) o como un "fracaso" (el elemento no tiene la característica de interés).
+
+Se dice que una v.a. $X$ tiene una **distribución hipergeométrica** con parámetros $n$, $M$, y $N$, lo que se escribe $X\sim Hg(n,M,N)$, si la f.m.p. de $X$ está dada por:
+\[
+f_X(x;n,M,N) = \left\{
+\begin{array}{ll}
+\frac{\binom{M}{x}\binom{N-M}{n-x}}{\binom{N}{n}}, & \hbox{si $x=\max\{0, n+M-N\},\ldots,\min\{n,M\}$;} \\
+0, & \hbox{en otro caso.}
+\end{array}
+\right.
+\]
+donde $n$, $M$ y $N$ son números enteros no negativos tales que $n\leq N$ y $M\leq N$.
+
+
+## Propiedades
+
+Si $X$ es una v.a. tal que $X \sim H(n,M,N)$, entonces:
+
+- $\textsf{E}[X] = n \frac{M}{N}$.
+- $\textsf{V}[X] = n \frac{M}{N} \left(1-\frac{M}{N}\right) \left(\frac{N-n}{N-1}\right)$.
+
+La razón $M/N$ corresponde a la proporción de éxitos de la población. Si se sustituye $M/N$ por $\pi$ en las fórmulas se obtiene que:
+
+- $\textsf{E}[X] = n\pi$.
+- $\textsf{V}[X] = n \pi (1-\pi)\left(\frac{N-n}{N-1}\right)$.
+
+La expresión anterior evidencia que el valor esperado de la distribución binomial y de la distribución hipergeométrica coinciden, mientras que la varianza de las dos distribuciones difieren por el factor $(N-n)/(N-1)$, denominado **factor de corrección**. 
+
+## Ejemplo
+
+Un equipo de trabajo establecido por el Ministerio de Medio Ambiente, programó visitas a las fábricas para investigar posibles violaciones a los reglamentos para el control de contaminación ambiental. Sin embargo, los recortes presupuéstales han reducido drásticamente el tamaño del equipo de trabajo por lo que solamente se podrán investigar cinco de las 25 fábricas. Por  inspecciones anteriores, se sabe que 10 de las fábricas están operando sin cumplir los reglamentos, calcular la probabilidad de que al menos una de las fábricas muestreadas esté operando en contra del reglamento.
+
+Se define la v.a. $X$ como el "número de fábricas en la muestra seleccionada que operan sin cumplir los reglamentos". De acuerdo con las características del problema se supone que el muestreo se hace sin reemplazo y por lo tanto se sigue que $X \sim H(5,10,25)$. Así, la probabilidad pedida es
+\begin{align*}
+\textsf{Pr}(X \geq 1) &= \sum_{i=1}^5 \textsf{Pr}(X=i) \\
+&= 1 - \textsf{Pr}(X=0) \\
+&= 1 - \frac{\binom{10}{0}\binom{15}{5}}{\binom{25}{5}} \\
+&= 0.9434.
+\end{align*}
+En consecuencia, la probabilidad de que al menos una de las fábricas muestreadas esté operando en contra al reglamento es 0.9434.
+
+```{r}
+# parametros
+n <- 5
+M <- 10
+N <- 25
+# P(X >= 1)
+# la parametrizacion de esta rutina es diferente a la presentada en la formula
+sum(dhyper(x = 1:5, m = M, n = N-M, k = n))
+# otra manera
+1 - dhyper(x = 0, m = M, n = N-M, k = n)
+```
+
+La siguiente figura presenta el gráfico de la f.m.p. y de la f.d.a. de una variable con distribución hipergeométrica con parámetros $n=5$, $M=10$ y $N=25$. 
+
+```{r}
+# parametros
+n <- 5
+M <- 10
+N <- 25
+x <- 0:5
+# f.m.p.
+fx <- dhyper(x = x, m = M, n = N-M, k = n)
+# f.d.a.
+Fx <- phyper(q = x, m = M, n = N-M, k = n)
+# graficos
+par(mfrow = c(1,2))
+# f.m.p
+plot(x = x, y = fx, xlab = "x", ylab = "f(x)", pch = 15, col = "blue")
+segments(x0 = x, y0 = 0, x1 = x, y1 = fx, lwd = 2, col = "blue")
+# f.d.a.
+plot(x = c(0, x), y = c(0, Fx), type = "s", xlab = "x", ylab = "F(x)", col = "blue", lwd = 2)
+points(x, Fx, col = "blue", pch = 15)
+```
+
+# Distribución Poisson
+
+La **distribución Poisson** se utiliza para caracterizar probabilísticamente **el número de veces que ocurre un evento** en relación con una **unidad de medida bien definida** (como una unidad de tiempo o espacio, por ejemplo), de forma que: 
+
+1. La probabilidad de que el evento ocurra en una unidad de medida dada es **igual** para todas las unidades.
+2. El número de eventos que ocurren en una unidad de medida es **independiente** del número de eventos que ocurren en otras unidades.
+
+Se dice que una v.a. $X$ tiene **distribución de Poisson** de parámetro $\lambda$, se escribe $X\sim Pois(\lambda).$, si la f.m.p. de $X$ está dada por:
+\[
+f_X(x;\lambda) = \left\{
+\begin{array}{ll}
+\frac{e^{-\lambda} \lambda^x}{x!}, & \hbox{si $x=0,1,2,\ldots$;} \\
+0, & \hbox{en otro caso.}
+\end{array}
+\right.
+\]
+donde $\lambda$ es un número real positivo.
+
+## Propiedades
+
+Si $X$ es una v.a. tal que $X \sim P(\lambda)$, entonces:
+
+- $\textsf{E}[X] = \lambda$.
+- $\textsf{V}[X] = \lambda$.
+
+## Ejemplo
+
+Los pacientes que entran a un centro de salud lo hacen a una tasa esperada de 0.50 clientes por minuto. Hallar la probabilidad de que el número de clientes que entran en un intervalo específico de 10 minutos sea a lo más 3.
+
+Las hipótesis del proceso de Poisson parecen ser razonables en este contexto. Se asume que los pacientes no llegan en grupos (o es posible contar al grupo entero como un solo paciente) y que la entrada de un paciente no aumenta ni disminuye la probabilidad de que llegue otro. 
+
+Para obtener $\lambda$, se tiene que la tasa media es de 0.50 clientes por minuto. Por lo tanto, en un intervalo de 10 minutos, se sigue que $\lambda = (0.50)(10) = 5$ entradas. Sea $X$ la v.a. dada por el "número de pacientes que entran en un intervalo de 10 minutos". Así, se tiene que $X \sim Pois(5)$, por lo que la f.m.p de $X$ es
+\[
+f_X(x;5) = \left\{
+\begin{array}{ll}
+\frac{e^{-5} 5^x}{x!}, & \hbox{si $x=0,1,2,\ldots$;} \\
+0, & \hbox{en otro caso.}
+\end{array}
+\right.
+\]
+
+Se pide calcular
+\begin{align*}
+\textsf{Pr}(X \leq 3) &= \textsf{Pr}(X=0;X=1;X=2;X=3) \\
+&= \textsf{Pr}(X=0) + \textsf{Pr}(X=1) + \textsf{Pr}(X=2) + \textsf{Pr}(X=3) \\
+&= \frac{e^{-5} 5^0}{0!} + \frac{e^{-5} 5^1}{1!} + \frac{e^{-5} 5^2}{2!} + \frac{e^{-5} 5^3}{3!} \\
+&= 0.2650.
+\end{align*}
+Se observa además que
+\[
+\textsf{Pr}(X > 3) = 1 - \textsf{Pr}(X \leq 3) = 1 - 0.2650 = 0.7350.
+\]
+
+En siguiente figura presenta el gráfico de la f.m.p. y la f.d.a. de una variable con distribución de poisson de parámetro $\lambda=5$.
+
+```{r}
+# parametros
+lambda <- 5
+x <- 0:20
+# P(X <= 3)
+sum(dpois(x = 0:3, lambda = lambda))
+# otra manera
+ppois(q = 3, lambda = lambda)
+# f.m.p.
+fx <- dpois(x = x, lambda = lambda)
+# f.d.a.
+Fx <- ppois(q = x, lambda = lambda)
+# graficos
+par(mfrow = c(1,2))
+# f.m.p
+plot(x = x, y = fx, xlab = "x", ylab = "f(x)", pch = 15, col = "blue")
+segments(x0 = x, y0 = 0, x1 = x, y1 = fx, lwd = 2, col = "blue")
+# f.d.a.
+plot(x = c(0, x), y = c(0, Fx), type = "s", xlab = "x", ylab = "F(x)", col = "blue", lwd = 2)
+points(x, Fx, col = "blue", pch = 15)
+```
+
+# Referencias
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-sosacoverbook.png")
+```
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-devorecoverbook.jpg")
+```
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-navidicoverbook.png")
+```
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-wackerlycoverbook.jpg")
+```

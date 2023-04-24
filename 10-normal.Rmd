@@ -1,0 +1,253 @@
+---
+title: "Distribución Normal"
+author: 
+  - Lina Buitrago PhD(c), labuitragor@unal.edu.co
+  - Juan Sosa PhD, jcsosam@unal.edu.co
+date: ""
+output:
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Introducción
+
+Una de las distribuciones continuas más utilizadas es la  **distribución normal** o **Gaussiana**, porque es un buen modelo para caracterizar varios **fenómenos aleatorios** en la práctica, y además, porque es fundamental para desarrollar técnicas de **inferencia estadística**.
+
+# Ejemplo: Tablero de Galton
+
+https://www.youtube.com/watch?v=AwEaHCjgeXk&ab_channel=FourPinesPublishing
+
+# Distribución Normal
+
+Una v.a.c. tiene **distribución normal**, $X \sim N(\mu,\sigma^2)$, si su función de densidad de probabilidad está dada por:
+
+$$f_X(x; \mu,\sigma^2)=\frac{1}{ \sigma\sqrt{2\pi}}\exp\left\{-\frac12\,\left(\frac{x-\mu}{\sigma}\right)^2\right\}$$
+para $-\infty<x<\infty$.
+
+```{r}
+curve(expr = dnorm(x, mean = 0, sd = 1),   col = 1, from = -6, to = 6, ylim = c(0,0.8), 
+      xlab = "x", ylab = "Densidad", main = "Distribución Normal")
+curve(expr = dnorm(x, mean = 0, sd = 2),   col = 2, add = T)
+curve(expr = dnorm(x, mean = 0, sd = 0.5), col = 3, add = T)
+curve(expr = dnorm(x, mean = 2, sd = 1),   col = 4, add = T)
+```
+
+
+## Propiedades
+
+Si $X \sim N(\mu,\sigma^2)$ y $Y = aX+b$ con $a$ y $b$ constantes, entonces:
+
+- $\textsf{E}[X] = \mu$.
+- $\textsf{V}[X] = \sigma^2$.
+- Es simétrica alrededor de $\mu$
+- $Y\sim N(a\mu+b,a^2\sigma^2)$
+
+## Regla empírica
+
+Si $X \sim N(\mu,\sigma^2)$, entonces:
+
+- $P(\mu-1\sigma<X<\mu+1\sigma)=0.6827$
+- $P(\mu-2\sigma<X<\mu+2\sigma)=0.9545$
+- $P(\mu-3\sigma<X<\mu+3\sigma)=0.9973$
+
+## Ejemplo
+
+El nivel de llenado de una botella tiene distribución normal, con promedio 500 ml y desviación estándar 5 ml.
+
+1. El departamento de control de calidad estipula que toda botella que contenga menos de 490 ml no puede salir al mercado ¿Cuál es la probabilidad de que una botella seleccionada al azar no pueda salir al mercado?
+
+La v.a. de estudio $X$ es "nivel de llenado (en ml) de una botella", tiene distribución $N(500 \text{ ml}, 25\text{ ml}^2)$. 
+
+La función de densidad de $X$ es:
+
+$$
+f_X(x; 500, 5^2)=\frac{1}{ 5\sqrt{2\pi}}\exp\left\{-\frac12\,\left(\frac{x-500}{5}\right)^2\right\}
+$$
+```{r, fig.width=8, fig.height=4}
+par(mfrow = c(1,2))
+curve(expr = dnorm(x, mean = 500, sd = 5), col = 2, lwd = 2, from = 480, to = 520,
+      xlab = "Nivel de llenado (ml)", ylab = "Densidad")
+abline(v = 500, lty = 2)
+curve(expr = pnorm(x, mean = 500, sd = 5), col = 4, lwd = 2, from = 480, to = 520, 
+      xlab = "Nivel de llenado (ml)", ylab = "Prob. acumulada")
+```
+
+Así, la probabilidad de que una botella seleccionada al azar no pueda salir al mercado es:
+  
+$$
+P(X < 490)=F_X(490)=0.02275013
+$$
+```{r}
+# P(X < 490)
+pnorm(q = 490, mean = 500, sd = 5)
+```
+
+```{r warning=FALSE}
+#función de densidad
+curve(expr = dnorm(x, mean = 500, sd = 5), col = 2, lwd = 2, from = 480, to = 520, xlab = "Nivel de llenado (ml)", ylab = "Densidad")
+grid <- seq(from = 480, to = 490, len = 1000)
+polygon(x = c(480,grid,490), y = c(0,dnorm(grid, mean = 500, sd = 5),0), col = "orange", border = "orange")
+curve(expr = dnorm(x, mean = 500, sd = 5), col = 2, lwd = 2, add = T)
+abline(v = 500, lty = 2)
+```
+2. La botella tiene un nivel de llenado óptimo si tal cantidad se encuentra entre 490 ml y 510 ml. ¿Qué porcentaje de botellas tendrán un nivel de llenado óptimo?
+
+$$P(490<X<510)=F_X(510)-F_X(490)=0.9544997$$
+
+Es decir que el $95.45\%$ de las botellas tienen un nivel de llenado óptimo.
+
+```{r}
+# P(490 < X < 510)
+pnorm(q = 510, mean = 500, sd = 5) - pnorm(q = 490, mean = 500, sd = 5)
+```
+
+```{r warning=FALSE}
+#función de densidad
+curve(expr = dnorm(x, mean = 500, sd = 5), col = 2, lwd = 2, from = 480, to = 520, xlab = "Nivel de llenado (ml)", ylab = "Densidad")
+grid <- seq(from = 490, to = 510, len = 1000)
+polygon(x = c(490,grid,510), y = c(0,dnorm(grid, mean = 500, sd = 5),0), col = "orange", border = "orange")
+curve(expr = dnorm(x, mean = 500, sd = 5), col = 2, lwd = 2, add = T)
+abline(v = 500, lty = 2)
+```
+
+3. ¿Cuál es el nivel de llenado máximo del 75% de las botellas?
+
+Se necesita el percentil 75 de la distribución:
+
+$$\pi_{75}=503.3724$$
+
+Es decir que el 75% de las botellas contienen 503.37 ml o menos.
+
+```{r}
+# percentil 75
+qnorm(p = 0.75, mean = 500, sd = 5)
+```
+
+
+# Distribución Normal Estándar
+
+Un **caso particular de la distribución normal** se tiene cuando $\mu=0$ y $\sigma^2=1$. Esta distribución se llama **distribución normal estándar** y se denota $Z \sim N(0,1)$. 
+
+La función de densidad de probabilidad correspondiente está dada por:
+
+$$\phi(z)=\frac{1}{\sqrt{2\pi}}\exp\left\{-\frac{1}{2}\, z^2 \right\}$$
+para $-\infty<z<\infty$.
+
+## Estandarización
+
+Al igual que en el caso descriptivo, la estandarización se utiliza para comparar instancias bajo escenarios diferentes.
+
+Una variable estandarizada es una variable adimensional (no tiene unidades de medición).
+
+Si $X \sim N(\mu,\sigma^2)$, entonces $Z=\frac{X-\mu}{\sigma}\sim N(0,1)$. 
+
+Si $X \sim N(\mu,\sigma^2)$ y $a$ y $b$ constantes, entonces:
+
+$$P(a<X<b)=P\left(\frac{a-\mu}{\sigma}<Z<\frac{b-\mu}{\sigma} \right)=\Phi\left(\frac{b-\mu}{\sigma}\right)-\Phi\left(\frac{a-\mu}{\sigma}\right)$$
+
+donde $\Phi(\cdot)$ es la función de distribución acumulada de $Z$.
+  
+## Ejemplo
+
+El nivel de llenado de una botella tiene distribución normal, con promedio 500 ml y desviación estándar 5 ml.
+
+1. El departamento de control de calidad estipula que toda botella que contenga menos de 490 ml no puede salir al mercado ¿Cuál es la probabilidad de que una botella seleccionada al azar no pueda salir al mercado?
+
+Se tiene que $X\sim N(500 \text{ ml}, 25\text{ ml}^2)$, y por lo tanto $Z=\frac{X-500}{5}\sim N(0,1)$.
+
+Así, la probabilidad de que una botella seleccionada al azar no pueda salir al mercado es:
+  
+$$P(X<490)=P\left(Z<\frac{490-500}{5}\right)=\Phi(-2)=02275013$$
+  
+```{r}
+# P(X < 450)
+pnorm(q = 490, mean = 500, sd = 5)
+pnorm(q = (490-500)/5)
+```
+
+
+2.  La botella tiene un nivel de llenado óptimo si tal cantidad se encuentra entre 490 ml y 510 ml. ¿Qué porcentaje de botellas tendrán un nivel de llenado óptimo?
+
+$$
+P(490<X<510)=P\left(\frac{490-500}{5}<Z<\frac{510-500}{5} \right)=\Phi(2)-\Phi(-2)=0.9544997
+$$ 
+
+Es decir que el $95.45\%$ de las botellas tienen un nivel de llenado óptimo.
+
+```{r}
+# P(490 < X < 510)
+pnorm(q = 510, mean = 500, sd = 5) - pnorm(q = 490, mean = 500, sd = 5)
+pnorm(q = (510-500)/5) - pnorm(q = (490-500)/5)
+```
+
+3. ¿Cuál es el nivel de llenado máximo del 75% de las botellas?
+
+Se necesita el percentil 75 de la distribución
+
+$$z_{75}=0.6745=\frac{\pi_{75}-500}{5}$$
+
+Así, 
+
+$$\pi_{0.75}=z_{0.75}*5+500=503.3724$$
+
+Es decir que el 75% de las botellas contienen 503.37 ml o menos.
+
+```{r}
+# percentil 75 de la normal estándar
+z75 <- qnorm(p = 0.75)
+# percentil 75 del volumen de llenado
+x75 <- z75*5 + 500
+x75
+```
+
+# Ejercicio
+
+La estatura media de los alumnos de un centro educativo es de 164 cm y solo 24 de los 200 alumnos
+miden menos de 150 cm. Suponiendo que la estatura de los alumnos tiene distribución normal, ¿cuál es
+la desviación estándar de la estatura?
+
+# Ejercicio
+
+Una empresa estatal puede comprar materia prima a dos proveedores diferentes y está interesada en
+el contenido de impurezas del producto. Una revisión de los registros de cada proveedor indica que los
+niveles de impurezas contenidos en sendas remesas de producto siguen distribuciones normales con media
+y desviación típica contenidas en la tabla de abajo. La empresa está especialmente preocupada porque
+el contenido de impurezas no exceda el 4\%, y comprará al proveedor que con más probabilidad cumpla
+con este requisito. ¿Qué proveedor habrá que elegir?
+
+| Proveedor | $\mu$ | $\sigma$ |
+|:---------:|:-----:|:--------:|
+| A         | 3.3   | 0.3      |
+| B         | 3.1   | 0.5|     |
+
+# Ejercicio
+
+Estudiando los productos de una compañía fabricante de una maquinaria específica, se identificó que
+la vida promedio de dicha maquinaria es dos años con una desviación estándar de un mes. La empresa
+reemplaza gratis todas las maquinarias que fallen dentro del tiempo de garantía y ha decidido reemplazar
+solo el 1\% de las maquinarias que fallen. Si la duración de la maquinaria sigue una distribución normal,
+¿de qué duración debe ser la garantía que ofrezca la compañía?
+
+# Referencias
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-sosacoverbook.png")
+```
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-devorecoverbook.jpg")
+```
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-navidicoverbook.png")
+```
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-wackerlycoverbook.jpg")
+```
