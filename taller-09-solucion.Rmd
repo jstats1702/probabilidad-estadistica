@@ -1,0 +1,244 @@
+---
+title: "Taller 9"
+author: 
+  - Lina Buitrago PhD(c), labuitragor@unal.edu.co
+  - Juan Sosa PhD, jcsosam@unal.edu.co
+date: ""
+output:
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+---
+
+
+1. Si los niños y las niñas tienen la misma probabilidad de nacer, ¿a qué es igual la probabilidad de que en una familia con tres hijos, exactamente uno sea niña? ¿Cuál es el número esperado de niñas que tendría una familia con tres hijos?
+
+Sea $X$ la v.a. que representa el número de niñas en una familia con tres hijos. Dadas las condiciones de la variable, se tiene que $X\sim \textsf{Bin}(n,\pi)$, donde $n=3$ y $\pi=0.5$; la probabilidad de éxito es 0.5 dado que los niños y las niñas tienen la mimsa probabilidad de nacer.
+
+a. ¿A qué es igual la probabilidad de que en una familia con tres hijos, exactamente uno sea niña?
+$$
+\textsf{Pr}(X=1) = f_X(1) = {3\choose1}(0.5)^1(0.5)^2=0.375
+$$
+```{r}
+dbinom(x = 1, size = 3, prob = 0.5)
+```
+b. ¿Cuál es el número esperado de niñas que tendría una familia con tres hijos?
+$$
+\textsf{E}(X) = 3*0.5 = 1.5
+$$
+2. Sea $X$ la variable aleatoria que representa el número de accidentes de trabajo en una semana en una fábrica. Si para ella se sabe que $Pr(X = 0) = 0.0821$, calcule la probabilidad de que en una semana seleccionada al azar, se presenten por lo menos dos accidentes de trabajo.
+
+En este caso la v.a. $X$ se puede modelar mediante la distribución Poisson con parámetro $\lambda$, dado que $X$ da cuenta del númedo de éxitos (accidentes de trabajos) en una unidad de tiempo bien definida, en este caso, por semana. Dado que $\textsf{Pr}(X=0)=0.0821$, se tiene que
+$$
+\textsf{Pr}(X=0)=\frac{e^{-\lambda}\,\lambda^0}{0!}=e^{-\lambda}=0.0821
+$$
+y por lo tanto, la tasa esperada de accidentes es $\lambda = - \ln(0.0821) = 2.499817$ por semana.
+
+Así, la probabilidad de que en una semana seleccionada al azar, se presenten por lo menos dos accidentes de trabajo es:
+$$
+\textsf{Pr}(X \geq 2) = 1 - \textsf{Pr}(X\leq 1) = 1-F_X(1) = 0.712665.
+$$
+
+```{r}
+# lambda
+lambda <- -log(0.0821)
+lambda
+# Pr(X >= 2)
+1 - ppois(q = 1, lambda = lambda)
+```
+
+3. Se estima que el porcentaje de adultos entre 40 y 50 años que están a favor de una medida económica es del 26\%. Si se selecciona una muestra aleatoria de 15 personas con edades entre 40 y 50 años.  
+
+Sea $X$ la v.a. que represeta el número de personas de una muestra aleatoria de 15 personas con edades entre 40 y 50 años que están a favor de la medida ecónomica. Dado que la probabilidad de éxito (estar a favor de la medida económica) se mantiene constante (esto puede suceder cuando la muestra se toma con reemplazo o cuando se toma sin reemplazo cuando $n << N$, donde $N$ es el tamaño de la población), se tiene que $X\sim\textsf{Bin}(n,\pi)$, con $n=15$ y $\pi=0.26$.
+
+a. Calcule la probabilidad de que: Exactamente 3 estén a favor. 
+$$
+\textsf{Pr}(X=3) = f_X(3) = {15\choose3}(0.26)^3(0.74)^{12} = 0.2156314
+$$
+b. Calcule la probabilidad de que: Tres o más tengan estén a favor.
+$$
+\textsf{Pr}(X\geq3) = 1 - P(X\leq2) = 1 - F_X(2) = 0.789861
+$$
+
+c. Calcule la probabilidad de que: Entre 4 y 7, inclusive, estén a favor.
+$$
+\textsf{Pr}(4\leq X \leq 7) = \textsf{Pr}(X=4) + \ldots + \textsf{Pr}(X = 7) =  F_X(7) - F_X(3) = 0.5523283
+$$
+
+```{r}
+# a. Pr(X = 3)
+dbinom(x = 3, size = 15, prob = 0.26)
+# b. Pr(X >= 3)
+1 - pbinom(q = 2, size = 15, prob = 0.26)
+# c. Pr(4 <= X <= 7)
+pbinom(q = 7, size = 15, prob = 0.26) - pbinom(q = 3, size = 15, prob = 0.26)
+```
+
+4. Un inspector de calidad aplica una prueba de control a 10 artículos de un lote para detectar una
+anomalía en específico, que por procesos de control preliminares, se sabe tiene una incidencia del 10\% sobre una población de artículos con las mismas características. La sensibilidad de la prueba de calidad es del 80\% y la especificidad del 75\%.
+
+Sea $E$ el evento dado por "el artículo tiene la anomalía"; se sabe que la incidencia correspondiente es 10\% y por lo tanto $\textsf{Pr}(E) = 0.1$. De otra parte, sea $P$ el evento dado por "la prueba de calidad es positiva para la anomalía de interés"; dado que la sensibilidad de la prueba de calidad es del 80\% y la especificidad del 75\%, se tiene que $\textsf{Pr}(P\mid E) = 0.8$ (sensibilidad) y $\textsf{Pr}(P^C\mid E^C) = 0.75$ (especificidad). Así, aplicando el teorema de la probabilidad total, se deduce que la probabilidad de no pasar el control es 
+$$
+\textsf{Pr}(P) = \textsf{Pr}(P\mid E)\,\textsf{Pr}(E) + \textsf{Pr}(P\mid E^C)\,\textsf{Pr}(E^C) = (0.8)(0.1)+(0.25)(0.9) = 0.305
+$$
+Ahora, sea $X$ la v.a. que representa el número de artículos de los 10 seleccionados para detectar la anomalía. Dado que la probabilidad de éxito (el artículo no pasa la prueba para la anomalía) se mantiene constante (esto puede suceder cuando la muestra se toma con reemplazo o cuando se toma sin reemplazo cuando $n << N$, donde $N$ es el tamaño del lote), se tiene que $X\sim\textsf{Bin}(n,\pi)$, con $n=10$ y $\pi=0.305$.
+
+a. ¿Cuál es la probabilidad de que exactamente cuatro artículos no pasen la prueba de control?
+$$
+\textsf{Pr}(X=4) = f_X(4) ={10\choose4}(0.305)^4(0.695)^6 = 0.2047988
+$$
+  
+  
+b. Si en la muestra hay cuatro artículos para los que la prueba detecta la anomalía, ¿cuál es la probabilidad de que entre estas, exactamente dos estén en perfectas condiciones?
+
+Sea $Y$ la v.a. que representa el número de artículos de los 4 para los que la prueba detecta la anomalía. Así, $Y\sim\textsf{Bin}(4,\pi)$ donde $n = 4$ y 
+$$
+\pi = \textsf{Pr}(E^C\mid P) = \frac{\textsf{Pr}(E^C\cap P)}{\textsf{Pr}(P)} = \frac{\textsf{Pr}(P\mid E^C)\textsf{Pr}(E^C)}{\textsf{Pr}(P)} = \frac{(0.25)(0.9)}{0.305} = 0.7377049
+$$
+y por lo tanto la probabilidad pedida es
+$$
+\textsf{Pr}(Y = 2) = {4\choose2}(0.7377049)^2(0.2622951)^2 = 0.2246451
+$$
+
+```{r}
+# Pr (P) (teorema de la probabilidad total)
+(0.8)*(0.1)+(0.25)*(0.9)
+# a. Pr(X = 4)
+dbinom(x = 4, size = 10, prob = 0.305)
+# Pr (E^C | P)
+ (0.25)*(0.9)/0.305
+# b. Pr(Y = 2)
+dbinom(x = 2, size = 4, prob = 0.7377049)
+```
+  
+  
+5. En una cierta población se ha observado un número medio anual de muertes por cáncer de pulmón de 12. 
+
+Sea $X$ la v.a. que representa el número anual de muertes por cáncer de pulmón. Así, $X$ se puede modelar mediante la distribución Poisson con parámetro $\lambda$, dado que $X$ da cuenta del númedo de éxitos (muertes) en una unidad de tiempo bien definida, en este caso, por año. Se tiene que $\lambda = 12$. 
+
+a. ¿Cuál es la probabilidad de que durante el año en curso: Haya exactamente 10 muertes por cáncer de pulmón?
+$$
+\textsf{Pr}(X = 10) = f_X(10) = \frac{e^{-12}\,12^{10}}{10!} = 0.1048373
+$$
+
+b. ¿Cuál es la probabilidad de que durante el año en curso: 15 o más personas mueran a causa de la enfermedad?
+$$
+\textsf{Pr}(X\geq 15) = 1 - \textsf{Pr}(X\leq 14) = 1 - F_X(14) = 0.2279755
+$$
+
+c. ¿Cuál es la probabilidad de que durante el año en curso: 10 o menos personas mueran a causa de la enfermedad?
+$$
+\textsf{Pr}(X \leq 10) = F_X(10) = 0.3472294
+$$
+```{r}
+# a. Pr(X = 10)
+dpois(x = 10, lambda = 12)
+# b. Pr(X >= 15)
+1- ppois(q = 14, lambda = 12)
+# c. Pr(X <= 10)
+ppois(q = 10, lambda = 12)
+```
+
+
+6. En un sector del país los gastos diarios en alimentación de las familias, están distribuidos normalmente, y además, se sabe que la probabilidad de que una familia gaste por lo menos \$4,080 es de 0.90 y la probabilidad de que gaste máximo \$9,000 es 0.9772.
+
+Sea $X$ la v.a. que representa los gastos diarios (en pesos) en alimentación de las familias en un sector del país. Se sabe que $X \sim\textsf{N}(\mu,\sigma^2)$ y que $\textsf{Pr}(X\geq 4080)=0.9$ y $\textsf{Pr}(X<9000) = 0.9772$. Estandarizando se tienen las siguientes ecuaciones:
+$$
+\textsf{Pr}\left(Z\geq \frac{4080-\mu}{\sigma}\right)=0.9\qquad\text{y}\qquad \textsf{Pr}\left(Z< \frac{9000-\mu}{\sigma}\right)=0.9772
+$$
+y por lo tanto
+$$
+\frac{4080-\mu}{\sigma}=-1.281552\qquad\text{y}\qquad \frac{9000-\mu}{\sigma}=1.999077
+$$
+Despejando $\mu$ y $\sigma$ de este sistema de ecuaciones (por ejemplo, despejando $\mu$ de la primera ec. y luego sustituyendo en la segunda para despejar $\sigma$, y en seguida usar este valor de $\sigma$ para hallar $\mu$) con dos incognitas se obtiene que $\mu = 6001.959$ y $\sigma = 1499.712$.
+
+a. Calcular la probabilidad de que en un día determinado, una familia: Gaste más de \$8,000 en alimentación. 
+$$
+\textsf{Pr}(X>8000)= 1 - F_X(8000) = 0.09138369 
+$$
+b. Calcular la probabilidad de que en un día determinado, una familia: Gaste entre \$7,000 y \$9000 en alimentación.
+$$
+\textsf{Pr}(7000<X<9000)= F_X(9000) - F_X(7000)  =  0.2300692
+$$
+c. Calcular la probabilidad de que en un día determinado, una familia: Gaste menos de \$5,000 en alimentación.
+$$
+\textsf{Pr}(X<5000)= F_X(5000) =  0.2520345
+$$
+d. Calcular la probabilidad de que en un día determinado, una familia: Gaste entre \$3,000 y \$4500 en alimentación.
+$$
+\textsf{Pr}(3000<X<4500)= F_X(4500) - F_X(3000)  =  0.1356339
+$$
+
+
+```{r}
+# percentil 10
+qnorm(p = 0.1)
+# percentil 97.72
+qnorm(p = 0.9772)
+# desviacion estandar
+sigma <- (9000-4080)/(1.999077+1.281552)
+sigma
+# media
+mu <- 4080+1.281552*sigma
+mu
+# a. Pr(X > 8000)
+1-pnorm(q = 8000, mean = mu, sd = sigma)
+# b. Pr(7000 < X < 9000)
+pnorm(q = 9000, mean = mu, sd = sigma) - pnorm(q = 7000, mean = mu, sd = sigma)
+# c. Pr(X < 5000)
+pnorm(q = 5000, mean = mu, sd = sigma)
+# d. Pr (3000 < X < 4500)
+pnorm(q = 4500, mean = mu, sd = sigma) - pnorm(q = 3000, mean = mu, sd = sigma)
+```
+
+
+
+7. Supóngase que se van a utilizar 15 ratas en un estudio de agentes coagulantes de la sangre. Como primera experiencia, se suministró un anticoagulante a 8 de estos especímenes, pero por inadvertencia se pusieron todas sin marcas en el mismo recinto. Se necesitaron 10 ratas para la segunda fase del estudio y se les tomó al azar sin reemplazamiento. 
+
+a. ¿Cuál es la probabilidad de que de las 10 elegidas 6 tengan la droga y 4 no la tengan?
+
+Sea $X$ la v.a. que representa el número de ratas a las que se les sumistró el anticoagulante entre las 10 seleccionadas para la segunda fase del estudio. Dado que el muestreo se hace sin reemplazo, y por lo tanto la probabilidad de éxito (la rata se le suministró el anticoagulante) no se mantiene constante, entonces se tiene que $X\sim\textsf{Hg}(n,M,N)$, donde $n=10$, $M=8$ y $N=15$. Por lo tanto, la probabilidad de que de las 10 ratas 6 tengan la droga y 4 no la tengan es:
+$$
+\textsf{Pr}(X=6) = \frac{{8\choose 6}{7\choose 4}}{{15\choose10}} = 0.3263403
+$$
+
+b. ¿cuál es el número esperado de ratas con el anticoagulante entre las 10 elegidas?
+$$
+\textsf{E}(X) = 10*\frac{8}{15} = 5.333333
+$$
+```{r}
+# a Pr(X = 6)
+dhyper(x = 6, m = 8, n = 7, k = 10)
+# b. E(X)
+10*8/15
+```
+
+8. La descarga de sólidos de una mina de fosfato tiene una distribución normal con descarga media igual a 27 miligramos por litro y una desviación estándar de 14 miligramos por litro. 
+
+Sea $X$ la v.a. que representa la descarga (en miligramos por litro) de sólidos de una mina de fosfato. Se sabe que $X\sim \textsf{N}(\mu,\sigma^2)$, donde $\mu=27$ y $\sigma=14$.
+
+a. ¿En que proporción de los días excederá la descarga diaria los 50 miligramos por litro? 
+$$
+\textsf{Pr}(X>50) = 1 - \textsf{Pr}(X\leq50) = 1-F_X(50) = 0.05020625
+$$
+
+b. ¿En que proporción de los días la descarga estará entre 29 y 32 miligramos por litro?
+$$
+\textsf{Pr}(29<X<32) = F_X(32)- F_X(29) = 0.08270907
+$$
+c. ¿Cuál es la descarga máxima que se produce en el 75\% de los días? El percentil 75 de $X$ es 36.44286. 
+$$
+\textsf{Pr}(X<a) = 0.75 \\
+a = 36.44286
+$$
+
+```{r}
+# a. Pr(X > 50)
+1 - pnorm(q = 50, mean = 27, sd = 14)
+# b. Pr(29 < X < 32)
+pnorm(q = 32, mean = 27, sd = 14) - pnorm(q = 29, mean = 27, sd = 14)
+# c. percentil 75
+qnorm(p = 0.75, mean = 27, sd = 14)
+```
+

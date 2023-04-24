@@ -1,0 +1,51 @@
+---
+title: "Taller 9"
+author: 
+  - Lina Buitrago PhD(c), labuitragor@unal.edu.co
+  - Juan Sosa PhD, jcsosam@unal.edu.co
+date: ""
+output:
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+---
+
+
+1. Si los niños y las niñas tienen la misma probabilidad de nacer, ¿a qué es igual la probabilidad de que en una familia con tres hijos, exactamente uno sea niña? ¿Cuál es el número esperado de niñas que tendría una familia con tres hijos?
+
+2. Sea $X$ la variable aleatoria que representa el número de accidentes de trabajo en una semana en una fábrica. Si para esta variable se sabe que $Pr(X = 0) = 0.0821$, calcule la probabilidad de que en una semana seleccionada al azar, se presenten por lo menos dos accidentes de trabajo.
+
+3. Se estima que el porcentaje de adultos entre 40 y 50 años que están a favor de una medida económica es del 26\%. Si se selecciona una muestra aleatoria de 15 personas con edades entre 40 y 50 años, calcule la probabilidad de que:   
+
+a. Exactamente 3 estén a favor. 
+b. Tres o más tengan estén a favor.
+c. Entre 4 y 7, inclusive, estén a favor.
+
+4. Un inspector de calidad aplica una prueba de control a 10 artículos de un lote para detectar una
+anomalía en específico, que por procesos de control preliminares, se sabe tiene una incidencia del 10\% sobre una población de artículos con las mismas características. La sensibilidad de la prueba de calidad es del 80\% y la especificidad del 75\%.
+  a. ¿Cuál es la probabilidad de que exactamente cuatro artículos tengan no pasen la prueba de control?
+  b. Si en la muestra hay cuatro artículos para los que la prueba detecta la anomalía, ¿cuál es la probabilidad de que entre estas, exactamente dos estén en perfectas condiciones?
+  
+5. En una cierta población se ha observado un número medio anual de
+muertes por cáncer de pulmón de 12. ¿Cuál es la probabilidad de que
+durante el año en curso:
+  a. Haya exactamente 10 muertes por cáncer de pulmón?
+  b. 15 o más personas mueran a causa de la enfermedad?
+  c. 10 o menos personas mueran a causa de la enfermedad?
+  
+6. En un sector del país los gastos diarios en alimentación de las familias, están distribuidos normalmente, y además, se sabe que la probabilidad de que una familia gaste por lo menos \$4,080 es de 0.90 y la probabilidad de que gaste máximo \$9,000 es 0.9772. Calcular la probabilidad de que en un día determinado, una familia: 
+
+  a. Gaste más de \$8,000 en alimentación. 
+  b. Gaste entre \$7,000 y \$9000 en alimentación.
+  c. Gaste menos de \$5,000 en alimentación.
+  d. Gaste entre \$3,000 y \$4500 en alimentación.
+
+7. Se van a utilizar 15 ratas en un estudio de agentes coagulantes de la sangre. Como primera experiencia, se suministró un anticoagulante a 8 de estos especímenes, pero por inadvertencia se pusieron todas sin marcas en el mismo recinto. Se necesitaron 10 ratas para la segunda fase del estudio y se les tomó al azar sin reemplazamiento. ¿Cuál es la probabilidad de que de las 10 elegidas 6 tengan la droga y 4 no la tengan?, ¿cuál es el número esperado de ratas con el anticoagulante entre las 10 elegidas?
+
+8. La descarga de sólidos de una mina de fosfato tiene una distribución normal con descarga media igual a 27 miligramos por litro y una desviación estándar de 14 miligramos por litro. 
+
+  a. ¿En que proporción de los días excederá la descarga diaria supera los 50 miligramos por litro? 
+  b. ¿En que proporción de los días la descarga estará entre 29 y 32 miligramos por litro?
+  c. ¿Cuál es la descarga máxima que se produce en el 75\% de los días?
+  
