@@ -1,0 +1,431 @@
+---
+title: "Introducción a la Inferencia Estadística"
+author: 
+  - Lina Buitrago PhD(c), labuitragor@unal.edu.co
+  - Juan Sosa PhD, jcsosam@unal.edu.co
+date: ""
+output:
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Introducción
+
+En la mayoría de situaciones prácticas **no es posible observar a todos los individuos de una población**. Esto es, **no es posible conocer completamente el proceso generativo de los datos**.
+
+La población corresponde una **distribución probabilística (modelo probabilístico) con parámetros desconocidos**. 
+
+La **inferencia estadística (basada en el modelo)** es un **proceso inductivo** que consiste en **estimar (aprender)** las **cantidades desconocidas (parámetros)** de una **población (modelo probabilístico)** a partir de una **muestra aleatoria de la población**.
+
+```{r, eval = TRUE, echo=FALSE, out.width="60%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("11-probability_inference.jpg")
+```
+
+## Ejemplo
+
+**Simulación de una muestra aleatoria** de tamaño $n = 100$ de una **población Normal** con media $\mu = 10$ y desviación estándar $\sigma = 1$.
+
+```{r}
+# parametros de la poblacion (modelo)
+mu <- 10
+sigma <- 1
+# muestra aleatoria
+set.seed(2)  # semilla
+x <- rnorm(n = 100, mean = mu, sd = sigma)
+```
+
+```{r}
+# tipo de objeto
+class(x)
+# inspeccion
+head(x)
+# tamaño de la muestra
+length(x)
+# tendencia
+summary(x)
+# dispersion
+sd(x)
+```
+
+```{r}
+# grafico
+# muestra
+hist(x, freq = F, xlim = c(6,14), ylim = c(0,0.4), xlab = "x", ylab = "Densidad", main = "", border = "red", col = "mistyrose")
+# poblacion
+curve(expr = dnorm(x, mean = 10, sd = 1), col = "blue", lty = 4, add = T)
+# leyenda
+legend("topleft", legend = c("Muestra","Población"), fill = c("red","blue"), bty = "n")
+```
+
+
+## Ejemplo
+
+- Variable de interés: $X =$ opinión ($x=1$: favorable; $x=0$: no favorable) de un estudiante acerca del manejo de la pandemia por parte de las directivas de la Universidad.
+- Modelo: $X\sim\textsf{Bernoulli}$.
+- Parámetro de interés: $\theta = \pi$, probabilidad de éxito de $X$.
+- Población: estudiantes (activos) de pre y posgrado de la sede Bogotá de la Universidad.
+
+## Ejemplo
+
+- Variable de interés: $X =$ peso (en kg) de una persona que se ha sometido a una terapia antiviral.
+- Modelo: $X\sim\textsf{Normal}$.
+- Parámetro de interés: $\theta = (\mu,\sigma^2)$, media y varianza de $X$.
+- Población: todas las personas similares a los voluntarios en todas las características fisiológicas relevantes para la terapia.
+
+## Observaciones
+
+- Los **parámetros de la población** se asumen como **cantidades fijas desconocidas**.
+- El **error muestral** (diferencia absoluta entre el estimador y el parámetro; e.g., $|\bar{X}-\mu|$) **no es observable**.
+- Hay tres maneras de hacer inferencia estadística: **estimación puntual**, **intervalos de confianza**, **pruebas de hipótesis**.
+
+# Muestras
+
+## Características
+
+- La muestra debe **representar** (ser similar a) a la **no-muestra**, y por ende a **toda la población**, en todos aquellos **aspectos que sean relevantes**. 
+- Es labor del profesional **definir con precisión cuáles son estos aspectos** y **en qué sentidos son relevantes**.
+- La inferencia se hace sobre aquellos elementos que satisfacen tales características de similaridad (e.g., **estudios observacionales**).
+
+## Ventajas
+
+- Se necesita menos tiempo y menos recursos para estudiar la muestra que la población.
+- La calidad de los datos suele ser mayor en una muestra que en un censo.
+
+## Retos
+
+- ¿Qué tan grande debe ser la muestra?
+- ¿Cómo se debe seleccionar la muestra?
+
+## Tipos
+
+- Muestreo aleatorio **con reemplazo** (MACR).
+- Muestreo aleatorio **sin reemplazo** (MASR).
+- **MASR provee más información que MACR**, particularmente cuando el **tamaño de la muestra** $n$ es "grande" respecto al **tamaño de la población** $N$.
+- Si $n << N$, entonces **MASR y MACR son equivalentes**.
+
+## Inferencia estadística basada en el modelo
+
+Matemáticamente resulta **más conveniente** trabajar con MACR. 
+
+En adelante **se asume que el tamaño de la población $N$ es grande respecto al tamaño de la muestra $n$**, por lo que es posible **considerar a $N$ como infinito** para todos los propósitos prácticos.
+
+## Muestra aleatoria
+
+Una **muestra aleatoria** se define como una secuencia de **variables aleatorias** $X_1,\ldots,X_n$ **independientes e idénticamente distribuidas (IID)**. Esto se escribe como 
+$$
+X_1,\ldots,X_n \stackrel{\text{IID}}{\sim} F_X(\theta)
+$$
+donde $F_X(\theta)$ es una **distribución probabilística** indexada por el **parámetro desconocido** $\theta$.
+
+## Observaciones
+
+- La variable aleatoria $X_i$ representa el **valor hipotético (aun no observado)** de la variable $X$ para el individuo de la muestra $i$, $i=1,\ldots,n$. 
+- **Independencia**: el valor que pueda asumir una variable particular, **no aporta información** sobre ninguna otra.
+- **Idénticamente Distribuidos**: todos los individuos **provienen de la misma población** $F_X(\theta)$.
+- Cuando se hace el proceso de observación, cada **$X_i$ asume un valor fijo conocido $x_i$**, y por lo tanto, **$X_i$ ya no es una variable aleatoria**. En este caso, se dice que **$x_1,\ldots,x_n$ es una realización de la muestra aleatoria $X_1,\ldots,X_n$**.
+
+# Estimador 
+
+Un **estimador** es **función conocida** de una muestra aleatoria que **no depende de ninguna cantidad desconocida.**
+
+## Estimador puntual de $\mu$
+
+Un **estimador de la media poblacional** $\mu=\textsf{E}(X)$ es la **media muestral** $\widehat\mu=\bar{X}$:
+$$
+\bar{X} = \frac{1}{n}\sum_{i=1}^{n} X_i
+$$
+
+## Estimador puntual de $\sigma^2$
+
+Un **estimador de la varianza poblacional** $\sigma^2=\textsf{Var}(X)$ es la **varianza muestral** $\widehat{\sigma^2}=S^2$:
+$$
+S^2 = \frac{1}{n-1}\sum_{i=1}^{n} (X_i-\bar{X})^2
+$$
+
+## Observaciones
+
+- **Antes** de recolectar los datos, un **estimador** es una **variable aleatoria** cuyo valor **depende de la muestra** seleccionada.
+- Cuando se hace el proceso de observación, es posible obtener el **valor que asumirá el estimador**. Esta cantidad se denomina **estimación (puntual)**.
+
+## Ejemplo
+
+Con el objetivo de estimar la media poblacional de temperatura corporal entre personas sanas, se obtuvieron los siguientes valores:
+```{r}
+# muestra observada
+x <- c(36.24, 36.43, 36.46, 36.35, 36.09, 36.27, 36.33, 36.31, 36.41, 36.29, 36.32, 
+       36.20, 36.21, 36.41, 36.37, 36.44, 36.09, 36.42, 36.33, 36.39, 36.22, 36.34, 
+       36.29, 36.50, 36.35, 36.20, 36.32, 36.27, 36.28, 36.60, 36.38, 36.11, 36.32, 
+       36.31, 36.40, 36.49, 36.42, 36.32, 36.33, 36.34, 36.23, 36.31, 36.22, 36.41, 
+       36.28, 36.28, 36.06, 36.31, 36.33, 36.35)
+```
+
+A partir de esta muestra de $n = 50$ personas, **se estima que** la media y la varianza poblacional son respectivamente 
+$$
+\widehat\mu=\bar{x}= \frac{1}{n}\sum_{i=1}^{n} x_i=36.32 \text{ C}
+$$ 
+y 
+$$
+\widehat{\sigma^2} = \frac{1}{n-1}\sum_{i=1}^{n} (x_i-\bar{x})^2 = 0.01\text{ C}^2
+$$
+
+```{r}
+# muestra observada
+x <- c(36.24, 36.43, 36.46, 36.35, 36.09, 36.27, 36.33, 36.31, 36.41, 36.29, 36.32, 
+       36.20, 36.21, 36.41, 36.37, 36.44, 36.09, 36.42, 36.33, 36.39, 36.22, 36.34, 
+       36.29, 36.50, 36.35, 36.20, 36.32, 36.27, 36.28, 36.60, 36.38, 36.11, 36.32, 
+       36.31, 36.40, 36.49, 36.42, 36.32, 36.33, 36.34, 36.23, 36.31, 36.22, 36.41, 
+       36.28, 36.28, 36.06, 36.31, 36.33, 36.35)
+# media 
+round(mean(x), 2)
+# varianza
+round(var(x), 2)
+```
+
+## Errores muestrales
+
+- El **error muestral** es la **diferencia entre el estimador $T$ y el parámetro $\theta$** de interés, esto es, $|T - \theta|$. 
+- **Surge a causa de observar una muestra** en lugar de la población completa.
+- **No se puede cuantificar** directamente. Sin embargo, se puede **controlar** por medio de la **variabilidad del estimador**. 
+- Disminuye a medida que se aumenta el tamaño de la muestra.
+
+## Errores no muestrales
+
+Los **errores no muestrales** lo componen todos aquellos **errores que se pueden presentar** durante el proceso de la investigación, **distintos del error muestral**.
+
+Al momento del análisis de datos, conducirá a resultados e interpretaciones distorsionadas.
+
+- Error por muestra no representativa de la población.
+- Error por fata de calibración de los instrumentos de medición.
+- Error por preguntas/mediciones mal formuladas.
+
+# El promedio muestral $\bar{X}$
+
+El **estimador de la media poblacional** $\mu=\textsf{E}(X)$ es la **media muestral** $\widehat\mu=\bar{X}$.
+
+## Propiedades del promedio muestral $\bar{X}$
+
+Si $X_1,\ldots,X_n$ es una muestra aleatoria de tamaño $n$ de una población $F_X$, entonces:
+$$
+\textsf{E}(\bar{X}) = \mu \qquad\text{y}\qquad \textsf{Var}(\bar{X}) = \frac{\sigma^2}{n}
+$$
+donde $\mu=\textsf{E}(X)$ es el **promedio poblacional** y $\sigma^2=\textsf{Var}(X)$ es la **varianza poblacional**.
+
+Si el tamaño de la muestra aumenta, entonces la variabilidad del estimador disminuye. 
+
+## Ejemplo
+
+**Simulación de una muestra aleatoria** de tamaño $n = 100$ de una **población Normal** con media $\mu = 10$ y desviación estándar $\sigma = 1$.
+
+```{r}
+# parametros de la poblacion (modelo)
+mu <- 10
+sigma <- 1
+# numero de simulaciones
+M <- 1000000
+# objeto para almacenar los promedios
+XB <- matrix(data = NA, nrow = M, ncol = 1)
+# simulacion
+set.seed(1)
+for (i in 1:M) {
+  x <- rnorm(n = 100, mean = mu, sd = sigma)
+  XB[i] <- mean(x)
+}
+```
+
+```{r}
+# tipo de objeto
+class(XB)
+# inspeccion
+head(XB)
+# media teorica
+mu
+# media empirica
+mean(XB)
+# varianza teorica
+sigma^2/100
+# varianza empirica
+var(XB)
+```
+
+**Simulación de una muestra aleatoria** de tamaño $n = 3$ de una **población Normal** con media $\mu = 10$ y desviación estándar $\sigma = 1$.
+
+```{r}
+# parametros de la poblacion (modelo)
+mu <- 10
+sigma <- 1
+# numero de simulaciones
+M <- 1000000
+# objeto para almacenar los promedios
+XB <- matrix(data = NA, nrow = M, ncol = 1)
+# simulacion
+set.seed(1)
+for (i in 1:M) {
+  x <- rnorm(n = 3, mean = mu, sd = sigma)
+  XB[i] <- mean(x)
+}
+```
+
+```{r}
+# tipo de objeto
+class(XB)
+# inspeccion
+head(XB)
+# media teorica
+mu
+# media empirica
+mean(XB)
+# varianza teorica
+sigma^2/3
+# varianza empirica
+var(XB)
+```
+
+## Estimador insesgado
+
+Un estimador $T$ del parámetro $\theta$ se llama **estimador insesgado** de $\theta$ si $\textsf{E}(T) = \theta$.
+
+## Ejemplo
+
+El estimador $\bar{X}$ del promedio poblacional $\mu$ es un **estimador insesgado** de $\mu$ ya que $\textsf{E}(\bar{X}) = \mu$.
+
+## Ejemplo 
+
+El estimador $S^2$ de la varianza poblacional $\sigma^2$ es un **estimador insesgado** de $\sigma^2$ ya que $\textsf{E}(S^2) = \sigma^2$.
+
+## Error estándar
+
+El **error estándar** de un estimador $T$ del parámetro $\theta$ se define como la **desviación estándar (típica) del estimador**, es decir, $\sigma_T=\textsf{DE}(T)=\sqrt{\textsf{Var}(T)}$.
+
+El error estándar cuantifica la variabilidad (dispersión) de un estimador respecto a su valor esperado.
+
+## Ejemplo
+
+El error estándar del promedio muestral $\bar{X}$ es
+$$
+\textsf{DE}(\bar{X}) = \sqrt{\frac{\sigma^2}{n}} = \frac{\sigma}{\sqrt{n}}
+$$
+donde $n$ es el **tamaño de la muestra** y $\sigma^2=\textsf{Var}(X)$ es la **varianza poblacional**.
+
+## Ejemplo
+
+Calcular el error estándar de $\bar{X}$ en la simulación anterior.
+
+```{r}
+# error estandar teorico
+sigma/sqrt(3)
+# error estandar empirico
+sd(XB)
+```
+
+
+## Ejemplo
+
+Calcular el **error estándar estimado** de la estimación puntual del ejemplo de las temperaturas. 
+
+En este caso se tiene que
+$$
+\widehat{\textsf{DE}}(\bar{X}) = \sqrt{\frac{0.01}{50}} = 0.00213
+$$
+
+¿Por qué este valor es un error estándar **estimado**?
+
+```{r}
+# muestra observada
+x <- c(36.24, 36.43, 36.46, 36.35, 36.09, 36.27, 36.33, 36.31, 36.41, 36.29, 36.32, 
+       36.20, 36.21, 36.41, 36.37, 36.44, 36.09, 36.42, 36.33, 36.39, 36.22, 36.34, 
+       36.29, 36.50, 36.35, 36.20, 36.32, 36.27, 36.28, 36.60, 36.38, 36.11, 36.32, 
+       36.31, 36.40, 36.49, 36.42, 36.32, 36.33, 36.34, 36.23, 36.31, 36.22, 36.41, 
+       36.28, 36.28, 36.06, 36.31, 36.33, 36.35) 
+# tamaño de la muestra
+n <- length(x)
+# error estandar
+round(sd(x)/n, 5)
+```
+
+## Estimador consistente
+
+Un estimador insesgado $T$ de $\theta$ es un estimador consistente de $\theta$ si $\lim\limits_{n\to\infty} \textsf{V}(T) = 0$.
+
+## Ejemplo
+
+$\bar{X}$ es un estimador consistente de $\mu$ porque $\lim\limits_{n\to\infty} \textsf{V}(\bar{X}) = \lim\limits_{n\to\infty}\frac{\sigma^2}{n} = 0$.
+
+## Distribución muestral
+
+Se llama distribución muestral a la **distribución probabilística de un estimador**.
+
+## Ley de los grandes números
+
+Si $X_1, X_2,\ldots$ es una sucesión infinita de variables aleatorias independientes que tienen el mismo valor esperado $\mu$ y varianza $\sigma^2$, entonces el promedio $\bar{X}$ **converge en probabilidad a** $\mu$. En otras palabras, para cualquier número positivo $\epsilon$ se tiene que:
+
+$$\lim\limits_{n\to\infty}P\left(|\bar{X}-\mu|<\epsilon\right) = 1$$
+
+## Teorema del Límite Central (TLC)
+
+Sea $X_1, \ldots,X_n$ un conjunto de variables aleatorias independientes e idénticamente distribuidas de una distribución con media $\mu$ y varianza $\sigma^2<\infty$, esto es, $X_1,\ldots,X_n\stackrel{\text{IID}}{\sim}F_X$. **Para $n$ *grande*, se tiene que el promedio muestral $\bar{X}$ aproximadamente (asintóticamente) sigue una distribución Normal.** Esto es:
+$$
+\bar{X}\sim \textsf{N}\left(\mu,\frac{\sigma^2}{n}\right)
+$$
+
+```{r, eval = TRUE, echo=FALSE, out.width="95%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("11-tlc.jpg")
+```
+
+## Observaciones
+
+- El TLC solo dice algo sobre la **distribución muestral** de $\bar{X}$, **no sobre la distribución de la población** $F$. 
+- El TLC dice que la distribución muestral de $\bar{X}$ es aproximadamente Normal cuando $n$ es grande. **¿Cuándo es $n$ grande?** No hay una respuesta universal, depende de la forma de la población: si ésta no es muy diferente de una distribución Normal, no hace falta un tamaño de muestra muy grande para que la aproximación sea satisfactoria. En cambio, si es muy distinta de una distribución Normal, es necesario un tamaño muestral bastante grande.
+
+## Ejemplo
+
+El peso de los habitantes de una ciudad tiene media 80 kg y desviación típica 4 kg. ¿Cuál es la probabilidad de que la media del peso de una muestra aleatoria de 100 personas supere los 79.5 kg?
+
+La población está constituida por el peso (en kg) $X$ de todos los habitantes de una ciudad. En este caso, se sabe que la media y la varianza de la población son respectivamente, $\mu = \textsf{E}(X) = 80$ y que $\sigma^2=\textsf{Var}(X) = 16$. Se pide calcular $\textsf{Pr}(\bar{X} > 79.5)$, donde $\bar{X} = \frac{1}{n}\sum_i^{n} X_i$ con $n = 100$. Así, por la propiedades del promedio muestral $\bar{X}$,
+$$
+\textsf{E}(\bar{X}) = \mu = 80
+$$
+y
+$$
+\textsf{Var}(\bar{X}) = \frac{\sigma^2}{n} = \frac{16}{100}\,.
+$$
+Por lo tanto, de acuerdo con lo estipulado en el TLC (pues no tenemos evidencia de que la población siga una distribución Normal), dado que el tamaño de la muestra es grande, se tiene que 
+$$
+\bar{X}\sim\textsf{N}\left(80,\frac{16}{100}\right)
+$$
+y en consecuencia,
+$$
+\textsf{Pr}(\bar{X} >79.5) = \textsf{Pr}\left(Z > \frac{79.5-80}{4/10}\right) = 0.8943
+$$
+
+```{r}
+# calculo de la probabilidad
+pnorm(q = 79.5, mean = 80, sd = 4/10, lower.tail = F)
+# otra manera (estandarizando)
+pnorm(q = (79.5-80)/(4/10), lower.tail = F)
+```
+
+
+# Referencias
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-sosacoverbook.png")
+```
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-devorecoverbook.jpg")
+```
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-navidicoverbook.png")
+```
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-wackerlycoverbook.jpg")
+```
