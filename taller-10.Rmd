@@ -1,0 +1,53 @@
+---
+title: "Taller 10"
+author: 
+  - Juan Sosa PhD, jcsosam@unal.edu.co
+date: ""
+output:
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+---
+
+1. El costo medio anual de un seguro para automóvil es de US 939 (CNBC, 23 de febrero de 2006).
+Suponga que la desviación estándar $\sigma$ es US 245.
+¿Cuál es la probabilidad de que una muestra aleatoria simple de pólizas de seguros de automóvil
+la media muestral no difiera más de US 25 de la media poblacional si el tamaño de la
+muestra es 30, 50, 100 y 400?
+
+
+2. Un investigador informa sobre sus resultados diciendo que el error estándar de la media es 20. La
+desviación estándar poblacional es 500.
+
+a. ¿De qué tamaño fue la muestra usada en esta investigación?
+b. ¿Cuál es la probabilidad de que la estimación puntual esté a no más de $\pm$ 25 de la media
+poblacional?
+
+3. *Nielsen Media Research* llevó a cabo un estudio para saber cuánto tiempo se veía televisión en
+los hogares, en el horario de 8:00 a 11:00 de la noche. Los datos que se encuentran en el archivo
+Nielsen son consistentes con los hallazgos reportados (*The World Almanac*,
+2003). Con base en estudios anteriores, la desviación estándar poblacional se considera conocida
+y es 3.5 horas. Dé una estimación mediante un intervalo de confianza de 95\% para la media
+del tiempo que se ve televisión por semana en el horario de 8:00 a 11:00 de la noche.
+
+4. La revista *Playbill* reportó que el ingreso familiar anual medio de sus suscriptores es US 119155
+(*Playbill*, enero de 2006). Suponga que la estimación del ingreso familiar anual medio está basada
+en una muestra de 80 familias y que por datos de estudios anteriores la desviación estándar poblacional
+es conocida y es US 30000.
+
+a. Desarrolle un intervalo de estimación de 90\% de confianza para la media poblacional.
+b. Dé un intervalo de estimación de 95\% de confianza para la media poblacional.
+c. Dé un intervalo de estimación de 99\% de confianza para la media poblacional.
+d. ¿Qué le pasa a la amplitud del intervalo de confianza a medida que el nivel de confianza aumenta?
+
+5. Un meteorólogo mide la temperatura en el centro de la ciudad a mediodía todos los días durante un año. Las 365 lecturas tienen un promedio de 57 $^\text{o}$F y una desviación
+estándar de 20 $^\text{o}$F. El meteorólogo calcula un intervalo de confianza de 95% para la media de la temperatura a mediodía de $57 \pm (1.96)(20)/\sqrt{365}$.
+¿Es esto correcto? ¿Por qué sí o por qué no?
+
+6. Con base en pruebas de comportamiento de una gran muestra
+de uniones soldadas, se calculó un intervalo de confianza
+de 90\% para la media de la dureza Rockwell B de cierto
+tipo de soldadura de (83.2, 84.1). Determine un intervalo de
+confianza de 95\% para la media de la dureza Rockwell B de
+este tipo de soldadura.

@@ -1,0 +1,222 @@
+---
+title: "Taller 10"
+author: 
+  - Juan Sosa PhD, jcsosam@unal.edu.co
+date: ""
+output:
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+---
+
+1. El costo medio anual de un seguro para automóvil es de US 939 (CNBC, 23 de febrero de 2006).
+Suponga que la desviación estándar $\sigma$ es US 245.
+¿Cuál es la probabilidad de que una muestra aleatoria simple de pólizas de seguros de automóvil
+la media muestral no difiera más de US 25 de la media poblacional si el tamaño de la
+muestra es 30, 50, 100 y 400?
+
+La variable de estudio $X$ es el costo anual de un seguro para automovil. Se sabe que $\mu_X = 939$ y $\sigma_X = 245$. Se pide calcular
+$$
+p=P(|\bar{X} - \mu_X| < 25) = P(-25 < \bar{X} - \mu_X < 25)
+$$
+para varios tamaños de muestra.
+
+Estandarizando, se tiene que
+$$
+\begin{align*}
+p &= P(-25/(245/\sqrt{n})<Z<25/(245/\sqrt{n})) \\ 
+&= \Phi(25/(245/\sqrt{n})) - \Phi(-25/(245/\sqrt{n}))
+\end{align*}
+$$
+donde $\Phi(\cdot)$ es la función de distribución acumulada de la distribución Normal estándar, dado que
+$$
+Z=\frac{\bar{X}-\mu_X}{245/\sqrt{n}}\sim\textsf{N}(0,1)
+$$
+para tamaños de muestra grandes (se se sabe si $X$ tiene distribución Normal o no).
+
+A continuación se calcula esta probabilidad para $n\in\{30,50,100,400\}$:
+
+```{r}
+tab <- matrix(data = NA, nrow = 1, ncol = 4)
+tab[1] <- pnorm(q = 25/(245/sqrt(30 ))) - pnorm(q = -25/(245/sqrt(30 )))
+tab[2] <- pnorm(q = 25/(245/sqrt(50 ))) - pnorm(q = -25/(245/sqrt(50 )))
+tab[3] <- pnorm(q = 25/(245/sqrt(100))) - pnorm(q = -25/(245/sqrt(100)))
+tab[4] <- pnorm(q = 25/(245/sqrt(400))) - pnorm(q = -25/(245/sqrt(400)))
+colnames(tab) <- paste0("n=",c(30,50,100,400))
+rownames(tab) <- c("p")
+print(round(tab, 4))
+```
+
+A continuación se presentan las distribuciones asociadas con $\bar{X}$ para cada tamaño de muestra, dado que $\bar{X}\approx\textsf{N}(\mu_X,\sigma_X^2/n)$ cuando $n$ es grande:
+
+```{r}
+mu <- 939
+sigma <- 245
+curve(expr = dnorm(x, mean = mu, sd = sigma/sqrt(400)), from = mu-3*sigma/sqrt(30), to = mu+3*sigma/sqrt(30), col = 1, xlab = "x", ylab = "Densidad", main = "")
+curve(expr = dnorm(x, mean = mu, sd = sigma/sqrt(100)), col = 2, add = TRUE)
+curve(expr = dnorm(x, mean = mu, sd = sigma/sqrt(50 )), col = 3, add = TRUE)
+curve(expr = dnorm(x, mean = mu, sd = sigma/sqrt(30 )), col = 4, add = TRUE)
+legend("topright", legend = paste0("n=",c(30,50,100,400)), col = 1:4, lwd = 2)
+```
+
+
+2. Un investigador informa sobre sus resultados diciendo que el error estándar de la media es 20. La desviación estándar poblacional es 500.
+
+a. ¿De qué tamaño fue la muestra usada en esta investigación?
+
+Se tiene que $\textsf{DE}(\bar{X}) = \sigma_X/\sqrt{n} = 20$ con $\sigma_X = 500$. Por lo tanto,
+$$
+n = \left( \frac{\sigma_X}{\textsf{DE}(\bar{X})} \right)^2 =  \left( \frac{500}{20} \right)^2 = 625\,.
+$$
+
+```{r}
+n <- (500/20)^2
+print(n)
+```
+
+b. ¿Cuál es la probabilidad de que la estimación puntual esté a no más de $\pm$ 25 de la media poblacional?
+
+Se pide calcular
+$$
+p=P(|\bar{X} - \mu_X| < 25) = \Phi(25/(\sigma_X/\sqrt{n})) - \Phi(-25/(\sigma_X/\sqrt{n})) = 0.7887005\,.
+$$
+
+```{r}
+pnorm(q = 25/(500/sqrt(625))) - pnorm(q = -25/(500/sqrt(625)))
+```
+
+
+
+3. *Nielsen Media Research* llevó a cabo un estudio para saber cuánto tiempo se veía televisión en
+los hogares, en el horario de 8:00 a 11:00 de la noche. Los datos que se encuentran en el archivo
+Nielsen son consistentes con los hallazgos reportados (*The World Almanac*,
+2003). Con base en estudios anteriores, la desviación estándar poblacional se considera conocida
+y es 3.5 horas. Dé una estimación mediante un intervalo de confianza de 95\% para la media
+del tiempo que se ve televisión por semana en el horario de 8:00 a 11:00 de la noche.
+
+
+La variable de estudio $X$ es el tiempo que se veía televisión en
+los hogares, en el horario de 8:00 a 11:00 de la noche. Se quiere calcular un intervalo de confianza de 95\% para $\mu_X$, sabiendo que la desviación estándar de la población es $\sigma_X = 3.5$. Dado que la población tiene distribución desconocida, pero el tamaño de la muestra $n=300$ es grande, se tiene el intervalo de confianza para $\mu_X$ se puede calcular mediante
+$$
+\textsf{IC}_{100(1-\alpha)\%}(\mu_X) = \bar{X} \pm \textsf{z}_{1-\alpha/2}\frac{\sigma_X}{\sqrt{n}}
+$$
+Calculando, se tiene que la estimación puntual es $\bar{x} = 8.5$ horas y el margen de error $ME = 0.4$ horas, y por lo tanto, con una confiabilidad del 95\%, la media
+del tiempo que se ve televisión por semana en el horario de 8:00 a 11:00 de la noche
+es $(8.1;8.8)$ horas.
+ 
+```{r}
+# importar base de datos
+datos <- read.csv("C:/Users/Juan Camilo/Dropbox/UN/probabilidad_estadistica/Nielsen.CSV", sep="")
+# datos
+x <- datos$Hours
+# tamaño de la muestra
+n <- length(x)
+print(n)
+# estimacion
+xb <- mean(x)
+round(xb, 2)
+# desv estandar poblacional
+sigma <- 3.5
+# margen de erro
+me <- qnorm(p = 0.975)*sigma/sqrt(n)
+round(me, 2)
+# intervalo
+round(xb + c(-1,1)*me, 2)
+```
+
+
+ 
+4. La revista *Playbill* reportó que el ingreso familiar anual medio de sus suscriptores es US 119155 (*Playbill*, enero de 2006). Suponga que la estimación del ingreso familiar anual medio está basada en una muestra de 80 familias y que por datos de estudios anteriores la desviación estándar poblacional es conocida y es US 30000.
+
+La variable de estudio $X$ es el ingreso familiar anual (US) y se sabe que la estimación puntual del ingreso medio anual correspondiente es $\bar{x}=119155$ con $n=80$. Además, se sabe que la desviación estándar poblacional es $\sigma_X=30000$.
+
+```{r}
+# tamaño de la muestra
+n <- 80
+# estimacion puntual
+xb <- 119155
+# varianza poblacional
+sigma <- 30000
+```
+
+a. Desarrolle un intervalo de estimación de 90\% de confianza para la media poblacional.
+
+Dado que la población tiene distribución desconocida, pero el tamaño de la muestra $n=80$ es grande, se tiene el intervalo de confianza para $\mu_X$ se puede calcular mediante
+$$
+\textsf{IC}_{100(1-\alpha)\%}(\mu_X) = \bar{X} \pm \textsf{z}_{1-\alpha/2}\frac{\sigma_X}{\sqrt{n}}
+$$
+
+b. Dé un intervalo de estimación de 95\% de confianza para la media poblacional.
+c. Dé un intervalo de estimación de 99\% de confianza para la media poblacional.
+
+Los intervalos de confianza al 80\%, 95\% y 99\% son:
+
+```{r}
+tab <- rbind(xb + c(-1,1)*qnorm(p = 0.950)*sigma/sqrt(n),
+             xb + c(-1,1)*qnorm(p = 0.975)*sigma/sqrt(n),
+             xb + c(-1,1)*qnorm(p = 0.995)*sigma/sqrt(n))
+colnames(tab) <- c("L. Inferior","L.Superior")
+rownames(tab) <- c("90%","95%","99%")
+tab
+```
+
+d. ¿Qué le pasa a la amplitud del intervalo de confianza a medida que el nivel de confianza aumenta?
+
+De la tabla anterior se observa que el margen de error, y por lo tanto, la amplitud del intervalo de confianza aumentan a medida que aumenta el nivel de confianza.
+
+5. Un meteorólogo mide la temperatura en el centro de la ciudad a mediodía todos los días durante un año. Las 365 lecturas tienen un promedio de 57 $^\text{o}$F y una desviación
+estándar de 20 $^\text{o}$F. El meteorólogo calcula un intervalo de confianza de 95% para la media de la temperatura a mediodía de $57 \pm (1.96)(20)/\sqrt{365}$.
+¿Es esto correcto? ¿Por qué sí o por qué no?
+
+Dado que el tamaño de muestra es grande ($n=365$) sí sería correcto utilizar la distribución normal para calcular un intervalo de confianza de 95% para la media de la temperatura a mediodía de $57 \pm (1.96)(20)/\sqrt{365}$, **siempre y cuando las observaciones se pudieran considerar como independientes**. Si las mediciones presentan un alto grado de correlación temporal (como usualmente ocurre en lugares con estaciones muy marcados), entonces este intervalo de confianza no tendría la cobertura especificada del 95\%.
+
+6. Con base en pruebas de comportamiento de una gran muestra
+de uniones soldadas, se calculó un intervalo de confianza
+de 90\% para la media de la dureza Rockwell B de cierto
+tipo de soldadura de (83.2, 84.1). Determine un intervalo de
+confianza de 95\% para la media de la dureza Rockwell B de
+este tipo de soldadura.
+
+Se sabe que la amplitud del intervalo al 90% es 
+$$
+A = 84.1-83.2 = 0.9
+$$
+y por lo tanto el margen de error al 90% correspondiente es 
+$$
+ME= 1.64\frac{s}{\sqrt{n}} = 0.9/2 = 0.45
+$$
+Así, el error estándar al 90% es
+$$
+EE = \frac{s}{\sqrt{n}} = ME/1.64 = 0.274
+$$
+
+De otra parte se esabe que la estimación puntual es el punto medio del intervalo, de donde
+$$
+\bar{x} = \frac{84.1+83.2}{2} = 83.65\,.
+$$
+
+Entonces, un intervalo de
+confianza de 95\% para la media de la dureza Rockwell B de
+este tipo de soldadura es
+$$
+IC_{95\%}(\mu_X) = \bar{x} \pm 1.96\cdot EE = (83.114;84.186)
+$$
+
+```{r}
+# amplitud al 90%
+A <-  84.1 - 83.2
+A
+# margen de error al 90%
+ME <- A/2
+ME
+# error estandar al 90%
+EE <- ME/qnorm(p = 0.95)
+round(EE, 3)
+# estimacion puntual
+xb <- (84.1 + 83.2)/2
+xb
+# intervalo de confianza al 95%
+round(xb + c(-1,1)*qnorm(p = 0.975)*EE, 3)
+```
+
