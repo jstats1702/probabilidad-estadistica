@@ -1,0 +1,214 @@
+---
+title: "Introducción a los Intervalos de Confianza"
+author: 
+  - Lina Buitrago PhD(c), labuitragor@unal.edu.co
+  - Juan Sosa PhD, jcsosam@unal.edu.co
+date: ""
+output:
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Introducción
+
+La probabilidad de que un estimador $T=T(X_1,\ldots,X_n)$ coincida exactamente con el parámetro de interés $\theta$ es $0$. 
+
+En la **estimación por intervalo** se escoge un **nivel de confianza** (confiabilidad) $100(1-\alpha)\%$ y se construye un **intervalo aleatorio** tal que la **probabilidad frecuentista** de que el **intervalo contenga a $\theta$** sea $1-\alpha$.
+
+# Intervalo de confianza
+
+Dada una muestra aleatoria $X_1,\ldots,X_n$ tal que $X_i \stackrel{\text{IID}}{\sim} F_X(\theta)$, para $i=1,\ldots,n$, la **estimación por intervalo** consiste en **construir un intervalo aleatorio** (los límites son variables aleatorias) tal que:
+$$
+\textsf{Pr}(L_I\leq\theta\leq L_S)=1-\alpha\,.
+$$
+$100(1-\alpha)\%$ se denomina **nivel de confianza** o **confiabilidad**. Esta cantidad corresponde a la **proporción de intervalos calculados** a partir de la **muestra aleatoria** que **contienen** a $\theta$.
+
+Por ejemplo, un intervalo de confianza al 95\% de confianza, indica que el 95\% de los intervalos de confianza calculados a partir de las realizaciones de una muestra aleatoria
+incluiría el valor del parámetro de interés.
+
+```{r, eval = TRUE, echo=FALSE, out.width="50%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("12-ci_freq.png")
+```
+
+## Ejemplo
+
+Considere una población **Normal** con **media desconocida** $\mu=\textsf{E}(X)$ y **varianza conocida** $\sigma^2=\textsf{Var}(X)$. Construir un **intervalo de confianza** para $\mu$ al 95\% de confianza basado en una muestra aleatoria $X_1,\ldots,X_n$ de tamaño $n$.
+
+Como $X_i \stackrel{\text{IID}}{\sim} \textsf{N}(\mu,\sigma^2)$, para $i=1,\ldots,n$, entonces $\bar{X}\sim\textsf{N}(\mu,\sigma^2/n)$. Por lo tanto, estandarizando se tiene que:
+$$
+Z=\frac{\bar{X}-\mu}{\sigma/\sqrt{n}}\sim \textsf{N}(0,1)
+$$
+y por lo tanto
+$$
+\textsf{Pr}\left(-1.96 < \frac{\bar{X}-\mu}{\sigma/\sqrt{n}} < 1.96\right) = 0.95\,.
+$$
+```{r}
+# percentil 97.5 de N(0,1)
+qnorm(p = 0.975)
+```
+
+Despejando $\mu$ de esta desigualdad se obtiene que:
+$$
+\textsf{Pr}\left(\bar{X}-1.96\,\frac{\sigma}{\sqrt{n}} < \mu < \bar{X}+1.96\,\frac{\sigma}{\sqrt{n}} \right) = 0.95\,.
+$$
+Por lo tanto, un intervalo de confianza para $\mu$ al 95% de confianza es:
+$$
+\textsf{IC}_{95\%}(\mu) = \left(\bar{X}-1.96\,\frac{\sigma}{\sqrt{n}} ; \bar{X}+1.96\,\frac{\sigma}{\sqrt{n}}\right) = \left( \bar{X}\pm 1.96\,\frac{\sigma}{\sqrt{n}} \right)\,.
+$$
+La cantidad $1.96\,\frac{\sigma}{\sqrt{n}}$ se denomina **margen de error**.
+
+## Ejemplo
+
+En el ejemplo anterior, si la confiabilidad es de $100(1-\alpha)\%$, entonces el intervalo de confianza para $\mu$ es:
+$$
+\textsf{IC}_{100(1-\alpha)\%}(\mu) = \left(\bar{X}-z_{1-\alpha/2}\,\frac{\sigma}{\sqrt{n}} ; \bar{X}+z_{1-\alpha/2}\,\frac{\sigma}{\sqrt{n}}\right) = \left( \bar{X}\pm z_{1-\alpha/2}\,\frac{\sigma}{\sqrt{n}} \right)
+$$
+donde $z_{1-\alpha/2}$ es el percentil $100(1-\alpha/2)$ de la distribución normal estándar.
+
+## Ejemplo
+
+**Simular una muestra aleatoria** de tamaño $n=30$ de una **población Normal** con media $\mu=10$ y desviación estándar $\sigma=1$, y a partir de esta muestra aleatoria, calcular el **intervalo de confianza** para $\mu$ al 95\% de confianza correspondiente.
+
+```{r}
+# parametros de la poblacion (modelo)
+mu <- 10
+sigma <- 1
+# simulacion de la muestra aleatoria
+set.seed(1)
+x <- rnorm(n = 30, mean = mu, sd = sigma)
+x
+```
+
+```{r}
+# calculo del intervalo de confianza al 95%
+# tamaño de la muestra
+n <- length(x)
+n
+# etimacion puntual
+xb <- mean(x)
+xb
+# percentil
+z975 <- qnorm(p = 0.975)
+z975
+# margen de error
+me <- z975*sigma/sqrt(n)
+me
+# limite inferior
+xb - me
+# limite superior
+xb + me
+```
+
+# Ejemplo 
+
+**Simular 1M de muestras aleatorias** de tamaño $n=30$ de una **población Normal** con media $\mu=10$ y desviación estándar $\sigma=1$, y para cada muestra aleatoria, calcular el **intervalo de confianza** para $\mu$ al 95\% de confianza correspondiente. ¿Qué proporción de intervalos contiene el valor de $\mu$?
+
+```{r}
+# parametros de la poblacion (modelo)
+mu <- 10
+sigma <- 1
+# tamaño de la muestra
+n <- 30
+# percentil
+z975 <- qnorm(p = 0.975)
+# numero de simulaciones
+M <- 1000000
+# objeto para almacenar los promedios
+IC <- matrix(data = NA, nrow = M, ncol = 2)
+# simulacion
+set.seed(1)
+for (i in 1:M) {
+  x <- rnorm(n = 30, mean = mu, sd = sigma)
+  IC[i,1] <- mean(x) - z975*sigma/sqrt(n)
+  IC[i,2] <- mean(x) + z975*sigma/sqrt(n)
+}
+```
+
+```{r}
+# inspeccion
+dim(IC)
+head(IC)
+```
+```{r}
+# cobertura
+tmp <- (IC[,1] < mu) & (mu < IC[,2])
+head(tmp)
+# proporcion
+mean(tmp)
+```
+
+## Observaciones
+
+- Antes de observar los datos, los límites del intervalo son aleatorios. 
+
+- Una vez se tiene una realización de la muestra, los límites del intervalo pierden su calidad aleatoria y se convierten en valores observados, y por lo tanto la probabilidad frecuentista de que el intervalo calculado contenga $\theta$ es $0$ o $1$.
+
+- La confianza se encuentra en el proceso de la construcción del intervalos de confianza, no en los resultados obtenidos al hacerlo en un caso particular.
+
+
+# El método de la variable aleatoria pivote
+
+Dada una muestra aleatoria $X_1,\ldots,X_n$, tal que $X_i \stackrel{\text{IID}}{\sim} F_X(\theta)$, para $i=1,\ldots,n$, una función $Q=Q(X_1,\ldots,Q_n)$ de $X_1,\ldots,X_n$ es una **variable aleatoria pivote** para $\theta$ si la distribución de $Q$ **no depende** de $\theta$.
+
+El procedimiento para encontrar los limites del intervalo es:
+
+1. Encontrar una v.a. pivote $Q$ para $\theta$.
+2. Determinar la distribución muestral de $Q$ para hallar valores $a$ y $b$ tales que:
+$$
+\textsf{Pr}(a\leq Q\leq b)=1-\alpha
+$$
+3. Despejar $\theta$ en la desigualdad anterior para obtener los límites del intervalo:
+$$
+\textsf{Pr}(L_I\leq \theta\leq L_S)=1-\alpha
+$$
+
+## Ejemplo
+
+Considere una población **no necesariamente Normal** con **media desconocida** $\mu=\textsf{E}(X)$ y **varianza conocida** $\sigma^2=\textsf{Var}(X)$. Construir un **intervalo de confianza** para $\mu$ al $100(1-\alpha)\%$ de confianza basado en una muestra aleatoria $X_1,\ldots,X_n$ de tamaño $n$.
+
+Por el **Teorema del Límite Central**, $\bar{X}\sim\textsf{N}(\mu,\sigma^2/n)$ si $n$ es **grande**. Estandarizando se tiene que:
+$$
+Z=\frac{\bar{X}-\mu}{\sigma/\sqrt{n}}\sim \textsf{N}(0,1)
+$$
+
+Por lo tanto, un intervalo de confianza para $\mu$ al $100(1-\alpha)\%$ de confianza es:
+$$
+\textsf{IC}_{100(1-\alpha)\%}(\mu) = \left(\bar{X}-z_{1-\alpha/2}\,\frac{\sigma}{\sqrt{n}} ; \bar{X}+z_{1-\alpha/2}\,\frac{\sigma}{\sqrt{n}}\right) = \left( \bar{X}\pm z_{1-\alpha/2}\,\frac{\sigma}{\sqrt{n}} \right)
+$$
+donde $z_{1-\alpha/2}$ es el percentil $100(1-\alpha/2)$ de la distribución normal estándar.
+
+## Ejemplo
+
+Considere una población **no necesariamente Normal** con **media desconocida** $\mu=\textsf{E}(X)$ y **varianza desconocida** $\sigma^2=\textsf{Var}(X)$. Construir un **intervalo de confianza** para $\mu$ al $100(1-\alpha)\%$ de confianza basado en una muestra aleatoria $X_1,\ldots,X_n$ de tamaño $n$.
+
+En este caso se tiene que $\bar{X}\sim\textsf{N}(\mu,S^2/n)$ si $n$ es **grande**. Estandarizando se tiene que:
+$$
+Z=\frac{\bar{X}-\mu}{S/\sqrt{n}}\sim \textsf{N}(0,1)\
+$$
+donde $S$ es la desviación estándar muestral, es decir,
+$$
+S = \sqrt{\frac{1}{n-1}\sum_{i=1}^n (X_i - \bar{X})^2} = \sqrt{\frac{1}{n-1}\left(\sum_{i=1}^nX_i^2 - n\bar{X}^2\right)}\,.
+$$
+
+Por lo tanto, un intervalo de confianza para $\mu$ al $100(1-\alpha)\%$ de confianza es:
+$$
+\textsf{IC}_{100(1-\alpha)\%}(\mu) = \left(\bar{X}-z_{1-\alpha/2}\,\frac{S}{\sqrt{n}} ; \bar{X}+z_{1-\alpha/2}\,\frac{S}{\sqrt{n}}\right) = \left( \bar{X}\pm z_{1-\alpha/2}\,\frac{S}{\sqrt{n}} \right)
+$$
+donde $z_{1-\alpha/2}$ es el percentil $100(1-\alpha/2)$ de la distribución normal estándar.
+
+## Ejercicio
+
+Los métodos de interpolación se utilizan para calcular alturas superiores al nivel del mar para ubicaciones donde las mediciones directas no están disponibles. En el artículo *Transformation of Ellipsoid Heights to Local Leveling Heights* (M. Yanalak y O. Baykal, en *Journal of Surveying Engineering*, 2001:90-103), se evalúa un método de interpolación para un polinomio de segundo orden que tiene como objetivo calcular las alturas de mediciones GPS (sistema de posicionamiento global). En una muestra de 74 ubicaciones, los errores del método tienen promedio de 3.8 cm, con desviación estándar de 4.8 cm.
+
+a. Determine un intervalo de confianza de 95% para la media del error de este método.
+b. Determine un intervalo de confianza de 98% para la media del error de este método.
+c. Un topógrafo afirma que el error de media está entre 3.2 y 4.4 cm. ¿Con qué nivel de confianza se puede hacer esta afirmación?
+d. ¿Aproximadamente cuántas ubicaciones se deben muestrear con el propósito de que un intervalo de confianza de 95% especificará que la media está dentro de $\pm$ 0.7 cm?
+e. ¿Aproximadamente cuántas ubicaciones se deben muestrear con el propósito de que un intervalo de confianza de 98% especificará que la media está dentro de $\pm$ 0.7 cm?
