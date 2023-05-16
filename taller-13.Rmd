@@ -1,0 +1,121 @@
+---
+title: "Taller 13"
+author: 
+  - Lina Buitrago PhD(c), labuitragor@unal.edu.co
+  - Juan Sosa PhD, jcsosam@unal.edu.co
+date: ""
+output:
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+---
+
+
+1. Es deseable comprobar la calibración de una balanza pesando
+un peso patrón de 10 gr 100 veces. Sea $\mu$ la media poblacional
+de lecturas en la balanza, por lo que esta última
+estará calibrada si $\mu = 10$. Los siguientes datos corresponden a replicaciones independientes del peso (en gr) 
+del peso patrón de (10 gr) obtenidos bajo condiciones idénticas e independientes.
+```{r, echo=F}
+set.seed(1)
+round(rnorm(100, 10.5, 0.1), 2)
+```
+- Usando una confiabilidad del 95\%, ¿hay suficiente evidencia para asegurar que la balanza no está calibrada? Responder esta pregunta por medio de pruebas de hipótesis e intervalos de confianza.
+- ¿Hay suficiente evidencia para asegurar que los datos provienen de una distribución normal? Responder esta pregunta por medio de métodos gráficos y pruebas de hipótesis.
+
+2. Se recomienda la instalación de un dispositivo de disminución
+de radón en cualquier casa donde la media de la concentración
+de radón es de 4.0 picocuries por litro (pCi/l) o
+mayor, porque se ha pensado que a la larga esa exposición
+representa una dosis suficientemente grande que puede aumentar
+el riesgo de cáncer. Se hicieron 25 mediciones en
+una casa específica. La media de las concentraciones fue de
+3.72 pCi/l y la desviación estándar de 1.93 pCi/l.
+
+- El inspector de casas que realizó la prueba informó que
+debido a que la media de las mediciones es menor de 4.0
+es innecesaria la disminución de radón. Explique por
+qué este razonamiento es incorrecto.
+- Debido a motivos de salud, se recomienda la disminución
+de radón siempre que sea factible que la concentración
+media de radón pueda ser de 4.0 pCi/l o mayor.
+Establezca las hipótesis nula y alternativa adecuadas para
+determinar si se requier de un dispositivo que disminuya la concentración de radón.
+- Calcule el valor $p$. ¿Usted recomendaría la instalación de dicho dispositivo utilizando un nivel de significancia del 1\%? Explique.
+- Responder la pregunta anterior nuevamente por medio de intervalos de confianza.
+- ¿Qué es necesario suponer acerca de la población para llevar a cabo la inferencia estadística? ¿Por qué?
+
+3. Complete la respuesta: un intervalo de confianza al 95\% para
+$\mu$ es $(1.2, 2.0)$. Con base en los datos a partir de los cuales
+se construyó el intervalo de confianza, alguien quiere
+probar que $H_0: \mu = 1.4$ contra $H_1: \mu\neq 1.4$. El valor $p$ será:
+
+a. Mayor que 0.05.
+b. Menor que 0.05.
+c. Igual a 0.05.
+d. No hay suficiente información para concluir.
+
+4. Las incineradoras pueden ser una fuente de emisiones peligrosas
+en la atmósfera. Se recolectaron muchas muestras de
+gases de una muestra de 50 incineradoras en una ciudad. De
+las 50, sólo 18 satisfacían una norma ambiental para la concentración
+de un compuesto peligroso. Usando una confibabilidad de 95\%, ¿se puede concluir
+que menos de la mitad de las incineradoras en toda la ciudad satisfacen
+la norma?  Responder esta pregunta por medio de pruebas de hipótesis e intervalos de confianza.
+
+5. El *National Center for Health Statistics* reportó que 70\% de los adultos no hacen ejercicio con regularidad.
+Un investigador decide realizar un estudio para ver si esto es diferente en cada uno de los Estados del país.
+
+a. Establezca el sistema de hipótesis si la intención del investigador es identificar los estados
+que tienen un porcentaje de personas que hacen ejercicio, diferente al 70\% nacional.
+
+b. Con un nivel de significancia de 5\%, cuál es la conclusión en los estados siguientes estados:
+
+- Wisconsin: 252 de 350 adultos no hacen ejercicio con regularidad.
+- California: 189 de 300 adultos no hacen ejercicio con regularidad.
+
+c. Responder esta prepgunta nuevamente por medio de intervalos de confianza.
+
+6. En la industria farmacéutica la varianza en los pesos de los medicamentos es trascendental. Considere
+un medicamento cuyo peso está dado en gramos y una muestra de 18 unidades de este medicamento,
+la varianza muestral es 0.36. Dé un intervalo de 99% de confianza para estimar la varianza poblacional de los pesos de
+este medicamento. ¿Qué es necesario suponer acerca de la población para llevar a cabo la inferencia estadística? ¿Por qué?
+
+7. Una pieza debe fabricarse con medidas de tolerancia muy estrechas para que
+sea aceptada por el cliente. Las especificaciones de producción indican que la varianza máxima
+en la longitud de la pieza debe ser 0.0004. Suponga que en 30 piezas la varianza muestral encontrada
+es 0.0005. Usando $\alpha = 0.05$ para probar si se está violando la especificación para la varianza
+poblacional de la longitud. ¿El proceso de producción esta bajo control en términos de la variabilidad?
+Responder esta pregunta por medio de pruebas de hipótesis e intervalos de confianza.
+
+8. El artículo *Modeling the Inactivation of Particle-Associated
+Coliform Bacteria* (R. Emerick, F. Loge y cols., en Water
+Environment Research, 2000:432-438) presenta los recuentos
+de números de partículas de diferentes tamaños en muestras de
+agua residual que contenían bacterias coliformes. De las 161
+partículas de 75-80 mm de diámetro, 19 contenían bacterias
+coliformes, y de las 95 partículas de 90-95 mm de diámetro,
+22 contenían bacterias coliformes. Con una confiabilidad del 99\%, ¿puede concluir que las
+partículas más grandes tienen una probabilidad mayor de tener
+bacterias coliformes? Responder esta pregunta por medio de pruebas de hipótesis e intervalos de confianza.
+
+9. Muchos autores aﬁrman que los pacientes con depresión tienen una función cortical por debajo de lo normal debido a un riego sanguíneo cerebral por debajo de lo normal. A dos muestras de individuos, unos con depresión y otros normales, se les midió un índice que indica el ﬂujo sanguíneo en la materia gris (dado en mg/(100g/min)), obteniéndose:
+
+Depresivos:  $n_1 =19$, $\bar{x}_1=47$, $s_1 = 7.8$.
+
+Normales:  $n_2=22$, $\bar{x}_2=53.1$, $s_2 = 6.1$. 
+
+¿Hay evidencia signiﬁcativa a favor de la aﬁrmación de los autores?. ¿Qué es necesario suponer acerca de la población para llevar a cabo la inferencia estadística? ¿Por qué?
+
+10. La *National Sleep Foundation* realiza encuestas para determinar si las horas de sueño por noche
+son independientes de la edad (Newsweek, 19 de enero de 2004). Las siguientes son las horas de
+sueño entre semana en una muestra de personas de 49 años o menos y en otra muestra de personas
+de 50 años o más.
+
+| Edad            | Menos de 6h | 6h a 6.9h | 7h a 7.9h | 8h o más |
+|-----------------|-------------|-----------|-----------|----------|
+| 49 años o menos | 38          | 60        | 77        | 65       |
+| 50 años o más   | 36          | 57        | 75        | 92       |
+
+

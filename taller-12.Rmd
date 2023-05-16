@@ -1,0 +1,34 @@
+---
+title: "Taller 12"
+author: 
+  - Lina Buitrago PhD(c), labuitragor@unal.edu.co
+  - Juan Sosa PhD, jcsosam@unal.edu.co
+date: ""
+output:
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+---
+
+
+1. Una muestra de 3000 viviendas de la ciudad de Cali indicó que el 6.4% de ellas se encontraban deshabitadas. Estime la proporción de viviendas deshabitadas en toda la ciudad, mediante un intervalo del 93% de confianza.
+
+2. La cantidad mínima requerida para que un anestésico surta efecto en una intervención quirúrgica,en una muestra de 60 pacientes, fue en promedio de 50 mg, con una desviación típica de 10.2 mg. Obtener un intervalo de confianza para la media al 99%, suponiendo que la muestra fue extraída de una población normal.
+
+3. Se seleccionó una muestra de 400 residentes entre todos los 6000 de un sector de la ciudad, con el objeto de estimar el total de los que patrocinarían un nuevo supermercado en tal sector. De los seleccionados, 185 indicaron que lo patrocinarían. Con base en tal información y con 90% de confianza, estime el total de residentes que patrocinarían el supermercado en el citado sector de la ciudad.
+
+4. Sólo una parte de los pacientes que sufren un determinado síndrome neurológico consiguen una curación completa. Si de 64 pacientes observados se han curado 41, dar una estimación por intervalo de la proporción de los que sanan. ¿Qué número de enfermos habría que observar para estimar la proporción de curados con un error inferior a 0.05 y una confianza del 95%?
+  
+5. Una compañía opera dos grandes divisiones: la A con 8100 empleados y la B con 7600. La compañía evaluó su programa de relaciones industriales y como parte del estudio seleccionó en forma independiente, una muestra de 100 empleados de cada sección, para aplicarles un formulario que entre otras cosas requería que cada empleado calificara, entre 0 y 100, el programa de relaciones industriales. Se encontró que:
+
+Para $X$: Calificación de la división A,
+
+$$\sum_{i=1}^{100}x_i=2789\text{  y  }\sum_{i=1}^{100}x_i^2=537917$$
+Para $Y$: Calificación de la división B,
+
+$$\sum_{i=1}^{100}y_i=7476\text{  y  }\sum_{i=1}^{100}x_i^2=585983$$
+Estime con 90% de confianza la diferencia entre las medias y el cociente entre las varianzas de las calificaciones otorgadas por los empleados muestra de las dos divisiones, con base en los resultados de las anteriores muestras.¿Existe diferencia entre los promedios de calificación de las dos divisiones?, ¿cuáles son los supuestos necesarios para tales estimaciones?
+
+  
+

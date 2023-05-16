@@ -1,0 +1,509 @@
+---
+title: "Taller 13"
+author: 
+  - Lina Buitrago PhD(c), labuitragor@unal.edu.co
+  - Juan Sosa PhD, jcsosam@unal.edu.co
+date: ""
+output:
+  html_document:
+    highlight: default
+    number_sections: yes
+    theme: cosmo
+---
+
+
+1. Es deseable comprobar la calibración de una balanza pesando
+un peso patrón de 10 gr 100 veces. Sea $\mu$ la media poblacional
+de lecturas en la balanza, por lo que esta última
+estará calibrada si $\mu = 10$. Los siguientes datos corresponden a replicaciones independientes del peso (en gr) 
+del peso patrón de (10 gr) obtenidos bajo condiciones idénticas e independientes.
+```{r, echo=T}
+datos <- c(10.44,10.52,10.42,10.66,10.53,10.42,10.55,10.57,10.56,10.47,10.65,10.54,
+           10.44,10.28,10.61,10.50,10.50,10.59,10.58,10.56,10.59,10.58,10.51,10.30,
+           10.56,10.49,10.48,10.35,10.45,10.54,10.64,10.49,10.54,10.49,10.36,10.46,
+           10.46,10.49,10.61,10.58,10.48,10.47,10.57,10.56,10.43,10.43,10.54,10.58,
+           10.49,10.59,10.54,10.44,10.53,10.39,10.64,10.70,10.46,10.40,10.56,10.49,
+           10.74,10.50,10.57,10.50,10.43,10.52,10.32,10.65,10.52,10.72,10.55,10.43,
+           10.56,10.41,10.37,10.53,10.46,10.50,10.51,10.44,10.44,10.49,10.62,10.35,
+           10.56,10.53,10.61,10.47,10.54,10.53,10.45,10.62,10.62,10.57,10.66,10.56,
+           10.37,10.44,10.38,10.45)
+```
+- Usando una confiabilidad del 95\%, ¿hay suficiente evidencia para asegurar que la balanza no está calibrada? Responder esta pregunta por medio de pruebas de hipótesis e intervalos de confianza.
+- ¿Hay suficiente evidencia para asegurar que los datos provienen de una distribución normal? Responder esta pregunta por medio de métodos gráficos y pruebas de hipótesis.
+
+**Solución:**
+- Prueba de hipótesis e intervalos de confianza:
+
+```{r}
+# datos
+# tamaño de muetra
+print(n <- length(datos))
+# promedio muestral
+print(xb <- mean(datos))
+# desviacion estandar muestral
+print(s <- sd(datos))
+# prueba de hipotesis
+# H0: mu = 10 frente a mu != 10
+# nivel de significancia
+print(alpha <- 0.05)
+# estadistico de prueba
+print(tc <- (xb - 10)/(s/sqrt(n)))
+# region de rechazo (dos colas)
+# x tales que |x| > t_{n-1,1-alpha/2}
+print(percentil <- qt(p = 1-alpha/2, df = n-1))
+# ¿el estadistico de prueba pertenece a la region de rechazo?
+abs(tc) > percentil
+# valor p
+print(valor_p <- 2*pt(q = tc, df = n-1, lower.tail = FALSE))
+# ¿el valor p es menor que el nivel de significancia?
+valor_p < alpha
+# decision
+# rechazar H0
+# intervalo de confinza
+xb + c(-1,1)*qt(p = 1-alpha/2, df = n-1)*s/sqrt(n)
+# ¿el valor hipotetico hace parte del intervalo de confianza?
+(xb - percentil*s/sqrt(n) < 10) & (10 < xb + percentil*s/sqrt(n))
+# conclusion
+# hay suficiente evidencia para establecer que la balanza no esta calibrada
+```
+- Prueba de normalidad:
+
+```{r}
+# prueba de normalidad de Shpiro-Wilk
+shapiro.test(datos)
+# graficos 
+par(mfrow=c(1,2))
+# qqplot
+qqnorm(datos, main = "")
+qqline(datos, col = 2)
+# histograma
+hist(datos, freq = F, col = "gray95", xlab = "Balance", main = "", 
+     xlim = c(xb-4*s, xb+4*s), ylim = c(0, 4.5))
+curve(dnorm(x, mean = xb, sd = s), col = 2, lwd = 2, add = TRUE)
+# decision
+# no rechazar H0
+# conclusion
+# no hay suficiente evidencia para establecer que los pesos no provienen de una
+# poblacion con distribucion normal
+```
+
+
+
+
+
+2. Se recomienda la instalación de un dispositivo de disminución
+de radón en cualquier casa donde la media de la concentración
+de radón es mayor que 4.0 picocuries por litro (pCi/l),
+porque se ha pensado que a la larga esa exposición
+representa una dosis suficientemente grande que puede aumentar
+el riesgo de cáncer. Se hicieron 25 mediciones en
+una casa específica. La media de las concentraciones fue de
+3.72 pCi/l y la desviación estándar de 1.93 pCi/l.
+
+- El inspector de casas que realizó la prueba informó que
+debido a que la media de las mediciones es menor de 4.0
+es innecesaria la disminución de radón. Explique por
+qué este razonamiento es incorrecto.
+- Debido a motivos de salud, se recomienda la disminución
+de radón siempre que sea factible que la concentración
+media de radón pueda ser de 4.0 pCi/l o mayor.
+Establezca las hipótesis nula y alternativa adecuadas para
+determinar si se requiere de un dispositivo que disminuya la concentración de radón.
+- Calcule el valor $p$. ¿Usted recomendaría la instalación de dicho dispositivo utilizando un nivel de significancia del 1\%? Explique.
+- Responder la pregunta anterior nuevamente por medio de intervalos de confianza.
+- ¿Qué es necesario suponer acerca de la población para llevar a cabo la inferencia estadística? ¿Por qué?
+
+**Solución:**
+
+- El hecho de que la media muestral sea de 3.72, no implica necesariamente que la media poblacional sea menor que 4.0.
+- Prueba de hipótesis e intervalos de confianza:
+
+```{r}
+# datos
+# tamaño de muetra
+print(n <- 25)
+# promedio muestral
+print(xb <- 3.72)
+# desviacion estandar muestral
+print(s <- 1.93)
+# prueba de hipotesis
+# H0: mu <= 4.0 frente a mu > 4.0
+# nivel de significancia
+print(alpha <- 0.01)
+# estadistico de prueba
+print(tc <- (xb - 4.0)/(s/sqrt(n)))
+# region de rechazo (cola derecha)
+# x tales que x < t_{n-1,alpha}
+print(percentil <- qt(p = 1-alpha, df = n-1))
+# ¿el estadistico de prueba pertenece a la region de rechazo?
+tc > percentil
+# valor p
+print(valor_p <- pt(q = tc, df = n-1, lower.tail = FALSE))
+# ¿el valor p es menor que el nivel de significancia?
+valor_p < alpha
+# decision
+# no rechazar H0
+# intervalo de confinza (unilateral)
+c(xb - qt(p = 1-alpha, df = n-1)*s/sqrt(n), Inf)
+# ¿el valor hipotetico hace parte del intervalo de confianza?
+xb - qt(p = 1-alpha, df = n-1)*s/sqrt(n) < 4
+# conclusion
+# no hay suficiente evidencia para establecer que se requiere de un dispositivo 
+# que disminuya la concentración de radón.
+```
+- Es necesario suporner que la concentración sigue una distribución normal, dado que el tamaño de la muestra no es lo suficientemente grande para justificar que el estadístico de prueba tiene distribución normal bajo la hipótesis nula.
+
+3. Complete la respuesta: un intervalo de confianza al 95\% para
+$\mu$ es $(1.2, 2.0)$. Con base en los datos a partir de los cuales
+se construyó el intervalo de confianza, alguien quiere
+probar que $H_0: \mu = 1.4$ contra $H_1: \mu\neq 1.4$. El valor $p$ será:
+
+a. Mayor que 0.05.
+b. Menor que 0.05.
+c. Igual a 0.05.
+d. No hay suficiente información para concluir.
+
+- Como el intervalo de confianza pasa por 1.4, entonces no hay suficiente evidencia para rechzar la hipótesis nula, y por lo tanto el valor p no puede ser menor que 0.05. Entonces la opción correcta es la a. 
+
+4. Las incineradoras pueden ser una fuente de emisiones peligrosas
+en la atmósfera. Se recolectaron muchas muestras de
+gases de una muestra de 50 incineradoras en una ciudad. De
+las 50, sólo 18 satisfacían una norma ambiental para la concentración
+de un compuesto peligroso. Usando una confibabilidad de 95\%, ¿se puede concluir
+que menos de la mitad de las incineradoras en toda la ciudad satisfacen
+la norma?  Responder esta pregunta por medio de pruebas de hipótesis e intervalos de confianza.
+
+**Solución:**
+
+- Prueba de hipótesis e intervalos de confianza:
+
+```{r}
+# datos
+# tamaño de muetra
+print(n <- 50)
+# proporcion muestral
+print(p <- 18/n)
+# prueba de hipotesis
+# H0: pi >= 0.5 frente a pi < 0.5
+# nivel de significancia
+print(alpha <- 0.05)
+# estadistico de prueba
+print(zc <- (p - 0.5)/sqrt(0.5*(1-0.5)/n))
+# region de rechazo (cola izquierda)
+# x tales que x < z_{alpha}
+print(percentil <- qnorm(p = alpha))
+# ¿el estadistico de prueba pertenece a la region de rechazo?
+zc < percentil
+# valor p
+print(valor_p <- pnorm(q = zc, lower.tail = TRUE))
+# ¿el valor p es menor que el nivel de significancia?
+valor_p < alpha
+# decision
+# rechazar H0
+# intervalo de confinza
+c(-Inf, p + qnorm(p = 1-alpha)*sqrt(p*(1-p)/n))
+# ¿el valor hipotetico hace parte del intervalo de confianza?
+0.5 < p + qnorm(p = 1-alpha)*sqrt(p*(1-p)/n)
+# conclusion
+# hay suficiente evidencia para establecer que menos de la mitad de las incineradoras
+# satisface los requerimientos ambientales
+```
+
+5. El *National Center for Health Statistics* reportó que 70\% de los adultos no hacen ejercicio con regularidad.
+Un investigador decide realizar un estudio para ver si esto es diferente en cada uno de los Estados del país.
+
+a. Establezca el sistema de hipótesis si la intención del investigador es identificar los estados
+que tienen un porcentaje de personas que no hacen ejercicio, diferente al 70\% nacional.
+
+b. Con un nivel de significancia de 5\%, cuál es la conclusión en los estados siguientes estados:
+
+- Wisconsin: 252 de 350 adultos no hacen ejercicio con regularidad.
+- California: 189 de 300 adultos no hacen ejercicio con regularidad.
+
+c. Responder esta pregunta nuevamente por medio de intervalos de confianza.
+
+**Solución:**
+
+a. $H_0:\pi = 0.7$ frente $H_1:\pi\neq 0.7$.
+b. Prueba de hipótesis e intervalos de confianza para Wisconsin:
+
+```{r}
+# datos
+# tamaño de muetra
+print(n <- 350)
+# proporcion muestral
+print(p <- 252/n)
+# prueba de hipotesis
+# H0: pi = 0.7 frente a pi != 0.7
+# nivel de significancia
+print(alpha <- 0.05)
+# estadistico de prueba
+print(zc <- (p - 0.7)/sqrt(0.7*(1-0.7)/n))
+# region de rechazo (dos colas)
+# x tales que |x| > z_{1-alpha/2}
+print(percentil <- qnorm(p = 1-alpha/2))
+# ¿el estadistico de prueba pertenece a la region de rechazo?
+abs(zc) > percentil
+# valor p
+print(valor_p <- 2*pnorm(q = zc, lower.tail = FALSE))
+# ¿el valor p es menor que el nivel de significancia?
+valor_p < alpha
+# decision
+# no rechazar H0
+# intervalo de confinza
+p + c(-1,1)*qnorm(p = 1-alpha/2)*sqrt(p*(1-p)/n)
+# ¿el valor hipotetico hace parte del intervalo de confianza?
+(p - qnorm(p = 1-alpha/2)*sqrt(p*(1-p)/n) < 0.7) & (0.7 < p + qnorm(p = 1-alpha/2)*sqrt(p*(1-p)/n))
+# conclusion
+# no hay suficiente evidencia para establecer que la proporcion de personas que no hacen
+# ejercicio en Winsconsin difiere del 70\% nacional
+```
+6. En la industria farmacéutica la varianza en los pesos de los medicamentos es trascendental. Considere
+un medicamento cuyo peso está dado en gramos y una muestra de 18 unidades de este medicamento,
+la varianza muestral es 0.36. Dé un intervalo de 99% de confianza para estimar la varianza poblacional de los pesos de
+este medicamento. ¿Qué es necesario suponer acerca de la población para llevar a cabo la inferencia estadística? ¿Por qué?
+
+**Solución:**
+
+- Intervalo de confianza:
+```{r}
+# datos
+print(n <- 18)
+# desviacion estandar muestral
+print(s <- sqrt(0.36))
+# nivel de significancia
+print(alpha <- 0.01)
+# intervalo de confianza
+c((n-1)*s^2/qchisq(p = 1-alpha/2, df = n-1), (n-1)*s^2/qchisq(p = alpha/2, df = n-1))
+```
+- Es necesario suponer que los pesos provienen de una distribución normal, dado que la cantidad pivotal de refencia sigue una distribución chi cuadrado siempre que la población tenga distribución normal. 
+
+
+7. Una pieza debe fabricarse con medidas de tolerancia muy estrechas para que
+sea aceptada por el cliente. Las especificaciones de producción indican que la varianza máxima
+en la longitud de la pieza debe ser 0.0004. Suponga que en 30 piezas la varianza muestral encontrada
+es 0.0005. Usando $\alpha = 0.05$, probar si se está violando la especificación para la varianza
+poblacional de la longitud. ¿El proceso de producción esta bajo control en términos de la variabilidad?
+Responder esta pregunta por medio de pruebas de hipótesis e intervalos de confianza.
+
+**Solución:**
+
+```{r}
+# datos
+# tamaño de muetra
+print(n <- 30)
+# desviacion estandar muestral
+print(s <- sqrt(0.0005))
+# prueba de hipotesis
+# H0: sigma^2 <= 0.0004 frente a sigma^2 > 0.0004
+# nivel de significancia
+print(alpha <- 0.05)
+# estadistico de prueba
+print(chic <- (n-1)*s^2/0.0004)
+# region de rechazo (cola derecha)
+# x tales que x > chi_{n-1,1-alpha}
+print(percentil <- qchisq(p = 1-alpha, df = n-1))
+# ¿el estadistico de prueba pertenece a la region de rechazo?
+chic > percentil
+# valor p
+print(valor_p <- pchisq(q = chic, df = n-1, lower.tail = FALSE))
+# ¿el valor p es menor que el nivel de significancia?
+valor_p < alpha
+# decision
+# no rechazar H0
+# intervalo de confinza (unilateral)
+c((n-1)*s^2/qchisq(p = 1-alpha, df = n-1), Inf)
+# ¿el valor hipotetico hace parte del intervalo de confianza?
+(n-1)*s^2/qchisq(p = 1-alpha, df = n-1) < 0.0004
+# conclusion
+# no hay suficiente evidencia para establecer que el proceso se encuentra fuera 
+# de control en terminos de la variabilidad
+```
+
+8. El artículo *Modeling the Inactivation of Particle-Associated
+Coliform Bacteria* (R. Emerick, F. Loge y cols., en Water
+Environment Research, 2000:432-438) presenta los recuentos
+de números de partículas de diferentes tamaños en muestras de
+agua residual que contenían bacterias coliformes. De las 161
+partículas de 75-80 mm de diámetro, 19 contenían bacterias
+coliformes, y de las 95 partículas de 90-95 mm de diámetro,
+22 contenían bacterias coliformes. Con una confiabilidad del 99\%, ¿puede concluir que las
+partículas más grandes tienen una probabilidad mayor de tener
+bacterias coliformes? Responder esta pregunta por medio de pruebas de hipótesis e intervalos de confianza.
+
+**Solución:**
+
+```{r}
+# datos
+# tamaño de muetra 1: 75-80 mm de diámetro (pequeñas)
+print(n1 <- 161)
+# tamaño de muetra 2: 90-95 mm de diámetro (grandes)
+print(n2 <- 95)
+# proporcion muestral 1
+print(p1 <- 19/n1)
+# proporcion muestral 2
+print(p2 <- 22/n2)
+# prueba de hipotesis
+# H0: pi1-pi2 >= 0 frente a pi1-pi2 < 0
+# nivel de significancia
+print(alpha <- 0.01)
+# estadistico de prueba
+pc <- (n1*p1 + n2*p2)/(n1 + n2)
+print(zc <- (p1-p2 - 0)/sqrt(pc*(1-pc)*(1/n1 + 1/n2)))
+# region de rechazo (colo izquierda)
+# x tales que x < z_{1-alpha}
+print(percentil <- qnorm(p = alpha))
+# ¿el estadistico de prueba pertenece a la region de rechazo?
+zc < percentil
+# valor p
+print(valor_p <- pnorm(q = zc, lower.tail = TRUE))
+# ¿el valor p es menor que el nivel de significancia?
+valor_p < alpha
+# decision
+# rechazar H0
+# intervalo de confinza
+c(-Inf, p1-p2 + qnorm(p = 1-alpha)*sqrt(p1*(1-p1)/n1 + p2*(1-p2)/n2))
+# ¿el valor hipotetico hace parte del intervalo de confianza?
+0 < p1-p2 + qnorm(p = 1-alpha)*sqrt(p1*(1-p1)/n1 + p2*(1-p2)/n2)
+# conclusion
+# hay suficiente evidencia para establecer que las
+# partículas más grandes tienen una probabilidad mayor de tener
+# bacterias coliformes
+
+# la diferencia entre los resultados que indican los intervalos de confianza
+# y las pruebas de hipotesis se debe que a que los tamaños de muestra
+# son altamente desbalanceados
+```
+
+9. Muchos autores aﬁrman que los pacientes con depresión tienen una función cortical por debajo de lo normal debido a un riego sanguíneo cerebral por debajo de lo normal. A dos muestras de individuos, unos con depresión y otros normales, se les midió un índice que indica el ﬂujo sanguíneo en la materia gris (dado en mg/(100g/min)), obteniéndose:
+
+Depresivos:  $n_1 =19$, $\bar{x}_1=47$, $s_1 = 7.8$.
+
+Normales:  $n_2=22$, $\bar{x}_2=53.1$, $s_2 = 6.1$. 
+
+¿Hay evidencia signiﬁcativa a favor de la aﬁrmación de los autores?. ¿Qué es necesario suponer acerca de la población para llevar a cabo la inferencia estadística? ¿Por qué?
+
+**Solución:**
+
+- Inferencia sobre el cociente de varainzas $\sigma^2_2/\sigma^2_1$:
+
+```{r}
+# datos
+# tamaño de muetra 1: depresivos
+print(n1 <- 19)
+# tamaño de muetra 2: normales
+print(n2 <- 22)
+# promedio muestral 1
+print(xb1 <- 47)
+# promedio muestral 2
+print(xb2 <- 53.1)
+# desviacion estandar muestral 1
+print(s1 <- 7.8)
+# desviacion estandar muestral 2
+print(s2 <- 6.1)
+# prueba de hipotesis
+# H0: sigma^2_2/sigma^2_1 = 1 (homocedasticidad) frente a sigma^2_2/sigma^2_1 != 1 (heterocedastidad)
+# nivel de significancia
+print(alpha <- 0.05)
+# estadistico de prueba
+print(f <- s1^2/s2^2)
+# region de rechazo (dos colas)
+# x tales que x < F_{n1-1,n2-1,alpha/2} o x > F_{n1-1,n2-1,1-alpha/2}
+print(percentil1 <- qf(p = alpha/2, df1 = n1-1, df2 = n2-1))
+print(percentil2 <- qf(p = 1-alpha/2, df1 = n1-1, df2 = n2-1))
+# ¿el estadistico de prueba pertenece a la region de rechazo?
+(f < percentil1) | (f > percentil2)
+# valor p
+p1 <- pf(q = f, df1 = n1-1, df2 = n2-1, lower.tail = TRUE)  # cola inferior
+p2 <- pf(q = f, df1 = n1-1, df2 = n2-1, lower.tail = FALSE) # cola superior
+print(valor_p <- 2*min(p1, p2))
+# ¿el valor p es menor que el nivel de significancia?
+valor_p < alpha
+# decision
+# no rechazar H0
+# intervalo de confinza
+c(s2^2/s1^2*qf(p = alpha/2, df1 = n1-1, df2 = n2-1), s2^2/s1^1*qf(p = 1-alpha/2, df1 = n1-1, df2 = n2-1))
+# ¿el valor hipotetico hace parte del intervalo de confianza?
+(s2^2/s1^2*qf(p = alpha/2, df1 = n1-1, df2 = n2-1) < 1) & (1 < s2^2/s1^1*qf(p = 1-alpha/2, df1 = n1-1, df2 = n2-1))
+# conclusion
+# no hay suficiente evidencia para establecer heterocedasticidad respecto a la variabilidad
+```
+
+- Inferencia sobre la diferencia de medias $\mu_1 - \mu_2$:
+
+```{r}
+# datos
+# tamaño de muetra 1: depresivos
+print(n1 <- 19)
+# tamaño de muetra 2: normales
+print(n2 <- 22)
+# promedio muestral 1
+print(xb1 <- 47)
+# promedio muestral 2
+print(xb2 <- 53.1)
+# desviacion estandar muestral 1
+print(s1 <- 7.8)
+# desviacion estandar muestral 2
+print(s2 <- 6.1)
+# prueba de hipotesis
+# H0: mu_1 - mu_2 >= 0 frente a mu_1 - mu_2 < 0
+# nivel de significancia
+print(alpha <- 0.05)
+# estadistico de prueba
+# heterocedasatico: print(tc <- (xb1-xb2 - 0)/sqrt(s1^2/n1 + s2^2/n2))
+print(sp <- sqrt(((n1-1)*s1^2 + (n2-1)*s2^2)/(n1 + n2 - 2)))
+print(tc <- (xb1-xb2 - 0)/(sp*sqrt(1/n1 + 1/n2)))
+# region de rechazo (cola izquierda)
+# x tales que x < t_{v,alpha}
+# heterocedastico: (v <- round( (s1^2/n1 + s2^2/n2)^2/( (s1^2/n1)^2/(n1-1) + (s2^2/n2)^2/(n2-1) ), 0) )
+v <- n1 + n2 - 2
+print(percentil <- qt(p = alpha, df = v))
+# ¿el estadistico de prueba pertenece a la region de rechazo?
+tc < percentil
+# valor p
+print(valor_p <- pt(q = tc, df = v))
+# ¿el valor p es menor que el nivel de significancia?
+valor_p < alpha
+# decision
+# rechazar H0
+# intervalo de confinza
+# heterocedastico: c(-Inf, xb1-xb2 + qt(p = 1-alpha, df = v)*sqrt(s1^2/n1 + s2^2/n2))
+c(-Inf, xb1-xb2 + qt(p = 1-alpha, df = v)*sp*sqrt(1/n1 + 1/n2))
+# ¿el valor hipotetico hace parte del intervalo de confianza?
+# heterocedastico: 0 < xb1-xb2 + qt(p = 1-alpha, df = v)*sqrt(s1^2/n1 + s2^2/n2)
+0 < xb1-xb2 + qt(p = 1-alpha, df = v)*sp*sqrt(1/n1 + 1/n2)
+# conclusion
+# hay suficiente evidencia para establecer que los pacientes con depresión 
+# tienen una función cortical por debajo de lo normal
+```
+
+- Es necesario suporner que el índice sigue una distribución normal, dado que los tamaños de la muestra no son lo suficientemente grande para justificar que el estadístico de prueba tiene distribución normal bajo la hipótesis nula.
+
+10. La *National Sleep Foundation* realiza encuestas para determinar si las horas de sueño por noche
+son independientes de la edad (Newsweek, 19 de enero de 2004). Las siguientes son las horas de
+sueño entre semana en una muestra de personas de 49 años o menos y en otra muestra de personas
+de 50 años o más.
+
+| Edad            | Menos de 6h | 6h a 6.9h | 7h a 7.9h | 8h o más |
+|-----------------|-------------|-----------|-----------|----------|
+| 49 años o menos | 38          | 60        | 77        | 65       |
+| 50 años o más   | 36          | 57        | 75        | 92       |
+
+**Solución:**
+
+Sistema de hipótesis:
+
+$H_0:$ Las horas de sueño y la edad son idependientes frente a $H_1$: Las horas de sueño y la edad no son idependientes.
+
+```{r}
+# datos
+print(tabla <- matrix(data = c(38,36,60,57,77,75,65,92), nrow = 2, ncol = 4))
+# prueba
+chisq.test(x = tabla)
+# decision
+# No rechazar la hipotesis nula
+# conclusion
+# no hay suficiente evidencia para establecer que las horas de sueño y la edad 
+# no son idependientes.
+```
+
