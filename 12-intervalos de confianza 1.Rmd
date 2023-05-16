@@ -212,3 +212,21 @@ b. Determine un intervalo de confianza de 98% para la media del error de este m�
 c. Un topógrafo afirma que el error de media está entre 3.2 y 4.4 cm. ¿Con qué nivel de confianza se puede hacer esta afirmación?
 d. ¿Aproximadamente cuántas ubicaciones se deben muestrear con el propósito de que un intervalo de confianza de 95% especificará que la media está dentro de $\pm$ 0.7 cm?
 e. ¿Aproximadamente cuántas ubicaciones se deben muestrear con el propósito de que un intervalo de confianza de 98% especificará que la media está dentro de $\pm$ 0.7 cm?
+
+# Referencias
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-sosacoverbook.png")
+```
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-devorecoverbook.jpg")
+```
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-navidicoverbook.png")
+```
+
+```{r, eval = TRUE, echo=FALSE, out.width="25%", fig.pos = 'H', fig.align = 'center'}
+knitr::include_graphics("01-wackerlycoverbook.jpg")
+```
